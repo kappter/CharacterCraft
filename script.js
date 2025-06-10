@@ -37,6 +37,14 @@ function getRandomTrait(category) {
     return categoryTraits.length ? categoryTraits[Math.floor(Math.random() * categoryTraits.length)] : null;
 }
 
+// Show tab
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
+}
+
 // Save character
 function saveCharacter() {
     const name = document.getElementById('name').value;
@@ -60,6 +68,7 @@ function saveCharacter() {
         displayCharacters();
         updateCharacterSelects();
         clearForm();
+        showTab('saved'); // Navigate to Saved Characters tab
     } else {
         alert('Please fill in required fields (Name, Occupation).');
     }
@@ -188,6 +197,8 @@ function displayCharacters() {
         div.innerHTML = `<strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
         characterList.appendChild(div);
     });
+    updateCharacterSelects();
+    updateEditCharacterSelect();
 }
 
 // Update character select dropdowns
@@ -203,6 +214,62 @@ function updateCharacterSelects() {
     });
 }
 
+// Update edit character dropdown
+function updateEditCharacterSelect() {
+    const editSelect = document.getElementById('editIndex');
+    editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
+    characters.forEach((char, index) => {
+        editSelect.innerHTML += `<option value="${index}">${char.name}</option>`;
+    });
+}
+
+// Load character data into edit form
+function loadCharacterToEdit() {
+    const index = document.getElementById('editIndex').value;
+    if (index === '') {
+        clearEditForm();
+        return;
+    }
+    const char = characters[index];
+    document.getElementById('editName').value = char.name;
+    document.getElementById('editAge').value = char.age;
+    document.getElementById('editGender').value = char.gender;
+    document.getElementById('editLocale').value = char.locale;
+    document.getElementById('editOccupation').value = char.occupation;
+    document.getElementById('editTraits').value = char.traits.join(', ');
+}
+
+// Update character
+function updateCharacter() {
+    const index = document.getElementById('editIndex').value;
+    if (index === '') {
+        alert('Please select a character to edit.');
+        return;
+    }
+    const name = document.getElementById('editName').value;
+    const age = document.getElementById('editAge').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+    const gender = document.getElementById('editGender').value || ['male', 'female', 'non-binary', 'unspecified'][Math.floor(Math.random() * 4)];
+    const locale = document.getElementById('editLocale').value || locales[Math.floor(Math.random() * locales.length)];
+    const occupation = document.getElementById('editOccupation').value;
+    const traitsInput = document.getElementById('editTraits').value;
+
+    if (name && occupation) {
+        characters[index] = {
+            name,
+            age,
+            gender,
+            locale,
+            occupation,
+            traits: traitsInput ? traitsInput.split(',').map(t => t.trim()) : []
+        };
+        localStorage.setItem('characters', JSON.stringify(characters));
+        displayCharacters();
+        clearEditForm();
+    } else {
+        alert('Please fill in required fields (Name, Occupation).');
+    }
+}
+
 // Clear forms
 function clearForm() {
     document.getElementById('name').value = '';
@@ -211,6 +278,8 @@ function clearForm() {
     document.getElementById('locale').value = '';
     document.getElementById('occupation').value = '';
     document.getElementById('traits').value = '';
+    document.getElementById('shortBioOutput').innerHTML = '';
+    document.getElementById('detailedBioOutput').innerHTML = '';
 }
 function clearTraitForm() {
     document.getElementById('newTraitCategory').value = 'Physical';
@@ -218,9 +287,18 @@ function clearTraitForm() {
     document.getElementById('newSynonyms').value = '';
     document.getElementById('newDescription').value = '';
 }
+function clearEditForm() {
+    document.getElementById('editIndex').value = '';
+    document.getElementById('editName').value = '';
+    document.getElementById('editAge').value = '';
+    document.getElementById('editGender').value = '';
+    document.getElementById('editLocale').value = '';
+    document.getElementById('editOccupation').value = '';
+    document.getElementById('editTraits').value = '';
+}
 
 // Initialize
 window.onload = () => {
     displayCharacters();
-    updateCharacterSelects();
+    showTab('create');
 };
