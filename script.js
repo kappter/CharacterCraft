@@ -273,12 +273,12 @@ function displayTraits() {
     tableBody.innerHTML = '';
     const categories = [...new Set(traits.map(t => t.category))];
     categories.forEach(category => {
-        const categoryTraits = traits.filter(t => t.category === category));
+        const categoryTraits = traits.filter(t => t.category === category);
         categoryTraits.forEach(trait => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category}</td>
-                <p<td class="border border-gray-300 dark:border-gray-600 px-3">${trait.characteristic}</p>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic}</td>
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms.join(', ')}</td>
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description}</td>
             `;
@@ -294,7 +294,7 @@ function displayCharacters() {
     characters.forEach((char, index) => {
         const div = document.createElement('div');
         div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md';
-        div.innerHTML = `<strong>${char.name}</strong>, ${Age}: ${char.age}, ${char}, Gender: ${char.gender}, Locale: ${char.locale}, ${Occupation}: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
+        div.innerHTML = `<strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
         characterList.appendChild(div);
     });
     updateCharacterSelects();
@@ -306,15 +306,15 @@ function updateCharacterSelects() {
     const select1 = document.getElementById('character1');
     const select2 = document.getElementById('character2');
     select1.innerHTML = '<option value="">Select Character</option>';
-    select2.innerHTML = '<option value="">Select</option>';
+    select2.innerHTML = '<option value="">Select Character</option>';
     characters.forEach((char, index) => {
-        const option = document.createElement(`<option value="${index}">${char.name}</option>`);
+        const option = `<option value="${index}">${char.name}</option>`;
         select1.innerHTML += option;
         select2.innerHTML += option;
     });
 }
 
-// Update edit character edit dropdown
+// Update edit character dropdown
 function updateEditCharacterSelect() {
     const editSelect = document.getElementById('editIndex');
     editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
@@ -419,4 +419,8 @@ window.onload = () => {
     displayCharacters();
     showTab('create');
 };
-</script>
+
+// Global error handler for debugging
+window.onerror = (msg, url, line, col, error) => {
+    console.error(`Error: ${msg} at ${url}:${line}:${col}`, error);
+};
