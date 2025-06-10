@@ -10,29 +10,56 @@ const occupations = ['Writer', 'Engineer', 'Teacher', 'Artist', 'Doctor', 'Chef'
 
 // CSV files to load
 const csvFiles = [
-    'physical_traits.csv',
-    'psychological_traits.csv',
-    'background_details.csv',
-    'motivations_beliefs.csv'
+    './physical_traits.csv',
+    './psychological_traits.csv',
+    './background_details.csv',
+    './motivations_beliefs.csv'
 ];
 
 // Load all CSV files
-Promise.all(csvFiles.map(file => fetch(file).then(response => response.text())))
-    .then(data => {
-        data.forEach((csvData, index) => {
+Promise.all(csvFiles.map(file => 
+    fetch(file)
+        .then(response => {
+            if (!response.ok) {
+                console.error(`Failed to load ${file}: ${response.statusText}`);
+                throw new Error(`Failed to load ${file}`);
+            }
+            return response.text();
+        })
+        .catch(err => {
+            console.error(`Error fetching ${file}:`, err);
+            return ''; // Fallback to avoid breaking the app
+        })
+))
+.then(data => {
+    data.forEach((csvData, index) => {
+        if (csvData) {
             const parsedTraits = parseCSV(csvData);
             traits = traits.concat(parsedTraits);
-        });
-        displayTraits();
+        }
     });
+    if (traits.length === 0) {
+        console.warn('No traits loaded; using fallback traits.');
+        traits = [
+            { category: 'Physical', characteristic: 'average build', synonyms: ['normal physique'], description: 'An unremarkable physique.' },
+            { category: 'Psychological', characteristic: 'calm', synonyms: ['composed'], description: 'A composed demeanor.' },
+            { category: 'Background', characteristic: 'urban upbringing', synonyms: ['city life'], description: 'Raised in a bustling city.' },
+            { category: 'Motivations', characteristic: 'pursuit of truth', synonyms: ['truth-seeking'], description: 'A drive to uncover hidden realities.' }
+        ];
+    }
+    displayTraits();
+})
+.catch(err => {
+    console.error('Error loading CSV files:', err);
+});
 
 // Parse CSV data
 function parseCSV(data) {
     const rows = data.trim().split('\n').slice(1); // Skip header
     return rows.map(row => {
         const [category, characteristic, synonyms, description] = row.split(',').map(item => item.trim());
-        return { category, characteristic, synonyms: synonyms.split(';'), description };
-    });
+        return { category, characteristic, synonyms: synonyms ? synonyms.split(';') : [], description };
+    }).filter(trait => trait.category && trait.characteristic); // Filter invalid rows
 }
 
 // Randomization functions
@@ -163,7 +190,7 @@ function generateBio() {
             content: `A pivotal moment for ${name} came when their ${psychologicalTrait.characteristic} collided with a challenge in ${locale}. This event, tied to their ${backgroundTrait.characteristic}, redefined their ${motivationTrait.characteristic}, setting them on a new path that continues to unfold.`.repeat(2)
         }
     ];
-    const extendedBio = extendedBioSections.map(s => `<h3>${s.title}</h3><p>${s.content}</p>`).join('');
+    const extendedBio = extendedBioSections.map(s => `<h3 class="text-lg font-semibold mb-2">${s.title}</h3><p>${s.content}</p>`).join('');
 
     document.getElementById('shortBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortBio}</p>`;
     document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${extendedBio}`;
@@ -181,7 +208,7 @@ function compareCharacters() {
     const char1 = characters[char1Index];
     const char2 = characters[char2Index];
     const commonTraits = char1.traits.filter(t => char2.traits.includes(t));
-    const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
+    const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char2.traits.includes(t)));
     const contention = differences.length ? `Potential conflicts arise from differing traits like ${differences.join(' and ')}.` : 'No major points of contention.';
     const transition = `Crossing paths, ${char1.name}'s ${char1.traits[0] || 'nature'} could challenge ${char2.name}'s ${char2.traits[0] || 'outlook'}, potentially shifting their perspectives in ${char1.locale}.`;
 
@@ -324,12 +351,14 @@ function clearForm() {
     document.getElementById('shortBioOutput').innerHTML = '';
     document.getElementById('detailedBioOutput').innerHTML = '';
 }
+
 function clearTraitForm() {
     document.getElementById('newTraitCategory').value = 'Physical';
     document.getElementById('newTrait').value = '';
     document.getElementById('newSynonyms').value = '';
     document.getElementById('newDescription').value = '';
 }
+
 function clearEditForm() {
     document.getElementById('editIndex').value = '';
     document.getElementById('editName').value = '';

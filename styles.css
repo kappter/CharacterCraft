@@ -1,106 +1,55 @@
+:root {
+    --bg-color: #f4f6f9;
+    --text-color: #212529;
+    --border-color: #ced4da;
+    --primary-color: #007bff;
+    --card-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a202c;
+    --text-color: #e2e8f0;
+    --border-color: #4a5568;
+    --primary-color: #3b82f6;
+    --card-bg: #2d3748;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f9;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+.toggle-checkbox:checked + .toggle-switch {
+    background-color: var(--primary-color);
 }
-h1 {
-    text-align: center;
-    color: #333;
+
+.toggle-checkbox:checked + .toggle-switch .toggle-knob {
+    transform: translateX(1.5rem);
 }
-.tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.tab-button {
-    padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #e9ecef;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.tab-button.active {
-    background-color: #007bff;
-    color: white;
-}
-.tab-button:hover {
-    background-color: #0056b3;
-    color: white;
-}
+
 .tab-content {
-    display: none;
+    transition: opacity 0.3s ease-in-out;
 }
+
+.tab-content:not(.active) {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
 .tab-content.active {
-    display: block;
+    opacity: 1;
 }
-.section {
-    margin-bottom: 20px;
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    border-color: var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
-.section h2 {
-    color: #007bff;
-}
-.input-group {
-    margin-bottom: 10px;
-}
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-.input-group input, .input-group textarea, .input-group select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #0056b3;
-}
-.bio-output {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #e9ecef;
-    border-radius: 4px;
-}
-#traitTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-#traitTable th, #traitTable td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-}
-#traitTable th {
-    background-color: #007bff;
-    color: white;
-}
-#characterList div {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-.edit-section {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
+
+#traitTable th,
+#traitTable td {
+    border-color: var(--border-color);
 }
