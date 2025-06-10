@@ -1,8 +1,8 @@
 :root {
-    --bg-color: #f4f6f9;
-    --text-color: #212529;
+    --bg-color: #f4f4f4;
+    --text-color: #333333;
     --border-color: #ced4da;
-    --primary-color: #007bff;
+    --primary-color: #ffffff;
     --card-bg: #ffffff;
 }
 
@@ -52,4 +52,12 @@ body {
 #traitTable th,
 #traitTable td {
     border-color: var(--border-color);
+}
+
+.toggle-switch {
+    background-color: var(--bg-color);
+}
+
+[data-theme="dark"] .toggle-switch {
+    background-color: #4a5568;
 }

@@ -7,6 +7,7 @@ const firstNames = ['Alex', 'Sam', 'Taylor', 'Jordan', 'Casey', 'Morgan', 'Riley
 const lastNames = ['Smith', 'Johnson', 'Brown', 'Lee', 'Wilson', 'Davis', 'Clark', 'Harris'];
 const genders = ['male', 'female', 'non-binary', 'unspecified'];
 const occupations = ['Writer', 'Engineer', 'Teacher', 'Artist', 'Doctor', 'Chef', 'Musician', 'Lawyer'];
+const contexts = ['work', 'family', 'vacation', 'class', 'school', 'in the wild', 'community event', 'online forum', 'shared hobby', 'chance encounter'];
 
 // CSV files to load
 const csvFiles = [
@@ -99,6 +100,11 @@ function randomizeTraits() {
         psychTraits.splice(index, 1); // Avoid duplicates
     }
     document.getElementById('traits').value = selectedTraits.join(', ');
+}
+
+function randomizeContext() {
+    const context = contexts[Math.floor(Math.random() * contexts.length)];
+    document.getElementById('context').value = context;
 }
 
 // Randomly select a trait from a category
@@ -200,6 +206,7 @@ function generateBio() {
 function compareCharacters() {
     const char1Index = document.getElementById('character1').value;
     const char2Index = document.getElementById('character2').value;
+    const context = document.getElementById('context').value || 'unspecified setting';
     if (char1Index === '' || char2Index === '' || char1Index === char2Index) {
         alert('Please select two different characters.');
         return;
@@ -208,13 +215,22 @@ function compareCharacters() {
     const char1 = characters[char1Index];
     const char2 = characters[char2Index];
     const commonTraits = char1.traits.filter(t => char2.traits.includes(t));
-    const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char2.traits.includes(t)));
-    const contention = differences.length ? `Potential conflicts arise from differing traits like ${differences.join(' and ')}.` : 'No major points of contention.';
-    const transition = `Crossing paths, ${char1.name}'s ${char1.traits[0] || 'nature'} could challenge ${char2.name}'s ${char2.traits[0] || 'outlook'}, potentially shifting their perspectives in ${char1.locale}.`;
+    const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
+
+    // Context-based narrative
+    const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} come together, their interactions shaped by their unique traits and the setting.`;
+    const commonalities = commonTraits.length 
+        ? `Their shared traits, such as ${commonTraits.join(', ')}, foster a connection in ${context}, enabling collaboration or mutual understanding.`
+        : `With few shared traits, their bond in ${context} relies on external factors or shared goals.`;
+    const contention = differences.length 
+        ? `Potential conflicts arise in ${context} from differing traits like ${differences.join(' and ')}, which may spark tension or growth.`
+        : `In ${context}, their aligned traits minimize conflict, paving the way for harmony.`;
+    const transition = `Within ${context}, ${char1.name}'s ${char1.traits[0] || 'nature'} challenges ${char2.name}'s ${char2.traits[0] || 'outlook'}, potentially reshaping their perspectives or deepening their relationship.`;
 
     const comparison = `
         <h3 class="text-lg font-semibold mb-2">Comparison: ${char1.name} vs ${char2.name}</h3>
-        <p><strong>Commonalities:</strong> ${commonTraits.length ? commonTraits.join(', ') : 'None'}</p>
+        <p><strong>Context:</strong> ${contextIntro}</p>
+        <p><strong>Commonalities:</strong> ${commonalities}</p>
         <p><strong>Points of Contention:</strong> ${contention}</p>
         <p><strong>Transition Points:</strong> ${transition}</p>
     `;
@@ -372,8 +388,10 @@ function clearEditForm() {
 // Dark mode toggle
 const themeToggle = document.getElementById('theme-toggle');
 themeToggle.addEventListener('change', () => {
-    document.documentElement.setAttribute('data-theme', themeToggle.checked ? 'dark' : 'light');
-    localStorage.setItem('theme', themeToggle.checked ? 'dark' : 'light');
+    const newTheme = themeToggle.checked ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    console.log(`Theme switched to: ${newTheme}`);
 });
 
 // Initialize
@@ -381,6 +399,7 @@ window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     themeToggle.checked = savedTheme === 'dark';
+    console.log(`Initialized with theme: ${savedTheme}`);
     displayCharacters();
     showTab('create');
 };
