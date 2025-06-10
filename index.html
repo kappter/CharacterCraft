@@ -44,29 +44,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>CharacterCraft - Build Believable Characters</title>
-    <link rel="icon" type="cclogo.png" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" type="text/css">
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter min-h-screen flex flex-col">
-    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-lg z-100">
-        <div class="max-w-2xl mx-auto px-4 sm:px-4 py-4 flex justify-between items-center">
+    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
             <div class="flex items-center">
-                <img src="./images/logo.png" alt="CharacterCraft Logo" class="h-4 mr-2">
-                <h2 class="text-lg font-bold text-gray-900 dark:text-white">CharacterCraft</h2>
+                <img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
             </div>
             <div class="flex items-center">
-                <label for="theme-toggle" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-200">Dark Mode</label>
+                <label for="theme-toggle" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
                 <input type="checkbox" id="theme-toggle" class="toggle-checkbox hidden">
-                <div class="toggle-switch w-12 h-6 bg-gray-300 rounded-full p-1 cursor-pointer transition-colors duration-300">
+                <div class="toggle-switch w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full p-1 cursor-pointer transition-colors duration-300">
                     <div class="toggle-knob w-4 h-4 bg-white rounded-full transform transition-transform duration-300"></div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-2xl mx-auto px-4 sm:px-4 pt-20 pb-16">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div class="tabs flex justify-center space-x-2 mb-6 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
             <button class="tab-button active px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600" onclick="showTab('create')">Create Character</button>
             <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('compare')">Compare Characters</button>

@@ -25,13 +25,12 @@ fetch('./randomization_data.json')
     })
     .catch(err => {
         console.error('Error loading randomization_data.json:', err);
-        // Fallback data
         randomizationData = {
             firstNames: ['Alex', 'Sam', 'Taylor', 'Jordan'],
             lastNames: ['Smith', 'Johnson', 'Brown', 'Lee'],
             ageRanges: [{min: 18, max: 80, label: 'Adult'}],
             genders: ['male', 'female', 'non-binary', 'unspecified'],
-            locales: ['New York', 'Tokyo', 'London'],
+            locales: ['New York', 'Tokyo', 'Paris'],
             occupations: ['Writer', 'Engineer', 'Teacher'],
             contexts: ['work', 'family', 'vacation']
         };
@@ -42,7 +41,7 @@ Promise.all(csvFiles.map(file =>
     fetch(file)
         .then(response => {
             if (!response.ok) {
-                console.error(`Failed to load ${file}: ${response.statusText}`);
+                console.error(`Failed to load ${file}: ${response.status}`);
                 throw new Error(`Failed to load ${file}`);
             }
             return response.text();
@@ -70,9 +69,7 @@ Promise.all(csvFiles.map(file =>
     }
     displayTraits();
 })
-.catch(err => {
-    console.error('Error loading CSV files:', err);
-});
+.catch(err => console.error('Error loading CSV files:', err));
 
 // Parse CSV data
 function parseCSV(data) {
@@ -236,7 +233,7 @@ function compareCharacters() {
     const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
 
     const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} come together, their interactions shaped by their unique traits and the setting.`;
-    const commonalities = commonTraits.length 
+    const commonality = commonTraits.length 
         ? `Their shared traits, such as ${commonTraits.join(', ')}, foster a connection in ${context}, enabling collaboration or mutual understanding.`
         : `With few shared traits, their bond in ${context} relies on external factors or shared goals.`;
     const contention = differences.length 
@@ -247,7 +244,7 @@ function compareCharacters() {
     const comparison = `
         <h3 class="text-lg font-semibold mb-2">Comparison: ${char1.name} vs ${char2.name}</h3>
         <p><strong>Context:</strong> ${contextIntro}</p>
-        <p><strong>Commonalities:</strong> ${commonalities}</p>
+        <p><strong>Commonalities:</strong> ${commonality}</p>
         <p><strong>Points of Contention:</strong> ${contention}</p>
         <p><strong>Transition Points:</strong> ${transition}</p>
     `;
@@ -258,7 +255,7 @@ function compareCharacters() {
 function addTrait() {
     const category = document.getElementById('newTraitCategory').value;
     const characteristic = document.getElementById('newTrait').value;
-    const synonyms = document.getElementById('newSynonyms').value.split(',').map(s => s.trim());
+    const synonyms = document.getElementById('newSynonyms').value.split(',').map(t => t.trim());
     const description = document.getElementById('newDescription').value;
 
     if (category && characteristic && synonyms.length && description) {
@@ -276,12 +273,12 @@ function displayTraits() {
     tableBody.innerHTML = '';
     const categories = [...new Set(traits.map(t => t.category))];
     categories.forEach(category => {
-        const categoryTraits = traits.filter(t => t.category === category);
+        const categoryTraits = traits.filter(t => t.category === category));
         categoryTraits.forEach(trait => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic}</td>
+                <p<td class="border border-gray-300 dark:border-gray-600 px-3">${trait.characteristic}</p>
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms.join(', ')}</td>
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description}</td>
             `;
@@ -297,7 +294,7 @@ function displayCharacters() {
     characters.forEach((char, index) => {
         const div = document.createElement('div');
         div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md';
-        div.innerHTML = `<strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
+        div.innerHTML = `<strong>${char.name}</strong>, ${Age}: ${char.age}, ${char}, Gender: ${char.gender}, Locale: ${char.locale}, ${Occupation}: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
         characterList.appendChild(div);
     });
     updateCharacterSelects();
@@ -309,15 +306,15 @@ function updateCharacterSelects() {
     const select1 = document.getElementById('character1');
     const select2 = document.getElementById('character2');
     select1.innerHTML = '<option value="">Select Character</option>';
-    select2.innerHTML = '<option value="">Select Character</option>';
+    select2.innerHTML = '<option value="">Select</option>';
     characters.forEach((char, index) => {
-        const option = `<option value="${index}">${char.name}</option>`;
+        const option = document.createElement(`<option value="${index}">${char.name}</option>`);
         select1.innerHTML += option;
         select2.innerHTML += option;
     });
 }
 
-// Update edit character dropdown
+// Update edit character edit dropdown
 function updateEditCharacterSelect() {
     const editSelect = document.getElementById('editIndex');
     editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
@@ -407,8 +404,10 @@ const themeToggle = document.getElementById('theme-toggle');
 themeToggle.addEventListener('change', () => {
     const newTheme = themeToggle.checked ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', newTheme);
+    document.body.classList.toggle('theme-transition', true);
     localStorage.setItem('theme', newTheme);
     console.log(`Theme switched to: ${newTheme}`);
+    setTimeout(() => document.body.classList.remove('theme-transition'), 300);
 });
 
 // Initialize
@@ -416,7 +415,8 @@ window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     themeToggle.checked = savedTheme === 'dark';
-    console.log(`Initialized with theme: ${savedTheme}`);
+    console.log(`Theme initialized with: ${savedTheme}`);
     displayCharacters();
     showTab('create');
 };
+</script>

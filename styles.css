@@ -1,22 +1,34 @@
 :root {
-    --bg-color: #f4f4f4;
+    --background-color: #f4f4f4;
     --text-color: #333333;
     --border-color: #ced4da;
-    --primary-color: #ffffff;
+    --primary-color: #3b82f6;
     --card-bg: #ffffff;
+    --header-bg: #ffffff;
+    --toggle-bg: #d1d5db;
+    --toggle-knob-bg: #ffffff;
 }
 
 [data-theme="dark"] {
-    --bg-color: #1a202c;
+    --background-color: #1a202c;
     --text-color: #e2e8f0;
     --border-color: #4a5568;
-    --primary-color: #3b82f6;
+    --primary-color: #60a5fa;
     --card-bg: #2d3748;
+    --header-bg: #1f2937;
+    --toggle-bg: #4b5563;
+    --toggle-knob-bg: #e5e7eb;
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--background-color);
     color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header {
+    background-color: var(--header-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .toggle-checkbox:checked + .toggle-switch {
@@ -25,10 +37,17 @@ body {
 
 .toggle-checkbox:checked + .toggle-switch .toggle-knob {
     transform: translateX(1.5rem);
+    background-color: var(--toggle-knob-bg);
+}
+
+.toggle-switch {
+    background-color: var(--toggle-bg);
+    transition: background-color 0.3s ease;
 }
 
 .tab-content {
-    transition: opacity 0.3s ease-in-out;
+    background-color: var(--card-bg);
+    transition: opacity 0.3s ease-in-out, background-color 0.3s ease;
 }
 
 .tab-content:not(.active) {
@@ -47,6 +66,7 @@ body {
     border-color: var(--border-color);
     background-color: var(--card-bg);
     color: var(--text-color);
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
 }
 
 #traitTable th,
@@ -54,10 +74,15 @@ body {
     border-color: var(--border-color);
 }
 
-.toggle-switch {
-    background-color: var(--bg-color);
+button.bg-blue-500 {
+    background-color: var(--primary-color);
 }
 
-[data-theme="dark"] .toggle-switch {
-    background-color: #4a5568;
+button:hover.bg-blue-600 {
+    background-color: #2563eb;
+}
+
+footer {
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
