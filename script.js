@@ -4,11 +4,21 @@ let traits = [];
 // Predefined locales for randomization
 const locales = ['New York', 'Tokyo', 'Rural Midwest', 'London', 'Cape Town'];
 
-// Load traits from CSV
-fetch('traits.csv')
-    .then(response => response.text())
+// CSV files to load
+const csvFiles = [
+    'physical_traits.csv',
+    'psychological_traits.csv',
+    'background_details.csv',
+    'motivations_beliefs.csv'
+];
+
+// Load all CSV files
+Promise.all(csvFiles.map(file => fetch(file).then(response => response.text())))
     .then(data => {
-        traits = parseCSV(data);
+        data.forEach((csvData, index) => {
+            const parsedTraits = parseCSV(csvData);
+            traits = traits.concat(parsedTraits);
+        });
         displayTraits();
     });
 
@@ -73,31 +83,32 @@ function generateBio() {
     const physicalTrait = getRandomTrait('Physical') || { characteristic: 'average build', description: 'An unremarkable physique.' };
     const psychologicalTrait = userTraits.length ? { characteristic: userTraits[0], description: 'User-defined trait.' } : getRandomTrait('Psychological') || { characteristic: 'calm', description: 'A composed demeanor.' };
     const backgroundTrait = getRandomTrait('Background') || { characteristic: 'urban upbringing', description: 'Raised in a bustling city.' };
+    const motivationTrait = getRandomTrait('Motivations') || { characteristic: 'pursuit of truth', description: 'A drive to uncover hidden realities.' };
 
     // Short bio template
-    const shortBio = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, embodies ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their life, shaped by ${locale}'s unique culture, revolves around their work and a personal drive that hints at untold stories waiting to unfold.`;
+    const shortBio = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, is marked by ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their ${motivationTrait.characteristic} shapes their life in ${locale}, hinting at a story rich with potential and depth.`;
 
     // Extended bio template
     const extendedBioSections = [
         {
             title: 'Early Life',
-            content: `${name} was born in ${locale}, where their ${backgroundTrait.characteristic} defined their formative years. ${backgroundTrait.description} Growing up, their ${physicalTrait.characteristic} made them stand out, often shaping how others perceived them. Early experiences in ${locale} instilled a sense of purpose that would guide their later choices.`.repeat(2)
+            content: `${name} was born in ${locale}, where their ${backgroundTrait.characteristic} set the stage for their early years. ${backgroundTrait.description} Their ${physicalTrait.characteristic} often drew attention, influencing their interactions with family and friends in ${locale}. These formative experiences laid the foundation for their ${motivationTrait.characteristic}.`.repeat(2)
         },
         {
             title: 'Career',
-            content: `As a ${occupation}, ${name} brings ${psychologicalTrait.characteristic} to their work. ${psychologicalTrait.description} Their professional journey in ${locale} has been marked by challenges that tested their resolve, leading to moments of growth and unexpected opportunities that shaped their career path.`.repeat(3)
+            content: `As a ${occupation}, ${name} channels their ${psychologicalTrait.characteristic} into their work. ${psychologicalTrait.description} In ${locale}, their career has been shaped by challenges that tested their ${motivationTrait.characteristic}, leading to professional growth and unexpected alliances.`.repeat(3)
         },
         {
             title: 'Personal Life',
-            content: `${name}'s personal life is a reflection of their ${physicalTrait.characteristic} and ${psychologicalTrait.characteristic}. In ${locale}, they pursue passions that align with their ${backgroundTrait.characteristic}, forging connections that enrich their story. A pivotal moment came when their ${psychologicalTrait.characteristic} led to a bold decision.`.repeat(2)
+            content: `${name}'s personal life in ${locale} reflects their ${physicalTrait.characteristic} and ${psychologicalTrait.characteristic}. ${backgroundTrait.description} Their ${motivationTrait.characteristic} drives their hobbies and relationships, creating a rich tapestry of experiences.`.repeat(2)
         },
         {
             title: 'Beliefs and Motivations',
-            content: `Deeply influenced by their ${backgroundTrait.characteristic}, ${name} believes in making a difference in ${locale}. Their ${psychologicalTrait.characteristic} drives them to overcome obstacles, motivated by a desire to leave a lasting impact. This belief shapes their interactions and aspirations.`.repeat(2)
+            content: `Rooted in their ${backgroundTrait.characteristic}, ${name}'s ${motivationTrait.characteristic} defines their worldview. ${motivationTrait.description} In ${locale}, this belief shapes their actions, pushing them to overcome obstacles and pursue their goals with unwavering resolve.`.repeat(2)
         },
         {
             title: 'Defining Moment',
-            content: `A turning point for ${name} came when their ${psychologicalTrait.characteristic} clashed with a challenge in ${locale}. This moment, rooted in their ${backgroundTrait.characteristic}, redefined their path, blending their ${physicalTrait.characteristic} with a renewed sense of purpose that continues to guide them.`.repeat(2)
+            content: `A pivotal moment for ${name} came when their ${psychologicalTrait.characteristic} collided with a challenge in ${locale}. This event, tied to their ${backgroundTrait.characteristic}, redefined their ${motivationTrait.characteristic}, setting them on a new path that continues to unfold.`.repeat(2)
         }
     ];
     const extendedBio = extendedBioSections.map(s => `<h3>${s.title}</h3><p>${s.content}</p>`).join('');
