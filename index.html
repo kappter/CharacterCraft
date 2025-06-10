@@ -38,160 +38,273 @@
         return gk_fileData[filename] || "";
         }
         </script><!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CharacterCraft - Build Believable Characters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>CharacterCraft</h1>
-        <div class="tabs">
-            <button class="tab-button active" onclick="showTab('create')">Create Character</button>
-            <button class="tab-button" onclick="showTab('compare')">Compare Characters</button>
-            <button class="tab-button" onclick="showTab('traits')">Trait List</button>
-            <button class="tab-button" onclick="showTab('saved')">Saved Characters</button>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter min-h-screen flex flex-col">
+    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
+            <div class="flex items-center">
+                <label for="theme-toggle" class="mr-2 text-sm font-medium">Dark Mode</label>
+                <input type="checkbox" id="theme-toggle" class="toggle-checkbox hidden">
+                <div class="toggle-switch w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full p-1 cursor-pointer">
+                    <div class="toggle-knob w-4 h-4 bg-white rounded-full transform transition-transform duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <div class="tabs flex justify-center space-x-2 mb-6 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+            <button class="tab-button active px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600" onclick="showTab('create')">Create Character</button>
+            <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('compare')">Compare Characters</button>
+            <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('traits')">Trait List</button>
+            <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('saved')">Saved Characters</button>
         </div>
 
         <!-- Create Character Tab -->
-        <div id="create" class="tab-content active">
-            <h2>Create a Character</h2>
-            <div class="input-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" placeholder="Enter character name">
+        <div id="create" class="tab-content active bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Create a Character</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="input-group flex items-end">
+                    <div class="flex-grow">
+                        <label for="name" class="block text-sm font-medium mb-1">Name</label>
+                        <input type="text" id="name" placeholder="Enter character name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="randomizeName()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                </div>
+                <div class="input-group flex items-end">
+                    <div class="flex-grow">
+                        <label for="age" class="block text-sm font-medium mb-1">Age</label>
+                        <input type="number" id="age" placeholder="Enter age (optional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="randomizeAge()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                </div>
+                <div class="input-group flex items-end">
+                    <div class="flex-grow">
+                        <label for="gender" class="block text-sm font-medium mb-1">Gender</label>
+                        <select id="gender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select gender (optional)</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="non-binary">Non-binary</option>
+                            <option value="unspecified">Unspecified</option>
+                        </select>
+                    </div>
+                    <button onclick="randomizeGender()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                </div>
+                <div class="input-group flex items-end">
+                    <div class="flex-grow">
+                        <label for="locale" class="block text-sm font-medium mb-1">Locale</label>
+                        <input type="text" id="locale" placeholder="Enter locale (optional, e.g., New York)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="randomizeLocale()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                </div>
+                <div class="input-group flex items-end">
+                    <div class="flex-grow">
+                        <label for="occupation" class="block text-sm font-medium mb-1">Occupation</label>
+                        <input type="text" id="occupation" placeholder="Enter occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="randomizeOccupation()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                </div>
+                <div class="input-group md:col-span-2 flex items-end">
+                    <div class="flex-grow">
+                        <label for="traits" class="block text-sm font-medium mb-1">Personality Traits</label>
+                        <textarea id="traits" placeholder="Enter personality traits (comma-separated, optional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
+                    </div>
+                    <button onclick="randomizeTraits()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="age">Age</label>
-                <input type="number" id="age" placeholder="Enter age (optional)">
+            <div class="flex space-x-4 mt-4">
+                <button onclick="generateBio()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Generate Bios</button>
+                <button onclick="saveCharacter()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Save Character</button>
             </div>
-            <div class="input-group">
-                <label for="gender">Gender</label>
-                <select id="gender">
-                    <option value="">Select gender (optional)</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="non-binary">Non-binary</option>
-                    <option value="unspecified">Unspecified</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="locale">Locale</label>
-                <input type="text" id="locale" placeholder="Enter locale (optional, e.g., New York)">
-            </div>
-            <div class="input-group">
-                <label for="occupation">Occupation</label>
-                <input type="text" id="occupation" placeholder="Enter occupation">
-            </div>
-            <div class="input-group">
-                <label for="traits">Personality Traits</label>
-                <textarea id="traits" placeholder="Enter personality traits (comma-separated, optional)"></textarea>
-            </div>
-            <button onclick="generateBio()">Generate Bios</button>
-            <button onclick="saveCharacter()">Save Character</button>
-            <div id="shortBioOutput" class="bio-output"></div>
-            <div id="detailedBioOutput" class="bio-output"></div>
+            <div id="shortBioOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
+            <div id="detailedBioOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
         </div>
 
         <!-- Compare Characters Tab -->
-        <div id="compare" class="tab-content">
-            <h2>Compare Characters</h2>
-            <div class="input-group">
-                <label for="character1">Select Character 1</label>
-                <select id="character1"></select>
+        <div id="compare" class="tab-content bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Compare Characters</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="input-group">
+                    <label for="character1" class="block text-sm font-medium mb-1">Select Character 1</label>
+                    <select id="character1" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
+                <div class="input-group">
+                    <label for="character2" class="block text-sm font-medium mb-1">Select Character 2</label>
+                    <select id="character2" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="character2">Select Character 2</label>
-                <select id="character2"></select>
-            </div>
-            <button onclick="compareCharacters()">Compare</button>
-            <div id="comparisonOutput" class="bio-output"></div>
+            <button onclick="compareCharacters()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare</button>
+            <div id="comparisonOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
         </div>
 
         <!-- Trait List Tab -->
-        <div id="traits" class="tab-content">
-            <h2>Trait List</h2>
-            <div class="input-group">
-                <label for="newTraitCategory">Category</label>
-                <select id="newTraitCategory">
-                    <option value="Physical">Physical</option>
-                    <option value="Psychological">Psychological</option>
-                    <option value="Background">Background</option>
-                    <option value="Motivations">Motivations</option>
-                    <option value="Custom">Custom</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="newTrait">Characteristic</label>
-                <input type="text" id="newTrait" placeholder="Enter trait name">
-            </div>
-            <div class="input-group">
-                <label for="newSynonyms">Synonyms</label>
-                <input type="text" id="newSynonyms" placeholder="Enter synonyms (comma-separated)">
-            </div>
-            <div class="input-group">
-                <label for="newDescription">Description</label>
-                <textarea id="newDescription" placeholder="Enter formal description"></textarea>
-            </div>
-            <button onclick="addTrait()">Add Trait</button>
-            <table id="traitTable">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Characteristic</th>
-                        <th>Synonyms</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody id="traitTableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Saved Characters Tab -->
-        <div id="saved" class="tab-content">
-            <h2>Saved Characters</h2>
-            <div id="characterList"></div>
-            <div id="editCharacter" class="edit-section">
-                <h3>Edit Character</h3>
+        <div id="traits" class="tab-content bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Trait List</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="input-group">
-                    <label for="editIndex">Select Character to Edit</label>
-                    <select id="editIndex" onchange="loadCharacterToEdit()"></select>
-                </div>
-                <div class="input-group">
-                    <label for="editName">Name</label>
-                    <input type="text" id="editName" placeholder="Enter character name">
-                </div>
-                <div class="input-group">
-                    <label for="editAge">Age</label>
-                    <input type="number" id="editAge" placeholder="Enter age (optional)">
-                </div>
-                <div class="input-group">
-                    <label for="editGender">Gender</label>
-                    <select id="editGender">
-                        <option value="">Select gender (optional)</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="non-binary">Non-binary</option>
-                        <option value="unspecified">Unspecified</option>
+                    <label for="newTraitCategory" class="block text-sm font-medium mb-1">Category</label>
+                    <select id="newTraitCategory" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Physical">Physical</option>
+                        <option value="Psychological">Psychological</option>
+                        <option value="Background">Background</option>
+                        <option value="Motivations">Motivations</option>
+                        <option value="Custom">Custom</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label for="editLocale">Locale</label>
-                    <input type="text" id="editLocale" placeholder="Enter locale (optional)">
+                    <label for="newTrait" class="block text-sm font-medium mb-1">Characteristic</label>
+                    <input type="text" id="newTrait" placeholder="Enter trait name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="input-group">
-                    <label for="editOccupation">Occupation</label>
-                    <input type="text" id="editOccupation" placeholder="Enter occupation">
+                    <label for="newSynonyms" class="block text-sm font-medium mb-1">Synonyms</label>
+                    <input type="text" id="newSynonyms" placeholder="Enter synonyms (comma-separated)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="input-group">
-                    <label for="editTraits">Personality Traits</label>
-                    <textarea id="editTraits" placeholder="Enter personality traits (comma-separated, optional)"></textarea>
+                    <label for="newDescription" class="block text-sm font-medium mb-1">Description</label>
+                    <textarea id="newDescription" placeholder="Enter formal description" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
                 </div>
-                <button onclick="updateCharacter()">Update Character</button>
+            </div>
+            <button onclick="addTrait()" class="mt-4 px Rach-4="4 py-2 bg-blue-[-500 text-white rounded-md hover:bg-blue-600 transition">Add Trait</button>
+            <div class="overflow-x-auto mt-4">
+                <table id="traitTable" class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-blue-600 text-white">
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-sm">Category</th>
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-sm">Characteristic</th>
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-sm">Synonyms</th>
+                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left text-sm">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="traitTableBody"></tbody>
+                </table>
             </div>
         </div>
-    </div>
+
+        <!-- Saved Characters Tab -->
+        <div id="saved" class="tab-content bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Saved Characters</h2>
+            <div id="characterList" class="space-y-4"></div>
+            <div id="editCharacter" class="edit-section mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-md">
+                <h3 class="text-lg font-semibold mb-4">Edit Character</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label for="editIndex" class="block text-sm font-medium mb-1">Select Character to Edit</label>
+                        <select id="editIndex" onchange="loadCharacterToEdit()" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select a character</option>
+                        </select>
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editName" class="block text-sm font-medium mb-1">Name</label>
+                        <input type="text" id="editName" placeholder="Enter character name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2">
+                        focus:ring-blue-500
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editAge" class="block text-sm font-medium mb-1">Age</label>
+                        <input type="number" id="editAge" placeholder="Enter age (optional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editGender" class="block text-sm font-medium mb-1">Gender</label>
+                        <select id="editGender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none">
+                            focus:outline-none;
+                            focus:ring-2 focus:ring-blue-500
+                            <option value="">Select gender (optional)</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="non-binary">Non-binary</option>
+                            <option value="unspecified">Unspecified</option>
+                        </select>
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editLocale" class="block text-sm font-medium mb-1">Locale</label>
+                        <input type="text" id="editLocale" placeholder="Enter locale (optional, e.g., New York)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2">
+                        focus:ring-blue-500
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editOccupation" class="block text-sm font-medium mb-1">Occupation</label>
+                        <input type="text" id="editOccupation" placeholder="Enter occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="edit-input-group md:col-span-2">
+                        <label for="editTraits" class="block text-sm font-medium mb-1">Personality Traits</label>
+                        <textarea id="editTraits" placeholder="Edit personality traits (comma-separated, optional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
+                    </div>
+                </div>
+                <button onclick="updateCharacter()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Update Character</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-gray-700 dark:bg-gray-800 text-white text-center py-3">
+        <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
+<xaiArtifact>
+
+<xaiArtifact artifact_id="61e041f4-14b4-4968-9471-afd4e5d94a8c" artifact_version_id="9bcc14e3-443b-4133-b323-eaf06b791646" title="styles.css" contentType="text/css">
+:root {
+  --bg-color: #f4f6f9;
+  --text-color: #212529;
+  --border-color: #ced4da;
+  --primary-color: #007bff;
+  --card-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a202c;
+  --text-color: #e2e8f0;
+  --border-color: #4a5568;
+  --primary-color: #3b82f6;
+  --card-bg: #2d3748;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.toggle-checkbox:checked + .toggle-switch {
+  background-color: var(--primary-color);
+}
+
+.toggle-checkbox:checked + .toggle-switch .toggle-knob {
+  transform: translateX(1.5rem);
+}
+
+.tab-content {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.tab-content:not(.active) {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.tab-content.active {
+  opacity: 1;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+  border-color: var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+#traitTable th,
+#traitTable td {
+  border-color: var(--border-color);
+}

@@ -1,8 +1,12 @@
 let characters = JSON.parse(localStorage.getItem('characters')) || [];
 let traits = [];
 
-// Predefined locales for randomization
+// Predefined data for randomization
 const locales = ['New York', 'Tokyo', 'Rural Midwest', 'London', 'Cape Town'];
+const firstNames = ['Alex', 'Sam', 'Taylor', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Avery'];
+const lastNames = ['Smith', 'Johnson', 'Brown', 'Lee', 'Wilson', 'Davis', 'Clark', 'Harris'];
+const genders = ['male', 'female', 'non-binary', 'unspecified'];
+const occupations = ['Writer', 'Engineer', 'Teacher', 'Artist', 'Doctor', 'Chef', 'Musician', 'Lawyer'];
 
 // CSV files to load
 const csvFiles = [
@@ -31,6 +35,45 @@ function parseCSV(data) {
     });
 }
 
+// Randomization functions
+function randomizeName() {
+    const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+    document.getElementById('name').value = `${first} ${last}`;
+}
+
+function randomizeAge() {
+    const age = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+    document.getElementById('age').value = age;
+}
+
+function randomizeGender() {
+    const gender = genders[Math.floor(Math.random() * genders.length)];
+    document.getElementById('gender').value = gender;
+}
+
+function randomizeLocale() {
+    const locale = locales[Math.floor(Math.random() * locales.length)];
+    document.getElementById('locale').value = locale;
+}
+
+function randomizeOccupation() {
+    const occupation = occupations[Math.floor(Math.random() * occupations.length)];
+    document.getElementById('occupation').value = occupation;
+}
+
+function randomizeTraits() {
+    const psychTraits = traits.filter(t => t.category === 'Psychological');
+    const numTraits = Math.floor(Math.random() * 3) + 1; // 1-3 traits
+    const selectedTraits = [];
+    for (let i = 0; i < numTraits && psychTraits.length > 0; i++) {
+        const index = Math.floor(Math.random() * psychTraits.length);
+        selectedTraits.push(psychTraits[index].characteristic);
+        psychTraits.splice(index, 1); // Avoid duplicates
+    }
+    document.getElementById('traits').value = selectedTraits.join(', ');
+}
+
 // Randomly select a trait from a category
 function getRandomTrait(category) {
     const categoryTraits = traits.filter(t => t.category === category);
@@ -49,7 +92,7 @@ function showTab(tabId) {
 function saveCharacter() {
     const name = document.getElementById('name').value;
     const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || ['male', 'female', 'non-binary', 'unspecified'][Math.floor(Math.random() * 4)];
+    const gender = document.getElementById('gender').value || genders[Math.floor(Math.random() * genders.length)];
     const locale = document.getElementById('locale').value || locales[Math.floor(Math.random() * locales.length)];
     const occupation = document.getElementById('occupation').value;
     const traitsInput = document.getElementById('traits').value;
@@ -68,7 +111,7 @@ function saveCharacter() {
         displayCharacters();
         updateCharacterSelects();
         clearForm();
-        showTab('saved'); // Navigate to Saved Characters tab
+        showTab('saved');
     } else {
         alert('Please fill in required fields (Name, Occupation).');
     }
@@ -78,7 +121,7 @@ function saveCharacter() {
 function generateBio() {
     const name = document.getElementById('name').value;
     const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || ['male', 'female', 'non-binary', 'unspecified'][Math.floor(Math.random() * 4)];
+    const gender = document.getElementById('gender').value || genders[Math.floor(Math.random() * genders.length)];
     const locale = document.getElementById('locale').value || locales[Math.floor(Math.random() * locales.length)];
     const occupation = document.getElementById('occupation').value;
     const userTraits = document.getElementById('traits').value.split(',').map(t => t.trim()).filter(t => t);
@@ -121,10 +164,9 @@ function generateBio() {
         }
     ];
     const extendedBio = extendedBioSections.map(s => `<h3>${s.title}</h3><p>${s.content}</p>`).join('');
-    // Approximate 1000 words by repeating sections (simplified for demo)
 
-    document.getElementById('shortBioOutput').innerHTML = `<h3>Short Bio</h3><p>${shortBio}</p>`;
-    document.getElementById('detailedBioOutput').innerHTML = `<h3>Detailed Bio</h3>${extendedBio}`;
+    document.getElementById('shortBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortBio}</p>`;
+    document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${extendedBio}`;
 }
 
 // Compare characters
@@ -144,7 +186,7 @@ function compareCharacters() {
     const transition = `Crossing paths, ${char1.name}'s ${char1.traits[0] || 'nature'} could challenge ${char2.name}'s ${char2.traits[0] || 'outlook'}, potentially shifting their perspectives in ${char1.locale}.`;
 
     const comparison = `
-        <h3>Comparison: ${char1.name} vs ${char2.name}</h3>
+        <h3 class="text-lg font-semibold mb-2">Comparison: ${char1.name} vs ${char2.name}</h3>
         <p><strong>Commonalities:</strong> ${commonTraits.length ? commonTraits.join(', ') : 'None'}</p>
         <p><strong>Points of Contention:</strong> ${contention}</p>
         <p><strong>Transition Points:</strong> ${transition}</p>
@@ -178,10 +220,10 @@ function displayTraits() {
         categoryTraits.forEach(trait => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${trait.category}</td>
-                <td>${trait.characteristic}</td>
-                <td>${trait.synonyms.join(', ')}</td>
-                <td>${trait.description}</td>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category}</td>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic}</td>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms.join(', ')}</td>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -194,6 +236,7 @@ function displayCharacters() {
     characterList.innerHTML = '';
     characters.forEach((char, index) => {
         const div = document.createElement('div');
+        div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md';
         div.innerHTML = `<strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
         characterList.appendChild(div);
     });
@@ -248,7 +291,7 @@ function updateCharacter() {
     }
     const name = document.getElementById('editName').value;
     const age = document.getElementById('editAge').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('editGender').value || ['male', 'female', 'non-binary', 'unspecified'][Math.floor(Math.random() * 4)];
+    const gender = document.getElementById('editGender').value || genders[Math.floor(Math.random() * genders.length)];
     const locale = document.getElementById('editLocale').value || locales[Math.floor(Math.random() * locales.length)];
     const occupation = document.getElementById('editOccupation').value;
     const traitsInput = document.getElementById('editTraits').value;
@@ -297,8 +340,18 @@ function clearEditForm() {
     document.getElementById('editTraits').value = '';
 }
 
+// Dark mode toggle
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('change', () => {
+    document.documentElement.setAttribute('data-theme', themeToggle.checked ? 'dark' : 'light');
+    localStorage.setItem('theme', themeToggle.checked ? 'dark' : 'light');
+});
+
 // Initialize
 window.onload = () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.checked = savedTheme === 'dark';
     displayCharacters();
     showTab('create');
 };
