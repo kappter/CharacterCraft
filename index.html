@@ -58,7 +58,21 @@
             </div>
             <div class="input-group">
                 <label for="age">Age</label>
-                <input type="number" id="age" placeholder="Enter age">
+                <input type="number" id="age" placeholder="Enter age (optional)">
+            </div>
+            <div class="input-group">
+                <label for="gender">Gender</label>
+                <select id="gender">
+                    <option value="">Select gender (optional)</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="non-binary">Non-binary</option>
+                    <option value="unspecified">Unspecified</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="locale">Locale</label>
+                <input type="text" id="locale" placeholder="Enter locale (optional, e.g., New York)">
             </div>
             <div class="input-group">
                 <label for="occupation">Occupation</label>
@@ -66,7 +80,7 @@
             </div>
             <div class="input-group">
                 <label for="traits">Personality Traits</label>
-                <textarea id="traits" placeholder="Enter personality traits"></textarea>
+                <textarea id="traits" placeholder="Enter personality traits (comma-separated, optional)"></textarea>
             </div>
             <button onclick="saveCharacter()">Save Character</button>
             <button onclick="generateBio()">Generate Bios</button>
@@ -93,7 +107,16 @@
         <div class="section">
             <h2>Trait List</h2>
             <div class="input-group">
-                <label for="newTrait">New Trait</label>
+                <label for="newTraitCategory">Category</label>
+                <select id="newTraitCategory">
+                    <option value="Physical">Physical</option>
+                    <option value="Psychological">Psychological</option>
+                    <option value="Background">Background</option>
+                    <option value="Custom">Custom</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="newTrait">Characteristic</label>
                 <input type="text" id="newTrait" placeholder="Enter trait name">
             </div>
             <div class="input-group">
@@ -108,6 +131,7 @@
             <table id="traitTable">
                 <thead>
                     <tr>
+                        <th>Category</th>
                         <th>Characteristic</th>
                         <th>Synonyms</th>
                         <th>Description</th>
