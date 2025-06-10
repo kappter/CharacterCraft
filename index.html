@@ -44,7 +44,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>CharacterCraft - Build Believable Characters</title>
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/svgs/solid/user-circle.svg">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" type="text/css">
@@ -52,7 +52,10 @@
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter min-h-screen flex flex-col">
     <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
+            <div class="flex items-center">
+                <img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
+            </div>
             <div class="flex items-center">
                 <label for="theme-toggle" class="mr-2 text-sm font-medium">Dark Mode</label>
                 <input type="checkbox" id="theme-toggle" class="toggle-checkbox hidden">
@@ -107,7 +110,7 @@
                         <label for="locale" class="block text-sm font-medium mb-1">Locale</label>
                         <input type="text" id="locale" placeholder="Enter locale (optional, e.g., New York)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-                    <button onclick="randomizeLocale()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-200 rounded-md text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
+                    <button onclick="randomizeLocale()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
                 </div>
                 <div class="input-group flex items-end">
                     <div class="flex-grow">
@@ -143,6 +146,13 @@
                 <div class="input-group">
                     <label for="character2" class="block text-sm font-medium mb-1">Select Character 2</label>
                     <select id="character2" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
+                <div class="input-group md:col-span-2 flex items-end">
+                    <div class="flex-grow">
+                        <label for="context" class="block text-sm font-medium mb-1">Context</label>
+                        <input type="text" id="context" placeholder="Enter context (e.g., work, family, vacation)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="randomizeContext()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
                 </div>
             </div>
             <button onclick="compareCharacters()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare</button>
