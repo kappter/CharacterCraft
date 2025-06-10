@@ -1,3 +1,9 @@
+<div align="center">
+  <a href="https://kappter.github.io/CharacterCraft/">
+    <img src="./cclogo.png" alt="CharacterCraft Logo" width="100">
+  </a>
+</div>
+
 # CharacterCraft
 
 CharacterCraft is a web application designed to assist writers in creating vivid, believable characters for their stories. Inspired by *The Writer's Digest Sourcebook for Building Believable Characters* by Marc McCutcheon, the app provides tools to generate character bios, compare characters, manage traits, and save character profiles. With a modern, user-friendly interface, CharacterCraft supports both manual input and randomization to spark creativity, making it ideal for novelists, screenwriters, and role-playing game enthusiasts.
@@ -13,6 +19,7 @@ CharacterCraft is a web application designed to assist writers in creating vivid
 
 ### 2. Character Comparison
 - Compare two saved characters to identify commonalities, points of contention, and potential transition points in their interactions.
+- **Context Field**: Specify or randomize the context (e.g., work, family, vacation, class, school, in the wild) to explore what brought the characters together, enriching the comparison narrative.
 - Useful for plotting character dynamics or conflicts in a story.
 
 ### 3. Trait List Management
@@ -28,7 +35,7 @@ CharacterCraft is a web application designed to assist writers in creating vivid
 ### 5. Modern UI
 - **Tabbed Interface**: Navigate between Create Character, Compare Characters, Trait List, and Saved Characters tabs for a focused workflow.
 - **Dark Mode**: Toggle between light and dark themes with a switch in the header, with preferences saved in localStorage.
-- **Fixed Header/Footer**: A fixed header displays the app title and dark mode toggle; a fixed footer shows a copyright notice.
+- **Fixed Header/Footer**: A fixed header displays the app logo, title, and dark mode toggle; a fixed footer shows a copyright notice.
 - **Responsive Design**: Built with Tailwind CSS and Inter font, the UI adapts to mobile, tablet, and desktop screens.
 - **Animations**: Subtle transitions for tab switches, button hovers, and dark mode toggle enhance user engagement.
 
@@ -51,13 +58,15 @@ The modern, intuitive interface ensures accessibility for both novice and experi
 ## Installation and Usage
 
 1. **Clone or Download**:
-   - Clone the repository or download the project files.
+   - Clone the repository or download the project files from [GitHub](https://github.com/kappter/CharacterCraft).
 
 2. **File Structure**:
    - Ensure the following files are in the same directory:
      - `index.html`: Main HTML file.
      - `styles.css`: Custom CSS for theme-specific styles.
      - `script.js`: JavaScript for functionality.
+     - `cclogo.png`: App logo.
+     - `favicon.ico`: Favicon.
      - `physical_traits.csv`: Physical trait data.
      - `psychological_traits.csv`: Psychological trait data.
      - `background_details.csv`: Background trait data.
@@ -66,9 +75,10 @@ The modern, intuitive interface ensures accessibility for both novice and experi
 3. **Serve the App**:
    - Use a local server to enable CSV fetching (e.g., Python’s HTTP server):
      ```bash
-     python -m http.server
+     python -m http.server 8000
      ```
    - Open `http://localhost:8000` in a web browser.
+   - Alternatively, visit the hosted version at [https://kappter.github.io/CharacterCraft/](https://kappter.github.io/CharacterCraft/).
 
 4. **Usage Instructions**:
    - **Create Character Tab**:
@@ -76,23 +86,37 @@ The modern, intuitive interface ensures accessibility for both novice and experi
      - Click "Generate Bios" to create short and extended bios.
      - Click "Save Character" to store the character and navigate to the Saved Characters tab.
    - **Compare Characters Tab**:
-     - Select two saved characters and click "Compare" to view commonalities and conflicts.
+     - Select two saved characters, enter or randomize a context (e.g., work, family), and click "Compare" to view commonalities and conflicts.
    - **Trait List Tab**:
      - View existing traits or add new ones by filling out the form and clicking "Add Trait".
    - **Saved Characters Tab**:
      - View saved characters or select one to edit, updating details as needed.
    - **Dark Mode**: Toggle dark mode via the switch in the header.
 
+## Troubleshooting
+- **Dark Mode Not Working**:
+  - Ensure JavaScript is enabled in your browser.
+  - Clear browser cache (Ctrl+Shift+R) and reload.
+  - Check the Console (F12 > Console) for errors related to `theme-toggle`.
+- **CSS Displaying as Text**:
+  - Verify you’re using a local server (`python -m http.server`) instead of opening `index.html` directly.
+  - Confirm `styles.css` is in the project root and referenced correctly.
+- **CSV Loading Issues**:
+  - Ensure CSV files are in the project root with correct names.
+  - Check Console for fetch errors; use a local server to avoid CORS issues.
+- **Browser Extension Errors** (e.g., `content.js`):
+  - Disable extensions like MindStudio temporarily to reduce console noise.
+
 ## Development Notes
 - **Tech Stack**:
   - HTML, Tailwind CSS, and JavaScript for the frontend.
   - Inter font (via Google Fonts CDN) for typography.
-  - localStorage for persistent character and theme storage.
+  - LocalStorage for persistent character and theme storage.
   - CSV files for trait data, parsed client-side.
 - **Limitations**:
   - Extended bio length (~1000 words) is approximated via repetition; a future version could use a narrative generator.
   - New traits are stored in-memory and reset on page refresh; a backend could persist them to CSV files.
-  - Randomization lists (names, occupations) are small; expand them for greater variety.
+  - Randomization lists (names, occupations, contexts) are small; expand them for greater variety.
 - **Future Enhancements**:
   - Backend integration for persistent trait storage.
   - Advanced bio generation with unique narratives.
@@ -100,7 +124,7 @@ The modern, intuitive interface ensures accessibility for both novice and experi
   - Randomize buttons for the Edit Character form.
 
 ## License
-This project is for educational and personal use, inspired by *The Writer's Digest Sourcebook for Building Believable Characters*. No commercial use is intended. All rights reserved for original content and concepts.
+This project is for educational and personal use only, inspired by *The Writer's Digest Sourcebook for Building Believable Characters*. No commercial use is intended. All rights reserved for original content and concepts.
 
 ## Acknowledgments
 - *The Writer's Digest Sourcebook for Building Believable Characters* by Marc McCutcheon for inspiration.
