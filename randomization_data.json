@@ -30,6 +30,18 @@
   ],
   "contexts": [
     "work", "family", "vacation", "class", "school", "in the wild", "community event", 
-    "online forum", "shared hobby", "chance encounter"
+    "online forum", "shared hobby", "chance encounter", "midnight stakeout", "village festival",
+    "battlefield truce", "stranded spacecraft", "courtroom showdown", "smuggler’s den",
+    "ghost town ruins", "underground fight club", "diplomatic summit", "rain-soaked alley",
+    "desert caravan", "haunted manor", "pirate ship deck", "war-torn refugee camp",
+    "neon-lit nightclub", "mountain rescue", "secret laboratory", "bustling marketplace",
+    "abandoned subway", "temple ritual", "skyline rooftop", "shipwreck dive",
+    "winter siege", "circus big top", "border checkpoint", "hacker’s hideout",
+    "royal masquerade", "fishing village dock", "jungle expedition", "street protest",
+    "doomsday bunker", "art gallery opening", "train heist", "arctic research station",
+    "gladiator arena", "ghostly séance", "smoke-filled tavern", "corporate espionage",
+    "nomad’s campfire", "flooded city ruins", "asteroid mining colony", "rebel safehouse",
+    "ancient library", "stormy lighthouse", "backstage drama", "quarantine zone",
+    "roadside diner", "sky pirate airship", "underworld auction", "festival bonfire"
   ]
 }
