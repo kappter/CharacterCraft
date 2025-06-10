@@ -1,0 +1,35 @@
+{
+  "firstNames": [
+    "Aisha", "Hiroshi", "Elena", "Javier", "Ngozi", "Sven", "Priya", "Liam", "Fatima", "Dmitri",
+    "Isabela", "Kwame", "Mei", "Omar", "Sofia", "Arjun", "Chloe", "Youssef", "Anika", "Rafael"
+  ],
+  "lastNames": [
+    "Patel", "Nguyen", "Garcia", "Kim", "Okafor", "Svensson", "Sharma", "O’Connor", "Hassan", "Ivanov",
+    "Silva", "Mensah", "Chen", "Al-Bayati", "Rossi", "Singh", "Dupont", "El-Sayed", "Weber", "Costa"
+  ],
+  "ageRanges": [
+    {"min": 18, "max": 25, "label": "Young Adult"},
+    {"min": 26, "max": 35, "label": "Early Career"},
+    {"min": 36, "max": 50, "label": "Midlife"},
+    {"min": 51, "max": 65, "label": "Mature"},
+    {"min": 66, "max": 90, "label": "Senior"}
+  ],
+  "genders": [
+    "male", "female", "non-binary", "unspecified", "agender", "genderfluid", "two-spirit"
+  ],
+  "locales": [
+    "Mumbai", "Appalachian Trail", "Lagos", "Reykjavik", "Siberian Outpost", "Cairo", "Kyoto", 
+    "Havana", "Nairobi", "Buenos Aires", "Amsterdam", "Ulaanbaatar", "Cape Town", "Vancouver",
+    "Bali", "Riyadh", "Seoul", "Lisbon", "Tbilisi", "Anchorage"
+  ],
+  "occupations": [
+    "Hacker", "Park Ranger", "Diplomat", "Barista", "Gravedigger", "Astrophysicist", "Photojournalist",
+    "Street Vendor", "Librarian", "Marine Biologist", "Union Organizer", "Puppeteer", "Archaeologist",
+    "Game Designer", "Herbalist", "Freight Train Conductor", "Dance Choreographer", "Cryptocurrency Trader",
+    "Urban Farmer", "Voice Actor"
+  ],
+  "contexts": [
+    "work", "family", "vacation", "class", "school", "in the wild", "community event", 
+    "online forum", "shared hobby", "chance encounter"
+  ]
+}

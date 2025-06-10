@@ -44,17 +44,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>CharacterCraft - Build Believable Characters</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="./images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" type="text/css">
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter min-h-screen flex flex-col">
-    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-lg z-100">
+        <div class="max-w-2xl mx-auto px-4 sm:px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
+                <img src="./images/logo.png" alt="CharacterCraft Logo" class="h-4 mr-2">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white">CharacterCraft</h2>
             </div>
             <div class="flex items-center">
                 <label for="theme-toggle" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-200">Dark Mode</label>
@@ -66,7 +66,7 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+    <main class="flex-grow max-w-2xl mx-auto px-4 sm:px-4 pt-20 pb-16">
         <div class="tabs flex justify-center space-x-2 mb-6 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
             <button class="tab-button active px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600" onclick="showTab('create')">Create Character</button>
             <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('compare')">Compare Characters</button>
@@ -101,6 +101,9 @@
                             <option value="female">Female</option>
                             <option value="non-binary">Non-binary</option>
                             <option value="unspecified">Unspecified</option>
+                            <option value="agender">Agender</option>
+                            <option value="genderfluid">Genderfluid</option>
+                            <option value="two-spirit">Two-spirit</option>
                         </select>
                     </div>
                     <button onclick="randomizeGender()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
@@ -108,7 +111,7 @@
                 <div class="input-group flex items-end">
                     <div class="flex-grow">
                         <label for="locale" class="block text-sm font-medium mb-1">Locale</label>
-                        <input type="text" id="locale" placeholder="Enter locale (optional, e.g., New York)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="locale" placeholder="Enter locale (optional, e.g., Mumbai)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <button onclick="randomizeLocale()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
                 </div>
@@ -229,15 +232,18 @@
                             <option value="female">Female</option>
                             <option value="non-binary">Non-binary</option>
                             <option value="unspecified">Unspecified</option>
+                            <option value="agender">Agender</option>
+                            <option value="genderfluid">Genderfluid</option>
+                            <option value="two-spirit">Two-spirit</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label for="editLocale" class="block text-sm font-medium mb-1">Locale</label>
-                        <input type="text" id="editLocale" placeholder="Enter locale (optional, e.g., New York)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="editLocale" placeholder="Enter locale (optional, e.g., Mumbai)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="input-group">
                         <label for="editOccupation" class="block text-sm font-medium mb-1">Occupation</label>
-                        <input type="text" id="editOccupation" placeholder="Enter occupation" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="editOccupation" placeholder="Enter occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="input-group md:col-span-2">
                         <label for="editTraits" class="block text-sm font-medium mb-1">Personality Traits</label>
@@ -250,7 +256,7 @@
     </main>
 
     <footer class="fixed bottom-0 left-0 w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-3">
-        <p class="text-sm">© 2024 CharacterCraft. All Rights Reserved.</p>
+        <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
     </footer>
 
     <script src="./script.js"></script>

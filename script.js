@@ -1,13 +1,6 @@
 let characters = JSON.parse(localStorage.getItem('characters')) || [];
 let traits = [];
-
-// Predefined data for randomization
-const locales = ['New York', 'Tokyo', 'Rural Midwest', 'London', 'Cape Town'];
-const firstNames = ['Alex', 'Sam', 'Taylor', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Avery'];
-const lastNames = ['Smith', 'Johnson', 'Brown', 'Lee', 'Wilson', 'Davis', 'Clark', 'Harris'];
-const genders = ['male', 'female', 'non-binary', 'unspecified'];
-const occupations = ['Writer', 'Engineer', 'Teacher', 'Artist', 'Doctor', 'Chef', 'Musician', 'Lawyer'];
-const contexts = ['work', 'family', 'vacation', 'class', 'school', 'in the wild', 'community event', 'online forum', 'shared hobby', 'chance encounter'];
+let randomizationData = {};
 
 // CSV files to load
 const csvFiles = [
@@ -16,6 +9,33 @@ const csvFiles = [
     './background_details.csv',
     './motivations_beliefs.csv'
 ];
+
+// Load randomization data
+fetch('./randomization_data.json')
+    .then(response => {
+        if (!response.ok) {
+            console.error(`Failed to load randomization_data.json: ${response.statusText}`);
+            throw new Error('Failed to load randomization data');
+        }
+        return response.json();
+    })
+    .then(data => {
+        randomizationData = data;
+        console.log('Randomization data loaded:', randomizationData);
+    })
+    .catch(err => {
+        console.error('Error loading randomization_data.json:', err);
+        // Fallback data
+        randomizationData = {
+            firstNames: ['Alex', 'Sam', 'Taylor', 'Jordan'],
+            lastNames: ['Smith', 'Johnson', 'Brown', 'Lee'],
+            ageRanges: [{min: 18, max: 80, label: 'Adult'}],
+            genders: ['male', 'female', 'non-binary', 'unspecified'],
+            locales: ['New York', 'Tokyo', 'London'],
+            occupations: ['Writer', 'Engineer', 'Teacher'],
+            contexts: ['work', 'family', 'vacation']
+        };
+    });
 
 // Load all CSV files
 Promise.all(csvFiles.map(file => 
@@ -29,7 +49,7 @@ Promise.all(csvFiles.map(file =>
         })
         .catch(err => {
             console.error(`Error fetching ${file}:`, err);
-            return ''; // Fallback to avoid breaking the app
+            return '';
         })
 ))
 .then(data => {
@@ -56,54 +76,55 @@ Promise.all(csvFiles.map(file =>
 
 // Parse CSV data
 function parseCSV(data) {
-    const rows = data.trim().split('\n').slice(1); // Skip header
+    const rows = data.trim().split('\n').slice(1);
     return rows.map(row => {
         const [category, characteristic, synonyms, description] = row.split(',').map(item => item.trim());
         return { category, characteristic, synonyms: synonyms ? synonyms.split(';') : [], description };
-    }).filter(trait => trait.category && trait.characteristic); // Filter invalid rows
+    }).filter(trait => trait.category && trait.characteristic);
 }
 
 // Randomization functions
 function randomizeName() {
-    const first = firstNames[Math.floor(Math.random() * firstNames.length)];
-    const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const first = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
+    const last = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
     document.getElementById('name').value = `${first} ${last}`;
 }
 
 function randomizeAge() {
-    const age = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+    const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
+    const age = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
     document.getElementById('age').value = age;
 }
 
 function randomizeGender() {
-    const gender = genders[Math.floor(Math.random() * genders.length)];
+    const gender = randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
     document.getElementById('gender').value = gender;
 }
 
 function randomizeLocale() {
-    const locale = locales[Math.floor(Math.random() * locales.length)];
+    const locale = randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
     document.getElementById('locale').value = locale;
 }
 
 function randomizeOccupation() {
-    const occupation = occupations[Math.floor(Math.random() * occupations.length)];
+    const occupation = randomizationData.occupations[Math.floor(Math.random() * randomizationData.occupations.length)];
     document.getElementById('occupation').value = occupation;
 }
 
 function randomizeTraits() {
     const psychTraits = traits.filter(t => t.category === 'Psychological');
-    const numTraits = Math.floor(Math.random() * 3) + 1; // 1-3 traits
+    const numTraits = Math.floor(Math.random() * 3) + 1;
     const selectedTraits = [];
     for (let i = 0; i < numTraits && psychTraits.length > 0; i++) {
         const index = Math.floor(Math.random() * psychTraits.length);
         selectedTraits.push(psychTraits[index].characteristic);
-        psychTraits.splice(index, 1); // Avoid duplicates
+        psychTraits.splice(index, 1);
     }
     document.getElementById('traits').value = selectedTraits.join(', ');
 }
 
 function randomizeContext() {
-    const context = contexts[Math.floor(Math.random() * contexts.length)];
+    const context = randomizationData.contexts[Math.floor(Math.random() * randomizationData.contexts.length)];
     document.getElementById('context').value = context;
 }
 
@@ -125,8 +146,8 @@ function showTab(tabId) {
 function saveCharacter() {
     const name = document.getElementById('name').value;
     const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || genders[Math.floor(Math.random() * genders.length)];
-    const locale = document.getElementById('locale').value || locales[Math.floor(Math.random() * locales.length)];
+    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
     const occupation = document.getElementById('occupation').value;
     const traitsInput = document.getElementById('traits').value;
 
@@ -154,8 +175,8 @@ function saveCharacter() {
 function generateBio() {
     const name = document.getElementById('name').value;
     const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || genders[Math.floor(Math.random() * genders.length)];
-    const locale = document.getElementById('locale').value || locales[Math.floor(Math.random() * locales.length)];
+    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
     const occupation = document.getElementById('occupation').value;
     const userTraits = document.getElementById('traits').value.split(',').map(t => t.trim()).filter(t => t);
 
@@ -164,36 +185,33 @@ function generateBio() {
         return;
     }
 
-    // Select traits (user-specified or random)
     const physicalTrait = getRandomTrait('Physical') || { characteristic: 'average build', description: 'An unremarkable physique.' };
     const psychologicalTrait = userTraits.length ? { characteristic: userTraits[0], description: 'User-defined trait.' } : getRandomTrait('Psychological') || { characteristic: 'calm', description: 'A composed demeanor.' };
     const backgroundTrait = getRandomTrait('Background') || { characteristic: 'urban upbringing', description: 'Raised in a bustling city.' };
     const motivationTrait = getRandomTrait('Motivations') || { characteristic: 'pursuit of truth', description: 'A drive to uncover hidden realities.' };
 
-    // Short bio template
     const shortBio = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, is marked by ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their ${motivationTrait.characteristic} shapes their life in ${locale}, hinting at a story rich with potential and depth.`;
 
-    // Extended bio template
     const extendedBioSections = [
         {
             title: 'Early Life',
-            content: `${name} was born in ${locale}, where their ${backgroundTrait.characteristic} set the stage for their early years. ${backgroundTrait.description} Their ${physicalTrait.characteristic} often drew attention, influencing their interactions with family and friends in ${locale}. These formative experiences laid the foundation for their ${motivationTrait.characteristic}.`.repeat(2)
+            content: `${name} was born in ${locale}, where their ${backgroundTrait.characteristic} set the stage for their early years. ${backgroundTrait.description} Their ${physicalTrait.characteristic} often drew attention, influencing their interactions with family and friends in ${locale}. These formative experiences laid the foundation for their ${motivationTrait.characteristic}.`
         },
         {
             title: 'Career',
-            content: `As a ${occupation}, ${name} channels their ${psychologicalTrait.characteristic} into their work. ${psychologicalTrait.description} In ${locale}, their career has been shaped by challenges that tested their ${motivationTrait.characteristic}, leading to professional growth and unexpected alliances.`.repeat(3)
+            content: `As a ${occupation}, ${name} channels their ${psychologicalTrait.characteristic} into their work. ${psychologicalTrait.description} In ${locale}, their career has been shaped by challenges that tested their ${motivationTrait.characteristic}, leading to professional growth and unexpected alliances.`
         },
         {
             title: 'Personal Life',
-            content: `${name}'s personal life in ${locale} reflects their ${physicalTrait.characteristic} and ${psychologicalTrait.characteristic}. ${backgroundTrait.description} Their ${motivationTrait.characteristic} drives their hobbies and relationships, creating a rich tapestry of experiences.`.repeat(2)
+            content: `${name}'s personal life in ${locale} reflects their ${physicalTrait.characteristic} and ${psychologicalTrait.characteristic}. ${backgroundTrait.description} Their ${motivationTrait.characteristic} drives their hobbies and relationships, creating a rich tapestry of experiences.`
         },
         {
             title: 'Beliefs and Motivations',
-            content: `Rooted in their ${backgroundTrait.characteristic}, ${name}'s ${motivationTrait.characteristic} defines their worldview. ${motivationTrait.description} In ${locale}, this belief shapes their actions, pushing them to overcome obstacles and pursue their goals with unwavering resolve.`.repeat(2)
+            content: `Rooted in their ${backgroundTrait.characteristic}, ${name}'s ${motivationTrait.characteristic} defines their worldview. ${motivationTrait.description} In ${locale}, this belief shapes their actions, pushing them to overcome obstacles and pursue their goals with unwavering resolve.`
         },
         {
             title: 'Defining Moment',
-            content: `A pivotal moment for ${name} came when their ${psychologicalTrait.characteristic} collided with a challenge in ${locale}. This event, tied to their ${backgroundTrait.characteristic}, redefined their ${motivationTrait.characteristic}, setting them on a new path that continues to unfold.`.repeat(2)
+            content: `A pivotal moment for ${name} came when their ${psychologicalTrait.characteristic} collided with a challenge in ${locale}. This event, tied to their ${backgroundTrait.characteristic}, redefined their ${motivationTrait.characteristic}, setting them on a new path that continues to unfold.`
         }
     ];
     const extendedBio = extendedBioSections.map(s => `<h3 class="text-lg font-semibold mb-2">${s.title}</h3><p>${s.content}</p>`).join('');
@@ -217,7 +235,6 @@ function compareCharacters() {
     const commonTraits = char1.traits.filter(t => char2.traits.includes(t));
     const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
 
-    // Context-based narrative
     const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} come together, their interactions shaped by their unique traits and the setting.`;
     const commonalities = commonTraits.length 
         ? `Their shared traits, such as ${commonTraits.join(', ')}, foster a connection in ${context}, enabling collaboration or mutual understanding.`
@@ -334,8 +351,8 @@ function updateCharacter() {
     }
     const name = document.getElementById('editName').value;
     const age = document.getElementById('editAge').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('editGender').value || genders[Math.floor(Math.random() * genders.length)];
-    const locale = document.getElementById('editLocale').value || locales[Math.floor(Math.random() * locales.length)];
+    const gender = document.getElementById('editGender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+    const locale = document.getElementById('editLocale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
     const occupation = document.getElementById('editOccupation').value;
     const traitsInput = document.getElementById('editTraits').value;
 
