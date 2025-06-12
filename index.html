@@ -138,12 +138,19 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="context" class="block text-sm font-medium mb-1">Context</label>
-                        <input type="text" id="context" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter context (e.g., work, family)">
+                        <label for="context1" class="block text-sm font-medium mb-1">Context 1 (Optional)</label>
+                        <input type="text" id="context1" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter context (e.g., work)">
+                        <button onclick="randomizeContext('context1')" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Context 1</button>
+                    </div>
+                    <div class="input-group">
+                        <label for="context2" class="block text-sm font-medium mb-1">Context 2 (Optional)</label>
+                        <input type="text" id="context2" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter context (e.g., family)">
+                        <button onclick="randomizeContext('context2')" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Context 2</button>
                     </div>
                 </div>
                 <div class="mt-6 flex space-x-4">
                     <button onclick="compareCharacters()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare Characters</button>
+                    <button onclick="randomizeComparison()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize All</button>
                     <button onclick="exportComparisonReport()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Comparison</button>
                 </div>
                 <div id="comparisonOutput" class="mt-6 bio-output p-4 rounded-md"></div>
