@@ -1,6 +1,6 @@
 {
     "firstNames": ["John", "Emma", "Liam", "Olivia", "Quinn"],
-    "lastNames": ["Smith", "Johnson", "Walker", "Brown", "Davis"],
+    "lastNames": ["Smith", "Johnson", "Walker", "Brown", "Li"],
     "genders": ["Male", "Female", "Non-binary"],
     "locales": ["New York", "Tokyo", "Bangkok", "London", "Rio de Janeiro"],
     "occupations": ["Engineer", "Teacher", "Architect", "Artist", "Doctor"],

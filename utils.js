@@ -40,7 +40,7 @@ function randomizeAge() {
         }
 
         if (isNaN(min) || isNaN(max) || min > max) {
-            console.warn('Invalid min/max values, using fallback:', 18, 80);
+            console.warn('Invalid min/max values, using fallback:', min, max);
             min = 18;
             max = 80;
         }
@@ -88,7 +88,7 @@ function randomizeOccupation() {
 function randomizeTraits() {
     try {
         const numTraits = Math.floor(Math.random() * 3) + 1;
-        const shuffledTraits = [...traits].sort(() => 0.5 - Math.random());
+        const shuffledTraits = [...traits].sort(() => Math.random() - 0.5);
         const selected = shuffledTraits.slice(0, numTraits).map(t => t.characteristic);
         document.getElementById('traits').value = selected.join(', ');
         console.log('Randomized traits:', selected);
