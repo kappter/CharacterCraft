@@ -1,75 +1,140 @@
-/* styles.css */
+:root {
+    --primary-bg: #f7fafc;
+    --primary-text: #1a202c;
+    --secondary-bg: #ffffff;
+    --accent-color: #2b6cb0;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --button-bg: #e2e8f0;
+    --button-hover-bg: #cbd5e0;
+}
+
+[data-theme="dark"] {
+    --primary-bg: #1a202c;
+    --primary-text: #e2e8f0;
+    --secondary-bg: #2d3748;
+    --accent-color: #63b3ed;
+    --border-color: #4a5568;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --button-bg: #4a5568;
+    --button-hover-bg: #718096;
+}
+
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
+.theme-transition {
+    transition: background-color 0.3s, color 0.3s;
 }
 
-main {
-    padding-top: 80px;
-    padding-bottom: 60px;
+header, footer {
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow);
 }
 
 .tab-button.active {
-    background-color: #ffffff;
+    background-color: var(--secondary-bg);
+    color: var(--accent-color);
 }
 
 .tab-content {
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow);
+}
+
+.tab-content.hidden {
     display: none;
 }
 
-.tab-content.active {
-    display: block;
+input, select, button {
+    background-color: var(--primary-bg);
+    border-color: var(--border-color);
+    color: var(--primary-text);
 }
 
-.input-group input,
-.input-group select {
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    padding: 0.5rem;
-    width: 100%;
-    box-sizing: border-box;
+input:focus, select:focus, textarea:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.2);
 }
 
-button {
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
+button.randomize-btn {
+    background-color: var(--button-bg);
+    color: var(--primary-text);
     transition: background-color 0.2s;
 }
 
-.bio-output {
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-}
-
-.dark .bio-output {
-    background-color: #374151;
-    border-color: #4b5563;
+button.randomize-btn:hover {
+    background-color: var(--button-hover-bg);
 }
 
 .toggle-switch {
-    position: relative;
+    background-color: var(--border-color);
 }
 
-.toggle-checkbox:checked + .toggle-switch .toggle-knob {
-    transform: translateX(24px);
+.toggle-checkbox:checked + .toggle-switch {
+    background-color: var(--accent-color);
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+.toggle-knob {
+    background-color: #ffffff;
 }
 
-/* Ensure Tailwind classes are supplemented */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.bio-output {
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+}
+
+.modal-content {
+    background-color: var(--secondary-bg);
+    box-shadow: var(--shadow);
+}
+
+table {
+    border-color: var(--border-color);
+}
+
+th, td {
+    border-color: var(--border-color);
+}
+
+.category-section {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.category-toggle {
+    transition: background-color 0.3s;
+}
+
+.category-bubbles {
+    background-color: var(--primary-bg);
+}
+
+.trait-bubble {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tooltip {
+    z-index: 1000;
+    transition: opacity 0.2s;
+}
+
+.pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+#categoryFilter {
+    background-color: var(--primary-bg);
+    border-color: var(--border-color);
+    color: var(--primary-text);
+}
+
+#categoryFilter:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.2);
+}
