@@ -10,15 +10,26 @@ async function loadTraits() {
             'motivations_traits.csv'
         ];
         for (const file of traitFiles) {
-            const response = await fetch(file);
-            const text = await response.text();
-            const lines = text.split('\n').slice(1).filter(line => line.trim());
-            lines.forEach(line => {
-                const [category, characteristic, synonyms, description] = line.split(',').map(item => item.trim());
-                traits.push({ category, characteristic, synonyms, description });
-            });
+            try {
+                const response = await fetch(file);
+                if (!response.ok) {
+                    console.warn(`Failed to load ${file}: ${response.status} ${response.statusText}`);
+                    continue;
+                }
+                const text = await response.text();
+                const lines = text.split('\n').slice(1).filter(line => line.trim());
+                lines.forEach(line => {
+                    const [category, characteristic, synonyms, description] = line.split(',').map(item => item.trim());
+                    if (category && characteristic) {
+                        traits.push({ category, characteristic, synonyms, description });
+                    }
+                });
+                console.log(`Loaded traits from ${file}:`, lines.length);
+            } catch (err) {
+                console.warn(`Error loading ${file}:`, err.message);
+            }
         }
-        console.log('Loaded', traits.length, 'traits from CSV files');
+        console.log('Total traits loaded:', traits.length);
         if (document.getElementById('traitTableBody')) {
             displayTraits();
         }
@@ -54,7 +65,10 @@ function displayTraits() {
 function getRandomTrait(category) {
     try {
         const filteredTraits = traits.filter(t => t.category === category);
-        if (filteredTraits.length === 0) return null;
+        if (filteredTraits.length === 0) {
+            console.warn(`No traits found for category: ${category}`);
+            return null;
+        }
         return filteredTraits[Math.floor(Math.random() * filteredTraits.length)];
     } catch (err) {
         console.error('Error getting random trait:', err);

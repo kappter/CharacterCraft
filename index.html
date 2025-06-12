@@ -43,6 +43,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-security-policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; script-src 'self'; font-src 'self';">
     <title>CharacterCraft</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -53,7 +54,7 @@
     <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
             <div class="flex items-center">
-                <a href="index.html" onclick="resetApp()"><img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2"></a>
+                <a href="index.html" onclick="resetApp()"><img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABlBMVEUAAAD///+l2Z/dAAAAAnRSTlMAAHaTzTgAAAA3SURBVHja7cwxAQAwEAKx6P9/uQvY6gK3YAFBi6iB5ABN0CpqIDlAE7SKGkgO0AStogZ6AOCrAT8kLxyPAAAAAElFTkSuQmCC'"></a>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
             </div>
             <div class="flex items-center">
@@ -117,8 +118,8 @@
                     <button onclick="randomizeEverything()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize Everything</button>
                     <button id="exportBioButton" onclick="exportDetailedBio()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition" disabled>Export Bio</button>
                 </div>
-                <div id="shortBioOutput" class="mt-6 bio-output p-4 rounded-md"></div>
-                <div id="detailedBioOutput" class="mt-4 bio-output p-4 rounded-md"></div>
+                <div id="shortBioOutput" class="mt-6 bio-output p-4 rounded"></div>
+                <div id="detailedBioOutput" class="mt-4 bio-output p-4 rounded"></div>
             </div>
 
             <!-- Compare Characters -->
@@ -153,7 +154,7 @@
                     <button onclick="randomizeComparison()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize All</button>
                     <button onclick="exportComparisonReport()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Comparison</button>
                 </div>
-                <div id="comparisonOutput" class="mt-6 bio-output p-4 rounded-md"></div>
+                <div id="comparisonOutput" class="mt-6 bio-output p-4 rounded"></div>
             </div>
 
             <!-- Trait List -->
@@ -189,27 +190,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="input-group">
                             <label for="editName" class="block text-sm font-medium mb-1">Name</label>
-                            <input type="text" id="editName" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter name">
+                            <input type="text" id="editName" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="input-group">
                             <label for="editAge" class="block text-sm font-medium mb-1">Age</label>
-                            <input type="number" id="editAge" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter age">
+                            <input type="number" id="editAge" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="input-group">
                             <label for="editGender" class="block text-sm font-medium mb-1">Gender</label>
-                            <input type="text" id="editGender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter gender">
+                            <input type="text" id="editGender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="input-group">
                             <label for="editLocale" class="block text-sm font-medium mb-1">Locale</label>
-                            <input type="text" id="editLocale" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter locale">
+                            <input type="text" id="editLocale" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="input-group">
                             <label for="editOccupation" class="block text-sm font-medium mb-1">Occupation</label>
-                            <input type="text" id="editOccupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter occupation">
+                            <input type="text" id="editOccupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="input-group">
                             <label for="editTraits" class="block text-sm font-medium mb-1">Traits</label>
-                            <input type="text" id="editTraits" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter traits (comma-separated)">
+                            <input type="text" id="editTraits" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
                     <button onclick="updateCharacter()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Update Character</button>
@@ -232,7 +233,7 @@
         </div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-2">
+    <footer class="bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-2 fixed bottom-0 left-0 w-full">
         <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
     </footer>
 

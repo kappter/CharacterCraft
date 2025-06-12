@@ -50,7 +50,7 @@ function saveCharacter() {
         const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
         const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
         const occupation = document.getElementById('occupation').value || '';
-        const traitsInput = document.getElementgetElementById('traits').value;
+        const traitsInput = document.getElementById('traits').value;
 
         if (!name || !occupation.trim()) {
             alert('Please enter a name and a valid occupation.');
@@ -64,24 +64,24 @@ function saveCharacter() {
             gender,
             locale,
             occupation,
-            traits: traitsInput.trim() ? traitsInput.trim().split(',').map(t => t.trim()) : []
+            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
         };
-        const { shortBio, selectedTraits: detailedBio } = generateCharacterBio(character);
+        const { shortBio, detailedBio } = generateCharacterBio(character);
         character.shortBio = shortBio;
         character.detailedBio = detailedBio;
 
-        characters.push(characters);
+        characters.push(character);
         localStorage.setItem('characters', JSON.stringify(characters));
         displayCharacters();
-        updateCharacterSelect();
+        updateCharacterSelects();
         updateEditCharacterSelect();
         document.getElementById('exportBioButton').disabled = false;
-        clearEditForm();
+        clearForm();
         showTab('saved');
         console.log('Character saved:', character.name);
     } catch (err) {
         console.error('Error saving character:', err);
-        alert('Error saving character. Please try again.');
+        alert('Failed to save character. Please try again.');
     }
 }
 
@@ -150,7 +150,7 @@ function exportDetailedBio() {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `Detailed_detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+        link.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
         link.click();
         window.URL.revokeObjectURL(url);
         console.log('Detailed bio exported:', name);
@@ -211,7 +211,7 @@ function exportComparisonReport() {
     try {
         const char1Index = parseInt(document.getElementById('character1').value);
         const char2Index = parseInt(document.getElementById('character2').value);
-        const comparisonOutput = document.getElementById('comparisonOutput').valueinnerHTML;
+        const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
 
         if (isNaN(char1Index) || isNaN(char2Index) || !comparisonOutput) {
             alert('Please compare two characters before exporting.');
@@ -269,7 +269,7 @@ function exportComparisonReport() {
         link.download = `comparison_${char1.name.replace(/\s+/g, '_')}_vs_${char2.name.replace(/\s+/g, '_')}.html`;
         link.click();
         window.URL.revokeObjectURL(url);
-        console.log('Comparison report exported:', char1.name, ' vs vs', char2.name);
+        console.log('Comparison report exported:', char1.name, 'vs', char2.name);
     } catch (err) {
         console.error('Error exporting comparison report:', err);
         alert('Failed to export comparison report. Please try again.');
@@ -324,7 +324,7 @@ function viewCharacterReport(index) {
             <h3 class="text-lg font-semibold mb-2">Detailed Bio for ${char.name}</h3>
             ${char.detailedBio}
             ${traitsSection}
-            `;
+        `;
         document.getElementById('characterReportModal').classList.remove('hidden');
         console.log('Viewing report for:', char.name);
     } catch (err) {
@@ -369,7 +369,7 @@ function exportCharacterReport() {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+        link.download = `character_report_${name.replace(/\s+/g, '_')}.html`;
         link.click();
         window.URL.revokeObjectURL(url);
         console.log('Character report exported:', name);
@@ -381,7 +381,7 @@ function exportCharacterReport() {
 
 function closeModal() {
     try {
-        document.getElementById('characterReportModal').classList.add('hidden'));
+        document.getElementById('characterReportModal').classList.add('hidden');
         document.getElementById('characterReportContent').innerHTML = '';
         console.log('Modal closed');
     } catch (err) {
@@ -469,12 +469,14 @@ function loadCharacterToEdit(select) {
 
 function updateCharacter() {
     try {
-        const index = document.getElementById('editSelectIndex').value;
-        if (index === '') {
-            alert('Please select a character to edit.');
+        const index = parseInt(document.getElementById('editSelectIndex').value);
+        if (isNaN(index) || !characters[index]) {
+            alert('Please select a valid character to edit.');
+            console.error('Invalid character index:', index);
             return;
         }
-        const name = document.getElementById('editName').value;
+
+        const name = document.getElementById('editName').value.trim();
         const age = parseInt(document.getElementById('editAge').value) || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
         const gender = document.getElementById('editGender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
         const locale = document.getElementById('editLocale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
@@ -483,6 +485,7 @@ function updateCharacter() {
 
         if (!name || !occupation.trim()) {
             alert('Please enter a name and a valid occupation.');
+            console.log('Invalid name or occupation:', name, occupation);
             return;
         }
 
@@ -493,8 +496,10 @@ function updateCharacter() {
             gender,
             locale,
             occupation,
-            traits: traitsInput.trim() ? traitsInput.trim().split(',').map(t => t.trim()) : []
+            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
         };
+        console.log('Updating character:', character);
+
         const { shortBio, detailedBio } = generateCharacterBio(character);
         character.shortBio = shortBio;
         character.detailedBio = detailedBio;

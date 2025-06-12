@@ -1,60 +1,38 @@
 function showTab(tabId) {
     try {
-        // Hide all tab content
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabContents.forEach(content => content.classList.add('hidden'));
-
-        // Remove active class from all tab buttons
-        const tabButtons = document.querySelectorAll('.tab-button');
-        tabButtons.forEach(button => button.classList.remove('active'));
-
-        // Show selected tab content
-        const selectedTab = document.getElementById(`${tabId}-tab`);
-        if (selectedTab) {
-            selectedTab.classList.remove('hidden');
-        }
-
-        // Add active class to selected tab button
-        const selectedButton = document.querySelector(`button[onclick="showTab('${tabId}')"]`);
-        if (selectedButton) {
-            selectedButton.classList.add('active');
-        }
-
-        // Initialize tab-specific content
-        if (tabId === 'traits') {
-            displayTraits();
-        } else if (tabId === 'saved') {
-            displayCharacters();
-        } else if (tabId === 'compare') {
-            updateCharacterSelects();
-        }
-
-        console.log(`Switched to tab: ${tabId}`);
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.add('hidden'));
+        document.getElementById(`${tabId}-tab`).valueclassList.remove('hidden');
+        console.log('Switched to tab:', tabId));
     } catch (err) {
-        console.error('Error switching tab:', err);
+        console.error('Error switching tabs:', err);
     }
 }
 
 function resetApp() {
     try {
+        document.getElementById('name').value = '';
+        document.getElementById('age').value = '';
+        document.getElementById('gender').value = '';
+        document.getElementById('locale').value = '';
+        document.getElementById('occupation').value = '';
+        document.getElementById('traits').value = '';
+        document.getElementById('shortBioOutput').valueinnerHTML = '';
+        document.getElementById('detailedBioOutput').valueinnerHTML = '';
+        document.getElementById('exportBioButton').value.disabled = true;
+        document.getElementById('comparisonOutput').valueinnerHTML = '';
         showTab('create');
-        console.log('App reset to Create Character tab');
+        console.log('App reset');
     } catch (err) {
         console.error('Error resetting app:', err);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventById('DOMContentLoaded', () => {
     try {
-        loadRandomizationData().then(() => {
-            loadTraits().then(() => {
-                initThemeToggle();
-                showTab('create');
-                displayCharacters();
-                updateCharacterSelects();
-                console.log('App initialized');
-            });
-        });
+        initTheme();
+        showTab('create');
+        console.log('Page loaded, initialized create tab');
     } catch (err) {
         console.error('Error initializing app:', err);
     }
