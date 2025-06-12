@@ -1,243 +1,267 @@
 let characters = JSON.parse(localStorage.getItem('characters')) || [];
 
 function generateCharacterBio(character) {
-    const { name, age, gender, locale, occupation, traits: userTraits } = character;
+    try {
+        const { name, age, gender, locale, traits: userTraits } = character;
 
-    const physicalTrait = getRandomTrait('Physical') || { characteristic: 'average build', description: 'An unremarkable physique.' };
-    const psychologicalTrait = userTraits.length ? { characteristic: userTraits[0], description: 'User-defined trait.' } : getRandomTrait('Psychological') || { characteristic: 'calm', description: 'A composed demeanor.' };
-    const backgroundTrait = getRandomTrait('Background') || { characteristic: 'urban upbringing', description: 'Raised in a bustling city.' };
-    const motivationTrait = getRandomTrait('Motivations') || { characteristic: 'pursuit of truth', description: 'A drive to uncover hidden realities.' };
+        const physicalTrait = getRandomTrait('Physical') || { characteristic: 'average build', description: 'An unremarkable physique.' };
+        const psychologicalTrait = userTraits?.length ? { characteristic: userTraits[0], description: 'User-defined trait.' } : getRandomTrait('Psychological') || { characteristic: 'calm', description: 'A composed demeanor.' };
+        const backgroundTrait = getRandomTrait('Background') || { characteristic: 'urban upbringing', description: 'Raised in a bustling city.' };
+        const motivationTrait = getRandomTrait('Motivations') || { characteristic: 'pursuit of truth', description: 'A drive to uncover hidden realities.' };
 
-    const shortBio = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, is marked by ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their ${motivationTrait.characteristic} shapes their life in ${locale}.`;
+        const shortBio = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, is marked by ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their ${motivationTrait.characteristic} shapes their life in ${locale}.`;
 
-    const extendedBioSections = [
-        {
-            title: 'Early Life',
-            content: `${name} was born in ${locale}, where their ${backgroundTrait.characteristic} set the stage. ${backgroundTrait.description}. Their ${physicalTrait.characteristic} influenced early interactions, laying the foundation for their ${motivationTrait.characteristic}.`
-        },
-        {
-            title: 'Career',
-            content: `As a ${occupation}, ${name} channels their ${psychologicalTrait.characteristic} into work. ${psychologicalTrait.description}. In ${locale}, challenges have tested their ${motivationTrait.characteristic}, driving growth.`
-        },
-        {
-            title: 'Personal Life',
-            content: `${name}'s life in ${locale} reflects their ${physicalTrait.characteristic} and ${psychologicalTrait.characteristic}. ${backgroundTrait.description}. Their ${motivationTrait.characteristic} shapes relationships.`
-        },
-        {
-            title: 'Beliefs and Motivations',
-            content: `Rooted in their ${backgroundTrait.characteristic}, ${name}'s ${motivationTrait.characteristic} defines their worldview. ${motivationTrait.description}. This drives their actions in ${locale}.`
-        },
-        {
-            title: 'Defining Moment',
-            content: `A key moment came when ${name}'s ${psychologicalTrait.characteristic} faced a challenge in ${locale}. Tied to their ${backgroundTrait.characteristic}, it redefined their ${motivationTrait.characteristic}.`
-        }
-    ];
-    const extendedBio = extendedBioSections.map(s => `<h3 class="text-lg font-semibold mb-2">${s.title}</h3><p>${s.content}</p>`).join('');
+        const extendedBioSections = [
+            {
+                title: 'Early Life',
+                content: `${name} was born in ${locale}, where their ${backgroundTrait.characteristic} set the stage. ${backgroundTrait.description}. Their ${physicalTrait.characteristic} influenced early interactions, laying the foundation for their ${motivationTrait.characteristic}.`
+            },
+            {
+                title: 'Career',
+                content: `As a ${occupation}, ${name} channels their ${psychologicalTrait.characteristic} into work. ${psychologicalTrait.description}. In ${locale}, challenges have tested their ${motivationTrait.characteristic}, driving growth.`
+            },
+            {
+                title: 'Personal Life',
+                content: `${name}'s life in ${locale} reflects their ${physicalTrait.characteristic} and ${psychologicalTrait.characteristic}. ${backgroundTrait.description}. Their ${motivationTrait.characteristic} shapes relationships.`
+            },
+            {
+                title: 'Beliefs and Motivations',
+                content: `Rooted in their ${backgroundTrait.characteristic}, ${name}'s ${motivationTrait.characteristic} defines their worldview. ${motivationTrait.description}. This drives their actions in ${locale}.`
+            },
+            {
+                title: 'Defining Moment',
+                content: `A key moment came when ${name}'s ${psychologicalTrait.characteristic} faced a challenge in ${locale}. Tied to their ${backgroundTrait.characteristic}, it redefined their ${motivationTrait.characteristic}.`
+            }
+        ];
+        const extendedBio = extendedBioSections.map(s => `<h3 class="text-lg font-semibold mb-2">${s.title}</h3><p>${s.content}</p>`).join('');
 
-    return { shortBio, detailedBio: extendedBio };
+        return { shortBio, detailedBio: extendedBio };
+    } catch (err) {
+        console.error('Error generating character bio:', err);
+        return { shortBio: '', detailedBio: 'Error generating bio.' };
+    }
 }
 
-// Save character
 function saveCharacter() {
-    const name = document.getElementById('name').value;
-    const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
-    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-    const occupation = document.getElementById('occupation').value;
-    const traitsInput = document.getElementById('traits').value;
+    try {
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+        const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+        const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+        const occupation = document.getElementById('occupation').value;
+        const traitsInput = document.getElementById('traits').value;
 
-    if (name && occupation.trim()) {
-        const character = {
-            id: Date.now(),
-            name,
-            age,
-            gender,
-            locale,
-            occupation,
-            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
-        };
-        const { shortBio, detailedBio } = generateCharacterBio(character);
-        character.shortBio = shortBio;
-        character.detailedBio = detailedBio;
+        if (name && occupation.trim()) {
+            const character = {
+                id: Date.now(),
+                name,
+                age,
+                gender,
+                locale,
+                occupation,
+                traits: traitsInput.trim() ? traitsInput.trim().split(',').map(t => t.trim()) : []
+            };
+            const { shortBio, detailedBio } = generateCharacterBio(character);
+            character.shortBio = shortBio;
+            character.detailedBio = detailedBio;
 
-        characters.push(character);
-        localStorage.setItem('characters', JSON.stringify(characters));
-        displayCharacters();
-        updateCharacterSelects();
-        document.getElementById('exportBioButton').disabled = false;
-        clearForm();
-        showTab('saved');
-        console.log('Character saved:', character.name);
-    } else {
-        alert('Please fill in a name and a valid occupation.');
+            characters.push(character);
+            localStorage.setItem('characters', JSON.stringify(characters));
+            displayCharacters();
+            updateCharacterSelects();
+            document.getElementById('exportBioButton').disabled = false;
+            clearForm();
+            showTab('saved');
+            console.log('Character saved:', character.name);
+        } else {
+            alert('Please fill in a name and a valid occupation.');
+        }
+    } catch (err) {
+        console.error('Error saving character:', err);
+        alert('Failed to save character. Please try again.');
     }
 }
 
-// Generate bio
 function generateBio() {
-    const name = document.getElementById('name').value;
-    const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
-    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-    const occupation = document.getElementById('occupation').value;
-    const userTraits = document.getElementById('traits').value.trim().split(',').map(t => t.trim()).filter(t => t);
+    try {
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+        const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+        const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+        const occupation = document.getElementById('occupation').value;
+        const userTraits = document.getElementById('traits').value.trim().split(',').map(t => t.trim()).filter(t => t);
 
-    if (!name || !occupation.trim()) {
-        alert('Please fill in name and occupation to generate bios.');
-        return;
+        if (!name || !occupation.trim()) {
+            alert('Please fill in name and occupation to generate bios.');
+            return;
+        }
+
+        const character = { name, age, gender, locale, occupation, traits: userTraits };
+        const { shortBio, detailedBio } = generateCharacterBio(character);
+
+        document.getElementById('shortBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortBio}</p>`;
+        document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${detailedBio}`;
+    } catch (err) {
+        console.error('Error generating bio:', err);
+        alert('Failed to generate bio. Please try again.');
     }
-
-    const character = { name, age, gender, locale, occupation, traits: userTraits };
-    const { shortBio, detailedBio } = generateCharacterBio(character);
-
-    document.getElementById('shortBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortBio}</p>`;
-    document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${detailedBio}`;
 }
 
-// Export Detailed Bio as HTML
 function exportDetailedBio() {
-    const name = document.getElementById('name').value;
-    const detailedBioOutput = document.getElementById('detailedBioOutput').innerHTML;
+    try {
+        const name = document.getElementById('name').value;
+        const detailedBioOutput = document.getElementById('detailedBioOutput').innerHTML;
 
-    if (!name || !detailedBioOutput) {
-        alert('Please generate a detailed bio before exporting.');
-        return;
+        if (!name || !detailedBioOutput) {
+            alert('Please generate a detailed bio before exporting.');
+            return;
+        }
+
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Detailed Bio - ${name}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    h1 { text-align: center; color: #2b6cb0; }
+                    h3 { color: #2b6cb0; margin-top: 20px; }
+                    p { line-height: 1.6; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Detailed Bio for ${name}</h1>
+                    ${detailedBioOutput}
+                </div>
+            </body>
+            </html>
+        `;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error('Error exporting detailed bio:', err);
+        alert('Failed to export bio. Please try again.');
     }
-
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Detailed Bio - ${name}</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
-                .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-                h1 { text-align: center; color: #2b6cb0; }
-                h3 { color: #2b6cb0; margin-top: 20px; }
-                p { line-height: 1.6; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Detailed Bio for ${name}</h1>
-                ${detailedBioOutput}
-            </div>
-        </body>
-        </html>
-    `;
-
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
-    a.click();
-    URL.revokeObjectURL(url);
 }
 
-// Compare characters
 function compareCharacters() {
-    const char1Index = document.getElementById('character1').value;
-    const char2Index = document.getElementById('character2').value;
-    const contextElement = document.getElementById('context');
-    const context = contextElement && contextElement.value.trim() ? contextElement.value : 'unspecified setting';
+    try {
+        const char1Index = document.getElementById('character1').value;
+        const char2Index = document.getElementById('character2').value;
+        const contextElement = document.getElementById('context');
+        const context = contextElement && contextElement.value.trim() ? contextElement.value : 'unspecified setting';
 
-    if (char1Index === '' || char2Index === '' || char1Index === char2Index) {
-        alert('Please select two different characters.');
-        return;
+        if (char1Index === '' || char2Index === '' || char1Index === char2Index) {
+            alert('Please select two different characters.');
+            return;
+        }
+
+        const char1 = characters[char1Index];
+        const char2 = characters[char2Index];
+        const commonTraits = char1.traits.filter(t => char2.traits.includes(t));
+        const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
+
+        const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} interact, shaped by their traits and setting.`;
+        const commonalities = commonTraits.length 
+            ? `Shared traits like ${commonTraits.join(', ')} foster connection in ${context}.`
+            : `With few shared traits, their bond in ${context} relies on external factors.`;
+        const contention = differences.length 
+            ? `Conflicts may arise in ${context} from traits like ${differences.join(' and ')}, sparking tension.`
+            : `Aligned traits in ${context} minimize conflict, fostering harmony.`;
+        const transition = `${char1.name}'s ${char1.traits[0] || 'nature'} challenges ${char2.name}'s ${char2.traits[0] || 'outlook'} in ${context}, potentially deepening their relationship.`;
+
+        const comparison = `
+            <h3 class="text-lg font-semibold mb-2">Comparison: ${char1.name} vs ${char2.name}</h3>
+            <p><strong>Context:</strong> ${contextIntro}</p>
+            <p><strong>Commonalities:</strong> ${commonalities}</p>
+            <p><strong>Contentions:</strong> ${contention}</p>
+            <p><strong>Transitions:</strong> ${transition}</p>
+        `;
+        document.getElementById('comparisonOutput').innerHTML = comparison;
+    } catch (err) {
+        console.error('Error comparing characters:', err);
+        alert('Failed to compare characters. Please try again.');
     }
-
-    const char1 = characters[char1Index];
-    const char2 = characters[char2Index];
-    const commonTraits = char1.traits.filter(t => char2.traits.includes(t));
-    const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
-
-    const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} interact, shaped by their traits and setting.`;
-    const commonalities = commonTraits.length 
-        ? `Shared traits like ${commonTraits.join(', ')} foster connection in ${context}.`
-        : `With few shared traits, their bond in ${context} relies on external factors.`;
-    const contention = differences.length 
-        ? `Conflicts may arise in ${context} from traits like ${differences.join(' and ')}, sparking tension.`
-        : `Aligned traits in ${context} minimize conflict, fostering harmony.`;
-    const transition = `${char1.name}'s ${char1.traits[0] || 'nature'} challenges ${char2.name}'s ${char2.traits[0] || 'outlook'} in ${context}, potentially deepening their relationship.`;
-
-    const comparison = `
-        <h3 class="text-lg font-semibold mb-2">Comparison: ${char1.name} vs ${char2.name}</h3>
-        <p><strong>Context:</strong> ${contextIntro}</p>
-        <p><strong>Commonalities:</strong> ${commonalities}</p>
-        <p><strong>Contentions:</strong> ${contention}</p>
-        <p><strong>Transitions:</strong> ${transition}</p>
-    `;
-    document.getElementById('comparisonOutput').innerHTML = comparison;
 }
 
-// Export Comparison Report as HTML
 function exportComparisonReport() {
-    const char1Index = document.getElementById('character1').value;
-    const char2Index = document.getElementById('character2').value;
-    const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
+    try {
+        const char1Index = document.getElementById('character1').value;
+        const char2Index = document.getElementById('character2').value;
+        const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
 
-    if (char1Index === '' || char2Index === '' || !comparisonOutput) {
-        alert('Please compare two characters before exporting.');
-        return;
+        if (char1Index === '' || char2Index === '' || !comparisonOutput) {
+            alert('Please compare two characters before exporting.');
+            return;
+        }
+
+        const char1 = characters[char1Index];
+        const char2 = characters[char2Index];
+
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Character Comparison - ${char1.name} vs ${char2.name}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    h1 { text-align: center; color: #2b6cb0; }
+                    h3 { color: #2b6cb0; margin-top: 20px; }
+                    p { line-height: 1.6; }
+                    .character-details { margin-bottom: 20px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Character Comparison Report</h1>
+                    <div class="character-details">
+                        <h3>${char1.name}</h3>
+                        <p><strong>Age:</strong> ${char1.age}</p>
+                        <p><strong>Gender:</strong> ${char1.gender}</p>
+                        <p><strong>Locale:</strong> ${char1.locale}</p>
+                        <p><strong>Occupation:</strong> ${char1.occupation}</p>
+                        <p><strong>Traits:</strong> ${char1.traits.join(', ') || 'None'}</p>
+                    </div>
+                    <div class="character-details">
+                        <h3>${char2.name}</h3>
+                        <p><strong>Age:</strong> ${char2.age}</p>
+                        <p><strong>Gender:</strong> ${char2.gender}</p>
+                        <p><strong>Locale:</strong> ${char2.locale}</p>
+                        <p><strong>Occupation:</strong> ${char2.occupation}</p>
+                        <p><strong>Traits:</strong> ${char2.traits.join(', ') || 'None'}</p>
+                    </div>
+                    ${comparisonOutput}
+                </div>
+            </body>
+            </html>
+        `;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `comparison_${char1.name.replace(/\s+/g, '_')}_vs_${char2.name.replace(/\s+/g, '_')}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error('Error exporting comparison report:', err);
+        alert('Failed to export comparison report. Please try again.');
     }
-
-    const char1 = characters[char1Index];
-    const char2 = characters[char2Index];
-
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Character Comparison - ${char1.name} vs ${char2.name}</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
-                .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-                h1 { text-align: center; color: #2b6cb0; }
-                h3 { color: #2b6cb0; margin-top: 20px; }
-                p { line-height: 1.6; }
-                .character-details { margin-bottom: 20px; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Character Comparison Report</h1>
-                <div class="character-details">
-                    <h3>${char1.name}</h3>
-                    <p><strong>Age:</strong> ${char1.age}</p>
-                    <p><strong>Gender:</strong> ${char1.gender}</p>
-                    <p><strong>Locale:</strong> ${char1.locale}</p>
-                    <p><strong>Occupation:</strong> ${char1.occupation}</p>
-                    <p><strong>Traits:</strong> ${char1.traits.join(', ') || 'None'}</p>
-                </div>
-                <div class="character-details">
-                    <h3>${char2.name}</h3>
-                    <p><strong>Age:</strong> ${char2.age}</p>
-                    <p><strong>Gender:</strong> ${char2.gender}</p>
-                    <p><strong>Locale:</strong> ${char2.locale}</p>
-                    <p><strong>Occupation:</strong> ${char2.occupation}</p>
-                    <p><strong>Traits:</strong> ${char2.traits.join(', ') || 'None'}</p>
-                </div>
-                ${comparisonOutput}
-            </div>
-        </body>
-        </html>
-    `;
-
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `comparison_${char1.name.replace(/\s+/g, '_')}_vs_${char2.name.replace(/\s+/g, '_')}.html`;
-    a.click();
-    URL.revokeObjectURL(url);
 }
 
-// Display saved characters
 function displayCharacters() {
     try {
         const characterList = document.getElementById('characterList');
@@ -263,10 +287,10 @@ function displayCharacters() {
         console.log('Characters displayed:', characters.length);
     } catch (err) {
         console.error('Error displaying characters:', err);
+        alert('Failed to display characters. Please refresh the page.');
     }
 }
 
-// View character report
 function viewCharacterReport(index) {
     try {
         const char = characters[index];
@@ -295,7 +319,6 @@ function viewCharacterReport(index) {
     }
 }
 
-// Export character report
 function exportCharacterReport() {
     try {
         const modalContent = document.getElementById('characterReportContent').innerHTML;
@@ -340,7 +363,6 @@ function exportCharacterReport() {
     }
 }
 
-// Close modal
 function closeModal() {
     try {
         document.getElementById('characterReportModal').classList.add('hidden');
@@ -350,7 +372,6 @@ function closeModal() {
     }
 }
 
-// Update character select dropdowns
 function updateCharacterSelects() {
     try {
         const select1 = document.getElementById('character1');
@@ -374,7 +395,6 @@ function updateCharacterSelects() {
     }
 }
 
-// Update edit character select
 function updateEditCharacterSelect() {
     try {
         const editSelect = document.getElementById('editSelectIndex');
@@ -395,7 +415,6 @@ function updateEditCharacterSelect() {
     }
 }
 
-// Load character data into edit form
 function loadCharacterToEdit(select) {
     try {
         const index = select.value;
@@ -415,7 +434,6 @@ function loadCharacterToEdit(select) {
     }
 }
 
-// Update character
 function updateCharacter() {
     try {
         const index = document.getElementById('editSelectIndex').value;
@@ -458,13 +476,31 @@ function updateCharacter() {
     }
 }
 
-// Clear edit form
 function clearEditForm() {
-    document.getElementById('editSelectIndex').value = '';
-    document.getElementById('editName').value = '';
-    document.getElementById('editAge').value = '';
-    document.getElementById('editGender').value = '';
-    document.getElementById('editLocale').value = '';
-    document.getElementById('editOccupation').value = '';
-    document.getElementById('editTraits').value = '';
+    try {
+        document.getElementById('editSelectIndex').value = '';
+        document.getElementById('editName').value = '';
+        document.getElementById('editAge').value = '';
+        document.getElementById('editGender').value = '';
+        document.getElementById('editLocale').value = '';
+        document.getElementById('editOccupation').value = '';
+        document.getElementById('editTraits').value = '';
+    } catch (err) {
+        console.error('Error clearing edit form:', err);
+    }
+}
+
+function clearForm() {
+    try {
+        document.getElementById('name').value = '';
+        document.getElementById('age').value = '';
+        document.getElementById('gender').value = '';
+        document.getElementById('locale').value = '';
+        document.getElementById('occupation').value = '';
+        document.getElementById('traits').value = '';
+        document.getElementById('shortBioOutput').innerHTML = '';
+        document.getElementById('detailedBioOutput').innerHTML = '';
+    } catch (err) {
+        console.error('Error clearing form:', err);
+    }
 }
