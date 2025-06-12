@@ -82,6 +82,11 @@ button:hover.bg-blue-600 {
     background-color: #2563eb;
 }
 
+button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
 footer {
     background-color: var(--header-bg);
     color: var(--text-color);

@@ -53,7 +53,7 @@
     <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
             <div class="flex items-center">
-                <img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2">
+                <a href="index.html" onclick="resetApp()"><img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2"></a>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
             </div>
             <div class="flex items-center">
@@ -134,7 +134,7 @@
             <div class="flex space-x-4 mt-4">
                 <button onclick="generateBio()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Generate Bios</button>
                 <button onclick="saveCharacter()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Save Character</button>
-                <button onclick="exportDetailedBio()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Detailed Bio</button>
+                <button id="exportBioButton" onclick="exportDetailedBio()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition" disabled>Export Detailed Bio</button>
             </div>
             <div id="shortBioOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
             <div id="detailedBioOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
