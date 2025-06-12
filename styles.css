@@ -41,6 +41,10 @@ header, footer {
     box-shadow: var(--shadow);
 }
 
+.tab-content.hidden {
+    display: none;
+}
+
 input, select, textarea {
     background-color: var(--primary-bg);
     border-color: var(--border-color);
