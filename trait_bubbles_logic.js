@@ -2,6 +2,7 @@ let selectedTraits = [];
 let currentPage = 0;
 const traitsPerPage = 20;
 let currentCategory = '';
+let selectedBubbleCharacter = '';
 
 function initializeBubbles() {
     try {
@@ -197,6 +198,7 @@ function updateCharacterSelect() {
             console.error('Character select not found.');
             return;
         }
+        const currentValue = select.value;
         select.innerHTML = '<option value="">Select a character</option>';
         characters.forEach((char, index) => {
             const option = document.createElement('option');
@@ -204,6 +206,15 @@ function updateCharacterSelect() {
             option.textContent = char.name;
             select.appendChild(option);
         });
+        if (selectedBubbleCharacter && characters[selectedBubbleCharacter]) {
+            select.value = selectedBubbleCharacter;
+            console.log('Restored character select:', characters[selectedBubbleCharacter].name);
+        } else if (currentValue && characters[currentValue]) {
+            select.value = currentValue;
+            selectedBubbleCharacter = currentValue;
+            console.log('Preserved character select:', characters[currentValue].name);
+        }
+        updateSelectedTraits();
         console.log('Character select updated:', characters.length);
     } catch (err) {
         console.error('Error updating character select:', err);
@@ -215,12 +226,14 @@ function updateSelectedTraits() {
         const select = document.getElementById('bubbleCharacterSelect');
         if (select.value === '') {
             selectedTraits = [];
+            selectedBubbleCharacter = '';
         } else {
             const char = characters[select.value];
+            selectedBubbleCharacter = select.value;
             selectedTraits = [...char.traits];
         }
         initializeBubbles();
-        console.log('Updated selected traits:', selectedTraits);
+        console.log('Updated selected traits:', selectedTraits, 'Selected character:', selectedBubbleCharacter);
     } catch (err) {
         console.error('Error updating selected traits:', err);
     }
@@ -236,7 +249,8 @@ function saveBubbleTraits() {
         const index = select.value;
         characters[index].traits = [...selectedTraits];
         localStorage.setItem('characters', JSON.stringify(characters));
-        console.log('Saved traits for character:', characters[index].name, selectedTraits);
+        updateCharacterSelects();
+        console.log('Saved traits for character:', characters[index].name, 'Traits:', selectedTraits);
         alert('Traits saved successfully!');
     } catch (err) {
         console.error('Error saving bubble traits:', err);
