@@ -1,6 +1,5 @@
 let randomizationData = {};
 
-// Parse CSV data
 function parseCSV(data) {
     const rows = data.trim().split('\n').slice(1);
     return rows.map(row => {
@@ -8,13 +7,12 @@ function parseCSV(data) {
         return { 
             category, 
             characteristic, 
-            synonyms: synonyms ? synonyms.split(';').map(s => s.trim()) : [], 
+            synonyms: synonyms ? synonyms.split(',').map(s => s.trim()) : [], 
             description 
         };
     }).filter(trait => trait.category && trait.characteristic);
 }
 
-// Load randomization data
 async function loadRandomizationData() {
     try {
         const response = await fetch('./randomization_data.json');
@@ -26,25 +24,24 @@ async function loadRandomizationData() {
         randomizationData = {
             firstNames: ['Alex', 'Sam', 'Taylor', 'Jordan'],
             lastNames: ['Smith', 'Johnson', 'Brown', 'Lee'],
-            ageRanges: [{min: 18, max: 80, label: 'Adult'}],
+            ageRanges: [{minAge: 18, maxAge: 80, label: 'Adult'}],
             genders: ['male', 'female', 'non-binary', 'unspecified'],
             locales: ['New York', 'Tokyo', 'London'],
             occupations: ['Writer', 'Engineer', 'Teacher'],
-            contexts: ['work', 'family', 'vacation']
+            contexts: ['work', 'family', 'research']
         };
     }
 }
 
-// Randomization functions
 function randomizeName() {
-    const first = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
-    const last = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
-    document.getElementById('name').value = `${first} ${last}`;
+    const firstName = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
+    const lastName = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
+    document.getElementById('name').value = `${firstName} ${lastName}`;
 }
 
 function randomizeAge() {
     const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
-    const age = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+    const age = Math.floor(Math.random() * (range.maxAge - range.minAge + 1)) + range.minAge;
     document.getElementById('age').value = age;
 }
 
@@ -80,7 +77,16 @@ function randomizeContext() {
     document.getElementById('context').value = context;
 }
 
-// Dark mode toggle
+function randomizeEverything() {
+    randomizeName();
+    randomizeAge();
+    randomizeGender();
+    randomizeLocale();
+    randomizeOccupation();
+    randomizeTraits();
+    console.log('Randomized all fields');
+}
+
 function initThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {

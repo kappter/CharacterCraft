@@ -42,10 +42,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>CharacterCraft - Trait Bubbles</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" type="text/css">
 </head>
@@ -83,21 +83,17 @@
                     <option value="">Select a character</option>
                 </select>
             </div>
-            <div class="category-filters flex flex-wrap gap-2 mb-4">
-                <button class="category-button active px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="all" onclick="filterTraits('all')">All</button>
-                <button class="category-button px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="Physical" onclick="filterTraits('Physical')">Physical</button>
-                <button class="category-button px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="Psychological" onclick="filterTraits('Psychological')">Psychological</button>
-                <button class="category-button px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="Heredity" onclick="filterTraits('Heredity')">Heredity</button>
-                <button class="category-button px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="Background" onclick="filterTraits('Background')">Background</button>
-                <button class="category-button px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="Motivations" onclick="filterTraits('Motivations')">Motivations</button>
-                <button class="category-button px-3 py-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm" data-category="Custom" onclick="filterTraits('Custom')">Custom</button>
+            <div id="categoryContainer" class="space-y-4"></div>
+            <div class="pagination mt-4 flex justify-center space-x-2">
+                <button id="prevPage" onclick="previousPage()" class="px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm font-medium disabled:opacity-50" disabled>Previous</button>
+                <span id="pageInfo" class="text-sm font-medium text-gray-600 dark:text-gray-300"></span>
+                <button id="nextPage" onclick="nextPage()" class="px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm font-medium">Next</button>
             </div>
-            <div id="bubbleContainer" class="flex flex-wrap gap-2"></div>
             <button onclick="saveBubbleTraits()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Save Traits</button>
         </div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-3">
+    <footer class="fixed bottom-0 left-0 w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-2">
         <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
     </footer>
 

@@ -1,90 +1,88 @@
 let traits = [];
 
-const csvFiles = [
-    './physical_traits.csv',
-    './psychological_traits.csv',
-    './background_details.csv',
-    './motivations_beliefs.csv'
-];
-
-// Load all CSV files
 async function loadTraits() {
+    const files = ['physical_traits.csv', 'psychological_traits.csv', 'background_details.csv', 'motivations_beliefs.csv'];
     try {
-        const responses = await Promise.all(csvFiles.map(file => 
-            fetch(file).then(response => {
-                if (!response.ok) throw new Error(`Failed to load ${file}`);
-                return response.text();
-            }).catch(err => {
-                console.error(`Error fetching ${file}:`, err);
-                return '';
-            })
-        ));
-        responses.forEach((csvData, index) => {
-            if (csvData) {
-                const parsedTraits = parseCSV(csvData);
-                traits = traits.concat(parsedTraits);
-            }
-        });
-        console.log(`Loaded ${traits.length} traits from CSV files.`);
-        if (traits.length === 0) {
-            console.warn('No traits loaded; using fallback traits.');
-            traits = [
-                { category: 'Physical', characteristic: 'average build', synonyms: ['normal physique'], description: 'An unremarkable physique.' },
-                { category: 'Psychological', characteristic: 'calm', synonyms: ['composed'], description: 'A composed demeanor.' },
-                { category: 'Background', characteristic: 'urban upbringing', synonyms: ['city life'], description: 'Raised in a bustling city.' },
-                { category: 'Motivations', characteristic: 'pursuit of truth', synonyms: ['truth-seeking'], description: 'A drive to uncover hidden realities.' }
-            ];
+        for (const file of files) {
+            const response = await fetch(file);
+            if (!response.ok) throw new Error(`Failed to load ${file}: ${response.statusText}`);
+            const text = await response.text();
+            const parsedTraits = parseCSV(text);
+            traits.push(...parsedTraits);
         }
+        console.log(`Loaded ${traits.length} traits from CSV files`);
         displayTraits();
     } catch (err) {
-        console.error('Error loading CSV files:', err);
-    }
-}
-
-// Add new trait
-function addTrait() {
-    const category = document.getElementById('newTraitCategory').value;
-    const characteristic = document.getElementById('newTrait').value;
-    const synonyms = document.getElementById('newSynonyms').value.split(',').map(s => s.trim()).filter(s => s);
-    const description = document.getElementById('newDescription').value;
-
-    if (category && characteristic.trim() && synonyms.length && description.trim()) {
-        traits.push({ category, characteristic, synonyms, description });
+        console.error('Error loading traits:', err);
+        traits = [
+            { category: 'Physical', characteristic: 'tall stature', synonyms: [], description: 'Above average height' },
+            { category: 'Psychological', characteristic: 'calm', synonyms: ['composed', 'serene'], description: 'A composed demeanor' }
+        ];
         displayTraits();
-        clearTraitForm();
-        console.log('New trait added:', characteristic);
-    } else {
-        alert('Please fill in all trait fields.');
     }
 }
 
-// Display traits
 function displayTraits() {
     const tbody = document.getElementById('traitTableBody');
     if (!tbody) {
-        console.error('Trait table body not found.');
+        console.error('Error: #traitTableBody not found in DOM');
         return;
     }
     tbody.innerHTML = '';
-    const categories = [...new Set(traits.map(t => t.category))];
-    categories.forEach(category => {
-        const categoryTraits = traits.filter(t => t.category === category);
-        categoryTraits.forEach(trait => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms.join(', ')}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+    console.log(`Clearing trait table, preparing to display ${traits.length} traits`);
+
+    if (traits.length === 0) {
+        console.warn('No traits available to display');
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No traits loaded.</td></tr>';
+        return;
+    }
+
+    traits.forEach((trait, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category || 'N/A'}</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic || 'N/A'}</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms?.join(', ') || ''}</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description || ''}</td>
+        `;
+        tbody.appendChild(row);
+        console.log(`Added trait row ${index + 1}: ${trait.characteristic}`);
     });
-    console.log(`Displayed ${traits.length} traits in table.`);
+
+    const table = document.getElementById('traitTable');
+    if (table.style.display === 'none') {
+        console.log('Table was hidden, making visible');
+        table.style.display = 'table';
+    }
+    console.log(`Displayed ${traits.length} traits in table`);
 }
 
-// Get random trait by category
+function addTrait() {
+    const category = document.getElementById('newTraitCategory').value;
+    const characteristic = document.getElementById('newTrait').value;
+    const synonymsInput = document.getElementById('newSynonyms').value;
+    const description = document.getElementById('newDescription').value;
+
+    if (category && characteristic && description) {
+        const newTrait = {
+            category,
+            characteristic,
+            synonyms: synonymsInput ? synonymsInput.trim().split(',').map(s => s.trim()) : [],
+            description
+        };
+        traits.push(newTrait);
+        console.log('Added new trait:', newTrait);
+        displayTraits();
+        document.getElementById('newTraitCategory').value = 'Physical';
+        document.getElementById('newTrait').value = '';
+        document.getElementById('newSynonyms').value = '';
+        document.getElementById('newDescription').value = '';
+    } else {
+        alert('Please fill in all required fields: Category, Characteristic, and Description.');
+    }
+}
+
 function getRandomTrait(category) {
-    const categoryTraits = traits.filter(t => t.category === category);
-    return categoryTraits.length ? categoryTraits[Math.floor(Math.random() * categoryTraits.length)] : null;
+    const filteredTraits = traits.filter(t => t.category === category);
+    return filteredTraits[Math.floor(Math.random() * filteredTraits.length)];
 }

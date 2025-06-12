@@ -1,94 +1,162 @@
 let selectedTraits = [];
-let currentCategory = 'all';
+let currentPage = 0;
+const traitsPerPage = 20;
 
-function initializeBubbles(category = 'all') {
-    const bubbleContainer = document.getElementById('bubbleContainer');
-    if (!bubbleContainer) {
-        console.error('Bubble container not found.');
+function initializeBubbles() {
+    const categoryContainer = document.getElementById('categoryContainer');
+    if (!categoryContainer) {
+        console.error('Category container not found.');
         return;
     }
-    bubbleContainer.innerHTML = '';
-    const filteredTraits = category === 'all' ? traits : traits.filter(trait => trait.category === category);
-    filteredTraits.forEach((trait, index) => {
-        const bubble = document.createElement('div');
-        bubble.className = 'trait-bubble';
+    categoryContainer.innerHTML = '';
+    const categories = [...new Set(traits.map(t => t.category))];
+    
+    categories.forEach(category => {
+        const categorySection = document.createElement('div');
+        categorySection.className = 'category-section mb-4';
+        categorySection.innerHTML = `
+            <h3 class="text-lg font-semibold mb-2 cursor-pointer category-toggle bg-blue-100 dark:bg-blue-900 p-2 rounded" data-category="${category}">${category}</h3>
+            <div id="category-${category}" class="category-bubbles hidden flex flex-wrap gap-2 p-2"></div>
+        `;
+        categoryContainer.appendChild(categorySection);
+        initializeCategoryBubbles(category, `category-${category}`);
+    });
+
+    setupCategoryToggles();
+    updatePagination();
+    updateCharacterSelect();
+    console.log('Trait bubbles initialized, categories:', categories.length);
+}
+
+function initializeCategoryBubbles(category, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Container ${containerId} not found.`);
+        return;
+    }
+    container.innerHTML = '';
+
+    const filteredTraits = traits.filter(t => t.category === category);
+    const startIndex = currentPage * traitsPerPage;
+    const endIndex = Math.min(startIndex + traitsPerPage, filteredTraits.length);
+    const paginatedTraits = filteredTraits.slice(startIndex, endIndex);
+
+    paginatedTraits.forEach(trait => {
+        const bubble = document.createElement('span');
+        bubble.className = `trait-bubble px-3 py-1 rounded-full text-sm cursor-pointer transition ${
+            selectedTraits.includes(trait.characteristic) 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-500'
+        }`;
         bubble.textContent = trait.characteristic;
-        bubble.dataset.index = traits.indexOf(trait);
-        bubble.addEventListener('click', () => toggleTrait(bubble, trait.characteristic));
-        if (selectedTraits.includes(trait.characteristic)) {
-            bubble.classList.add('selected');
-        }
-        bubbleContainer.appendChild(bubble);
+        bubble.dataset.trait = trait.characteristic;
+        bubble.dataset.description = trait.description || 'No description available';
+        bubble.addEventListener('click', () => toggleTrait(trait.characteristic, bubble));
+        container.appendChild(bubble);
     });
-    console.log(`Trait bubbles initialized for category '${category}': ${filteredTraits.length} traits`);
-}
 
-// Filter traits by category
-function filterTraits(category) {
-    currentCategory = category;
-    initializeBubbles(category);
-    updateCategoryButtons();
-}
-
-// Update active category button
-function updateCategoryButtons() {
-    document.querySelectorAll('.category-button').forEach(button => {
-        button.classList.remove('active');
-        if (button.dataset.category === currentCategory) {
-            button.classList.add('active');
-        }
+    // Initialize tooltips
+    const bubbles = container.querySelectorAll('.trait-bubble');
+    bubbles.forEach(bubble => {
+        bubble.addEventListener('mouseenter', () => {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip absolute bg-gray-800 text-white text-sm rounded p-2 max-w-xs';
+            tooltip.textContent = bubble.dataset.description;
+            document.body.appendChild(tooltip);
+            const rect = bubble.getBoundingClientRect();
+            tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+            tooltip.style.left = `${rect.left + window.scrollX}px`;
+            bubble.tooltip = tooltip;
+        });
+        bubble.addEventListener('mouseleave', () => {
+            if (bubble.tooltip) {
+                bubble.tooltip.remove();
+                bubble.tooltip = null;
+            }
+        });
     });
+
+    console.log(`Initialized ${paginatedTraits.length} bubbles for category ${category}`);
 }
 
-// Toggle trait selection
-function toggleTrait(bubble, trait) {
+function toggleTrait(trait, bubble) {
     const index = selectedTraits.indexOf(trait);
     if (index === -1) {
         selectedTraits.push(trait);
-        bubble.classList.add('selected');
+        bubble.classList.remove('bg-gray-200', 'dark:bg-gray-600', 'text-gray-700', 'dark:text-gray-200', 'hover:bg-gray-300', 'dark:hover:bg-gray-500');
+        bubble.classList.add('bg-blue-500', 'text-white');
     } else {
         selectedTraits.splice(index, 1);
-        bubble.classList.remove('selected');
+        bubble.classList.remove('bg-blue-500', 'text-white');
+        bubble.classList.add('bg-gray-200', 'dark:bg-gray-600', 'text-gray-700', 'dark:text-gray-200', 'hover:bg-gray-300', 'dark:hover:bg-gray-500');
     }
+    console.log('Toggled trait:', trait, 'Selected traits:', selectedTraits);
 }
 
-// Update selected traits based on character selection
-function updateSelectedTraits() {
-    const charIndex = parseInt(document.getElementById('bubbleCharacterSelect').value);
-    selectedTraits.length = 0;
-    document.querySelectorAll('.trait-bubble').forEach(bubble => bubble.classList.remove('selected'));
-    if (!isNaN(charIndex) && charIndex >= 0 && charIndex < characters.length) {
-        const char = characters[charIndex];
-        char.traits.forEach(trait => {
-            const bubble = document.querySelector(`.trait-bubble[data-index="${traits.findIndex(t => t.characteristic === trait)}"]`);
-            if (bubble) {
-                selectedTraits.push(trait);
-                bubble.classList.add('selected');
-            }
+function setupCategoryToggles() {
+    const toggles = document.querySelectorAll('.category-toggle');
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const category = toggle.dataset.category;
+            const container = document.getElementById(`category-${category}`);
+            container.classList.toggle('hidden');
+            toggle.classList.toggle('bg-blue-100', 'dark:bg-blue-900');
+            toggle.classList.toggle('bg-blue-200', 'dark:bg-blue-800');
+            console.log(`Toggled category: ${category}`);
         });
-    }
-    console.log('Selected traits updated for character index:', charIndex);
+    });
 }
 
-// Save selected traits to character
-function saveBubbleTraits() {
-    const charIndex = parseInt(document.getElementById('bubbleCharacterSelect').value);
-    if (isNaN(charIndex) || charIndex < 0 || charIndex >= characters.length) {
-        alert('Please select a valid character.');
-        return;
-    }
-    characters[charIndex].traits = selectedTraits.slice();
-    localStorage.setItem('characters', JSON.stringify(characters));
-    updateCharacterSelects(); // Sync dropdowns
-    alert('Traits saved successfully!');
-    console.log('Traits saved for character:', characters[charIndex].name);
+function updatePagination() {
+    const categories = [...new Set(traits.map(t => t.category))];
+    let maxTraits = 0;
+    categories.forEach(category => {
+        const count = traits.filter(t => t.category === category).length;
+        if (count > maxTraits) maxTraits = count;
+    });
+    const totalPages = Math.ceil(maxTraits / traitsPerPage);
+    
+    const pageInfo = document.getElementById('pageInfo');
+    const prevButton = document.getElementById('prevPage');
+    const nextButton = document.getElementById('nextPage');
+
+    if (pageInfo) pageInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+    if (prevButton) prevButton.disabled = currentPage === 0;
+    if (nextButton) nextButton.disabled = currentPage >= totalPages - 1;
+
+    // Reinitialize bubbles for all categories to reflect pagination
+    categories.forEach(category => {
+        initializeCategoryBubbles(category, `category-${category}`);
+    });
 }
 
-// Update character select dropdown
-function updateBubbleCharacterSelect() {
+function previousPage() {
+    if (currentPage > 0) {
+        currentPage--;
+        updatePagination();
+        console.log('Navigated to previous page:', currentPage + 1);
+    }
+}
+
+function nextPage() {
+    const categories = [...new Set(traits.map(t => t.category))];
+    let maxTraits = 0;
+    categories.forEach(category => {
+        const count = traits.filter(t => t.category === category).length;
+        if (count > maxTraits) maxTraits = count;
+    });
+    const totalPages = Math.ceil(maxTraits / traitsPerPage);
+    if (currentPage < totalPages - 1) {
+        currentPage++;
+        updatePagination();
+        console.log('Navigated to next page:', currentPage + 1);
+    }
+}
+
+function updateCharacterSelect() {
     const select = document.getElementById('bubbleCharacterSelect');
     if (!select) {
-        console.error('Bubble character select not found.');
+        console.error('Character select not found.');
         return;
     }
     select.innerHTML = '<option value="">Select a character</option>';
@@ -98,17 +166,35 @@ function updateBubbleCharacterSelect() {
         option.textContent = char.name;
         select.appendChild(option);
     });
-    console.log('Bubble character select updated:', characters.length);
 }
 
-// Initialize page
-async function initTraitBubbles() {
-    await loadTraits(); // Ensure traits are loaded
-    updateBubbleCharacterSelect(); // Populate dropdown
-    initializeBubbles(currentCategory);
-    updateSelectedTraits();
-    initThemeToggle();
-    console.log('Trait Bubbles page initialized.');
+function updateSelectedTraits() {
+    const select = document.getElementById('bubbleCharacterSelect');
+    if (select.value === '') {
+        selectedTraits = [];
+    } else {
+        const char = characters[select.value];
+        selectedTraits = [...char.traits];
+    }
+    // Refresh bubbles to reflect selected state
+    const categories = [...new Set(traits.map(t => t.category))];
+    categories.forEach(category => {
+        initializeCategoryBubbles(category, `category-${category}`);
+    });
+    console.log('Updated selected traits:', selectedTraits);
 }
 
-window.onload = initTraitBubbles;
+function saveBubbleTraits() {
+    const select = document.getElementById('bubbleCharacterSelect');
+    if (select.value === '') {
+        alert('Please select a character to save traits.');
+        return;
+    }
+    const index = select.value;
+    characters[index].traits = [...selectedTraits];
+    localStorage.setItem('characters', JSON.stringify(characters));
+    console.log('Saved traits for character:', characters[index].name, selectedTraits);
+    alert('Traits saved successfully!');
+}
+
+document.addEventListener('DOMContentLoaded', initializeBubbles);
