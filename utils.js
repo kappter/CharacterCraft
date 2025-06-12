@@ -1,126 +1,143 @@
 let randomizationData = {};
 
-function parseCSV(data) {
-    const rows = data.trim().split('\n').slice(1);
-    return rows.map(row => {
-        const [category, characteristic, synonyms, description] = row.split(',').map(item => item.trim());
-        return { 
-            category, 
-            characteristic, 
-            synonyms: synonyms ? synonyms.split(',').map(s => s.trim()) : [], 
-            description 
-        };
-    }).filter(trait => trait.category && trait.characteristic);
-}
-
 async function loadRandomizationData() {
     try {
-        const response = await fetch('./randomization_data.json');
-        if (!response.ok) throw new Error(`Failed to load randomization_data.json: ${response.statusText}`);
+        const response = await fetch('randomization_data.json');
         randomizationData = await response.json();
         console.log('Randomization data loaded:', randomizationData);
     } catch (err) {
-        console.error('Error loading randomization_data.json:', err);
-        randomizationData = {
-            firstNames: ['Alex', 'Sam', 'Taylor', 'Jordan'],
-            lastNames: ['Smith', 'Johnson', 'Brown', 'Lee'],
-            ageRanges: [{minAge: 18, maxAge: 80, label: 'Adult'}],
-            genders: ['male', 'female', 'non-binary', 'unspecified'],
-            locales: ['New York', 'Tokyo', 'London'],
-            occupations: ['Writer', 'Engineer', 'Teacher'],
-            contexts: ['work', 'family', 'research']
-        };
+        console.error('Error loading randomization data:', err);
     }
 }
 
 function randomizeName() {
-    const firstName = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
-    const lastName = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
-    document.getElementById('name').value = `${firstName} ${lastName}`;
+    try {
+        const first = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
+        const last = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
+        const fullName = `${first} ${last}`;
+        document.getElementById('name').value = fullName;
+        console.log('Randomized name:', fullName);
+    } catch (err) {
+        console.error('Error randomizing name:', err);
+    }
 }
 
 function randomizeAge() {
     try {
-        if (!randomizationData.ageRanges?.length) {
-            console.error('No age ranges available, using fallback');
-            document.getElementById('age').value = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-            return;
-        }
-        const validRanges = randomizationData.ageRanges.filter(range => 
-            typeof range.minAge === 'number' && typeof range.maxAge === 'number' && range.minAge <= range.maxAge
-        );
-        if (!validRanges.length) {
-            console.error('No valid age ranges, using fallback');
-            document.getElementById('age').value = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-            return;
-        }
-        const range = validRanges[Math.floor(Math.random() * validRanges.length)];
-        console.log('Selected age range:', range);
-        const age = Math.floor(Math.random() * (range.maxAge - range.minAge + 1)) + range.minAge;
+        const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
+        const [min, max] = range.split('-').map(Number);
+        const age = Math.floor(Math.random() * (max - min + 1)) + min;
         document.getElementById('age').value = age;
         console.log('Randomized age:', age);
     } catch (err) {
         console.error('Error randomizing age:', err);
-        document.getElementById('age').value = 30; // Fallback age
     }
 }
 
 function randomizeGender() {
-    const gender = randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
-    document.getElementById('gender').value = gender;
+    try {
+        const gender = randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+        document.getElementById('gender').value = gender;
+        console.log('Randomized gender:', gender);
+    } catch (err) {
+        console.error('Error randomizing gender:', err);
+    }
 }
 
 function randomizeLocale() {
-    const locale = randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-    document.getElementById('locale').value = locale;
+    try {
+        const locale = randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+        document.getElementById('locale').value = locale;
+        console.log('Randomized locale:', locale);
+    } catch (err) {
+        console.error('Error randomizing locale:', err);
+    }
 }
 
 function randomizeOccupation() {
-    const occupation = randomizationData.occupations[Math.floor(Math.random() * randomizationData.occupations.length)];
-    document.getElementById('occupation').value = occupation;
+    try {
+        const occupation = randomizationData.occupations[Math.floor(Math.random() * randomizationData.occupations.length)];
+        document.getElementById('occupation').value = occupation;
+        console.log('Randomized occupation:', occupation);
+    } catch (err) {
+        console.error('Error randomizing occupation:', err);
+    }
 }
 
 function randomizeTraits() {
-    const psychTraits = traits.filter(t => t.category === 'Psychological' || t.category === 'Heredity');
-    const numTraits = Math.floor(Math.random() * 3) + 1;
-    const selectedTraits = [];
-    for (let i = 0; i < numTraits && psychTraits.length > 0; i++) {
-        const index = Math.floor(Math.random() * psychTraits.length);
-        selectedTraits.push(psychTraits[index].characteristic);
-        psychTraits.splice(index, 1);
+    try {
+        const numTraits = Math.floor(Math.random() * 3) + 1; // 1-3) + traits
+        const shuffledTraits = [...traits].sort(() => 0.5 - Math.random());
+        const selected = shuffledTraits.slice(0, numTraits).map(t => t.characteristic);
+        document.getElementById('traits').value = selected.join(', ');
+        console.log('Randomized traits:', selected);
+    } catch (err) {
+        console.error('Error randomizing traits:', err);
     }
-    document.getElementById('traits').value = selectedTraits.join(', ');
-}
-
-function randomizeContext() {
-    const context = randomizationData.contexts[Math.floor(Math.random() * randomizationData.contexts.length)];
-    document.getElementById('context').value = context;
 }
 
 function randomizeEverything() {
-    randomizeName();
-    randomizeAge();
-    randomizeGender();
-    randomizeLocale();
-    randomizeOccupation();
-    randomizeTraits();
-    console.log('Randomized all fields');
+    try {
+        randomizeName();
+        randomizeAge();
+        randomizeGender();
+        randomizeLocale();
+        randomizeOccupation();
+        randomizeTraits();
+        console.log('Randomized all fields');
+    } catch (err) {
+        console.error('Error randomizing everything:', err);
+    }
+}
+
+function randomizeContext(fieldId) {
+    try {
+        const contexts = ['work', 'family', 'friendship', 'rivalry', 'community', 'school', 'adventure', 'romance'];
+        const context = contexts[Math.floor(Math.random() * contexts.length)];
+        document.getElementById(fieldId).value = context;
+        console.log(`Randomized ${fieldId}:`, context);
+    } catch (err) {
+        console.error('Error randomizing context:', err);
+    }
+}
+
+function randomizeComparison() {
+    try {
+        if (characters.length < 2) {
+            alert('Not enough characters to randomize comparison.');
+            return;
+        }
+        const indices = Array.from({ length: characters.length }, (_, i) => i);
+        const char1Index = indices.splice(Math.floor(Math.random() * indices.length), 1)[0];
+        const char2Index = indices[Math.floor(Math.random() * indices.length)];
+        document.getElementById('character1').value = char1Index;
+        document.getElementById('character2').value = char2Index;
+        randomizeContext('context1');
+        randomizeContext('context2');
+        console.log('Randomized comparison:', char1Index, char2Index);
+    } catch (err) {
+        console.error('Error randomizing comparison:', err);
+    }
 }
 
 function initThemeToggle() {
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('change', () => {
-            const newTheme = themeToggle.checked ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            document.body.classList.add('theme-transition');
-            localStorage.setItem('theme', newTheme);
-            console.log(`Theme switched to: ${newTheme}`);
-            setTimeout(() => document.body.classList.remove('theme-transition'), 300);
-        });
+    try {
+        const toggleCheckbox = document.getElementById('theme-toggle');
+        const html = document.documentElement;
         const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        themeToggle.checked = savedTheme === 'dark';
-        console.log(`Initialized with theme: ${savedTheme}`);
+        html.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            toggleCheckbox.checked = true;
+        }
+
+        toggleCheckbox.addEventListener('change', () => {
+            const newTheme = toggleCheckbox.checked ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            console.log('Theme toggled to:', newTheme);
+        });
+        console.log('Initialized with theme:', savedTheme);
+    } catch (err) {
+        console.error('Error initializing theme toggle:', err);
     }
 }
