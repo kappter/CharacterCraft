@@ -239,178 +239,232 @@ function exportComparisonReport() {
 
 // Display saved characters
 function displayCharacters() {
-    const characterList = document.getElementById('characterList');
-    if (!characterList) {
-        console.error('Character list container not found.');
-        return;
+    try {
+        const characterList = document.getElementById('characterList');
+        if (!characterList) {
+            console.error('Character list container not found.');
+            return;
+        }
+        characterList.innerHTML = '';
+        characters.forEach((char, index) => {
+            const div = document.createElement('div');
+            div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md flex justify-between items-center';
+            div.innerHTML = `
+                <div>
+                    <strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>
+                    Traits: ${char.traits.join(', ') || 'None'}
+                </div>
+                <button onclick="viewCharacterReport(${index})" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm">View Report</button>
+            `;
+            characterList.appendChild(div);
+        });
+        updateCharacterSelects();
+        updateEditCharacterSelect();
+        console.log('Characters displayed:', characters.length);
+    } catch (err) {
+        console.error('Error displaying characters:', err);
     }
-    characterList.innerHTML = '';
-    characters.forEach((char, index) => {
-        const div = document.createElement('div');
-        div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md flex justify-between items-center';
-        div.innerHTML = `
-            <div>
-                <strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>
-                Traits: ${char.traits.join(', ') || 'None'}
-            </div>
-            <button onclick="viewCharacterReport(${index})" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm">View Report</button>
-        `;
-        characterList.appendChild(div);
-    });
-    updateCharacterSelects();
-    updateEditCharacterSelect();
-    console.log('Characters displayed:', characters.length);
 }
 
 // View character report
 function viewCharacterReport(index) {
-    const char = characters[index];
-    if (!char.detailedBio) {
-        const { detailedBio } = generateCharacterBio(char);
-        characters[index].detailedBio = detailedBio;
-        localStorage.setItem('characters', JSON.stringify(characters));
+    try {
+        const char = characters[index];
+        if (!char) {
+            console.error('Character not found at index:', index);
+            return;
+        }
+        if (!char.detailedBio) {
+            const { detailedBio } = generateCharacterBio(char);
+            characters[index].detailedBio = detailedBio;
+            localStorage.setItem('characters', JSON.stringify(characters));
+        }
+        const traitsSection = char.traits && char.traits.length 
+            ? `<h3 class="text-lg font-semibold mb-2">Personality Traits</h3><p>${char.traits.join(', ')}</p>`
+            : `<h3 class="text-lg font-semibold mb-2">Personality Traits</h3><p>No traits assigned.</p>`;
+        document.getElementById('characterReportContent').innerHTML = `
+            <h3 class="text-lg font-semibold mb-2">Detailed Bio for ${char.name}</h3>
+            ${char.detailedBio}
+            ${traitsSection}
+        `;
+        document.getElementById('characterReportModal').classList.remove('hidden');
+        console.log('Viewing report for:', char.name);
+    } catch (err) {
+        console.error('Error viewing character report:', err);
+        alert('Failed to display character report. Please try again.');
     }
-    document.getElementById('characterReportContent').innerHTML = `
-        <h3 class="text-lg font-semibold mb-2">Detailed Bio for ${char.name}</h3>
-        ${char.detailedBio}
-    `;
-    document.getElementById('characterReportModal').classList.remove('hidden');
-    console.log('Viewing report for:', char.name);
 }
 
 // Export character report
 function exportCharacterReport() {
-    const modalContent = document.getElementById('characterReportContent').innerHTML;
-    if (!modalContent) {
-        alert('No report to export.');
-        return;
+    try {
+        const modalContent = document.getElementById('characterReportContent').innerHTML;
+        if (!modalContent) {
+            alert('No report to export.');
+            return;
+        }
+        const name = modalContent.match(/Detailed Bio for ([^<]+)/)?.[1] || 'Character';
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Detailed Bio - ${name}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    h1 { text-align: center; color: #2b6cb0; }
+                    h3 { color: #2b6cb0; margin-top: 20px; }
+                    p { line-height: 1.6; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Detailed Bio for ${name}</h1>
+                    ${modalContent}
+                </div>
+            </body>
+            </html>
+        `;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error('Error exporting character report:', err);
+        alert('Failed to export report. Please try again.');
     }
-    const name = modalContent.match(/Detailed Bio for ([^<]+)/)?.[1] || 'Character';
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Detailed Bio - ${name}</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
-                .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-                h1 { text-align: center; color: #2b6cb0; }
-                h3 { color: #2b6cb0; margin-top: 20px; }
-                p { line-height: 1.6; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Detailed Bio for ${name}</h1>
-                ${modalContent}
-            </div>
-        </body>
-        </html>
-    `;
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
-    a.click();
-    URL.revokeObjectURL(url);
 }
 
 // Close modal
 function closeModal() {
-    document.getElementById('characterReportModal').classList.add('hidden');
-    document.getElementById('characterReportContent').innerHTML = '';
+    try {
+        document.getElementById('characterReportModal').classList.add('hidden');
+        document.getElementById('characterReportContent').innerHTML = '';
+    } catch (err) {
+        console.error('Error closing modal:', err);
+    }
 }
 
 // Update character select dropdowns
 function updateCharacterSelects() {
-    const select1 = document.getElementById('character1');
-    const select2 = document.getElementById('character2');
-    if (!select1 || !select2) {
-        console.error('Character select dropdowns not found.');
-        return;
+    try {
+        const select1 = document.getElementById('character1');
+        const select2 = document.getElementById('character2');
+        if (!select1 || !select2) {
+            console.error('Character select dropdowns not found.');
+            return;
+        }
+        select1.innerHTML = '<option value="">Select Character</option>';
+        select2.innerHTML = '<option value="">Select Character</option>';
+        characters.forEach((char, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = char.name;
+            select1.appendChild(option.cloneNode(true));
+            select2.appendChild(option);
+        });
+        console.log('Character selects updated:', characters.length);
+    } catch (err) {
+        console.error('Error updating character selects:', err);
     }
-    select1.innerHTML = '<option value="">Select Character</option>';
-    select2.innerHTML = '<option value="">Select Character</option>';
-    characters.forEach((char, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = char.name;
-        select1.appendChild(option.cloneNode(true));
-        select2.appendChild(option);
-    });
-    console.log('Character selects updated:', characters.length);
 }
 
 // Update edit character select
 function updateEditCharacterSelect() {
-    const editSelect = document.getElementById('editSelectIndex');
-    if (!editSelect) {
-        console.error('Edit character select not found.');
-        return;
+    try {
+        const editSelect = document.getElementById('editSelectIndex');
+        if (!editSelect) {
+            console.error('Edit character select not found.');
+            return;
+        }
+        editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
+        characters.forEach((char, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = char.name;
+            editSelect.appendChild(option);
+        });
+        console.log('Edit character select updated.');
+    } catch (err) {
+        console.error('Error updating edit character select:', err);
     }
-    editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
-    characters.forEach((char, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = char.name;
-        editSelect.appendChild(option);
-    });
-    console.log('Edit character select updated.');
 }
 
 // Load character data into edit form
 function loadCharacterToEdit(select) {
-    const index = select.value;
-    if (index === '') {
-        clearEditForm();
-        return;
+    try {
+        const index = select.value;
+        if (index === '') {
+            clearEditForm();
+            return;
+        }
+        const char = characters[index];
+        document.getElementById('editName').value = char.name;
+        document.getElementById('editAge').value = char.age;
+        document.getElementById('editGender').value = char.gender;
+        document.getElementById('editLocale').value = char.locale;
+        document.getElementById('editOccupation').value = char.occupation;
+        document.getElementById('editTraits').value = char.traits.join(', ');
+    } catch (err) {
+        console.error('Error loading character to edit:', err);
     }
-    const char = characters[index];
-    document.getElementById('editName').value = char.name;
-    document.getElementById('editAge').value = char.age;
-    document.getElementById('editGender').value = char.gender;
-    document.getElementById('editLocale').value = char.locale;
-    document.getElementById('editOccupation').value = char.occupation;
-    document.getElementById('editTraits').value = char.traits.join(', ');
 }
 
 // Update character
 function updateCharacter() {
-    const index = document.getElementById('editSelectIndex').value;
-    if (index === '') {
-        alert('Please select a character to edit.');
-        return;
-    }
-    const name = document.getElementById('editName').value;
-    const age = document.getElementById('editAge').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('editGender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
-    const locale = document.getElementById('editLocale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-    const occupation = document.getElementById('editOccupation').value;
-    const traitsInput = document.getElementById('editTraits').value;
+    try {
+        const index = document.getElementById('editSelectIndex').value;
+        if (index === '') {
+            alert('Please select a character to edit.');
+            return;
+        }
+        const name = document.getElementById('editName').value;
+        const age = document.getElementById('editAge').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+        const gender = document.getElementById('editGender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+        const locale = document.getElementById('editLocale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+        const occupation = document.getElementById('editOccupation').value;
+        const traitsInput = document.getElementById('editTraits').value;
 
-    if (name && occupation.trim()) {
-        const character = {
-            id: characters[index].id,
-            name,
-            age,
-            gender,
-            locale,
-            occupation,
-            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
-        };
-        const { shortBio, detailedBio } = generateCharacterBio(character);
-        character.shortBio = shortBio;
-        character.detailedBio = detailedBio;
+        if (name && occupation.trim()) {
+            const character = {
+                id: characters[index].id,
+                name,
+                age,
+                gender,
+                locale,
+                occupation,
+                traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
+            };
+            const { shortBio, detailedBio } = generateCharacterBio(character);
+            character.shortBio = shortBio;
+            character.detailedBio = detailedBio;
 
-        characters[index] = character;
-        localStorage.setItem('characters', JSON.stringify(characters));
-        displayCharacters();
-        clearEditForm();
-        console.log('Character updated:', name);
-    } else {
-        alert('Please fill in a name and a valid occupation.');
+            characters[index] = character;
+            localStorage.setItem('characters', JSON.stringify(characters));
+            displayCharacters();
+            clearEditForm();
+            console.log('Character updated:', name);
+        } else {
+            alert('Please fill in a name and a valid occupation.');
+        }
+    } catch (err) {
+        console.error('Error updating character:', err);
+        alert('Failed to update character. Please try again.');
     }
+}
+
+// Clear edit form
+function clearEditForm() {
+    document.getElementById('editSelectIndex').value = '';
+    document.getElementById('editName').value = '';
+    document.getElementById('editAge').value = '';
+    document.getElementById('editGender').value = '';
+    document.getElementById('editLocale').value = '';
+    document.getElementById('editOccupation').value = '';
+    document.getElementById('editTraits').value = '';
 }
