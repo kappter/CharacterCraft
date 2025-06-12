@@ -1,6 +1,5 @@
 category,characteristic,synonyms,description
 Psychological,calm,composed;serene,A composed demeanor under pressure.
-Psychological,bitter resentment,grudge;vendetta,A deep-seated anger from past wrongs, often hidden but influencing actions.
 Psychological,reluctant optimism,hopeful hesitance;cautious positivity,A guarded belief in positive outcomes despite past setbacks.
 Psychological,crippling self-doubt,insecurity;self-uncertainty,A persistent fear of inadequacy that undermines confidence.
 Psychological,obsessive perfectionism,meticulousness;control fixation,An unrelenting drive for flawless results, often at personal cost.
@@ -24,4 +23,29 @@ Psychological,compulsive risk-taking,thrill-seeking;adventurousness,A need for e
 Psychological,skeptical pragmatism,realism;doubt,Approaching life with practical caution, questioning motives.
 Psychological,clinging dependency,neediness;attachment,A fear of abandonment driving desperate need for closeness.
 Psychological,erratic moodiness,volatility;instability,Sudden emotional ups and downs, confusing others.
-Psychological,sm
+Psychological,cynical wit,sarcasm;irony,Using sharp humor to mask deeper dissatisfaction.
+Psychological,smothered ambition,stifled drive;unrealized potential,A burning desire for success, restrained by circumstance or fear.
+Psychological,obsessive loyalty,blind devotion;allegiance,Unquestioning dedication to a person or cause, ignoring faults.
+Psychological,secretive ambition,hidden drive;covert goals,Pursuing grand plans in private, revealing little to others.
+Psychological,reluctant leadership,hesitant authority;unwanted command,Taking charge only when forced, despite capability.
+Psychological,chronic indecision,hesitation;vacillation,Struggling to make choices, paralyzed by options.
+Psychological,defensive sarcasm,protective humor;shielding wit,Using biting humor to deflect criticism or vulnerability.
+Psychological,unconscious bias,prejudice;partiality,Deep-seated assumptions influencing behavior without awareness.
+Psychological,restless curiosity,inquiring mind;seeker,A relentless need to explore and understand the unknown.
+Psychological,suppressed creativity,stifled artistry;latent talent,An unexpressed artistic drive, yearning for an outlet.
+Psychological,vengeful spite,malice;retribution,Holding grudges with a desire to settle scores.
+Psychological,fragile confidence,shaky self-assurance;unstable esteem,Self-belief that crumbles under scrutiny.
+Psychological,compulsive honesty,truthfulness;frankness,An inability to lie, even when tact would serve better.
+Psychological,brooding introspection,deep reflection;self-analysis,Constantly examining one’s own thoughts, often darkly.
+Psychological,impulsive generosity,spontaneous kindness;overgiving,Giving freely without considering personal cost.
+Psychological,guarded vulnerability,hidden sensitivity;shielded emotions,Protecting a fragile emotional core from exposure.
+Heredity,bitter resentment,grudge;vendetta,A deep-seated anger from family history, passed down through generations.
+Heredity,inherited anxiety,generational worry;familial stress,Anxiety rooted in family patterns, manifesting in nervous habits.
+Heredity,stubborn pride,family honor;ancestral ego,A sense of superiority tied to lineage, often inflexible.
+Heredity,compulsive hoarding,packrat tendency;inherited clutter,A drive to collect items, learned from family behavior.
+Heredity,traditionalist mindset,old-school values;ancestral beliefs,Clinging to family customs, resistant to change.
+Heredity,familial temper,hot-headedness;inherited anger,Quick to anger, a trait observed in relatives.
+Heredity,artistic inclination,creative heritage;family artistry,A natural talent for art, seen in family history.
+Heredity,superstitious nature,folk beliefs;ancestral rituals,Adhering to family superstitions, shaping decisions.
+Heredity,chronic mistrust,ingrained suspicion;family skepticism,Distrust of others, rooted in familial experiences.
+Heredity,generational duty,family obligation;inherited responsibility,A sense of responsibility carried forward from ancestors.

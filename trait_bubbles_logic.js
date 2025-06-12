@@ -1,21 +1,43 @@
 let selectedTraits = [];
+let currentCategory = 'all';
 
-function initializeBubbles() {
+function initializeBubbles(category = 'all') {
     const bubbleContainer = document.getElementById('bubbleContainer');
     if (!bubbleContainer) {
         console.error('Bubble container not found.');
         return;
     }
     bubbleContainer.innerHTML = '';
-    traits.forEach((trait, index) => {
+    const filteredTraits = category === 'all' ? traits : traits.filter(trait => trait.category === category);
+    filteredTraits.forEach((trait, index) => {
         const bubble = document.createElement('div');
         bubble.className = 'trait-bubble';
         bubble.textContent = trait.characteristic;
-        bubble.dataset.index = index;
+        bubble.dataset.index = traits.indexOf(trait);
         bubble.addEventListener('click', () => toggleTrait(bubble, trait.characteristic));
+        if (selectedTraits.includes(trait.characteristic)) {
+            bubble.classList.add('selected');
+        }
         bubbleContainer.appendChild(bubble);
     });
-    console.log('Trait bubbles initialized:', traits.length);
+    console.log(`Trait bubbles initialized for category '${category}': ${filteredTraits.length} traits`);
+}
+
+// Filter traits by category
+function filterTraits(category) {
+    currentCategory = category;
+    initializeBubbles(category);
+    updateCategoryButtons();
+}
+
+// Update active category button
+function updateCategoryButtons() {
+    document.querySelectorAll('.category-button').forEach(button => {
+        button.classList.remove('active');
+        if (button.dataset.category === currentCategory) {
+            button.classList.add('active');
+        }
+    });
 }
 
 // Toggle trait selection
@@ -62,11 +84,28 @@ function saveBubbleTraits() {
     console.log('Traits saved for character:', characters[charIndex].name);
 }
 
+// Update character select dropdown
+function updateBubbleCharacterSelect() {
+    const select = document.getElementById('bubbleCharacterSelect');
+    if (!select) {
+        console.error('Bubble character select not found.');
+        return;
+    }
+    select.innerHTML = '<option value="">Select a character</option>';
+    characters.forEach((char, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = char.name;
+        select.appendChild(option);
+    });
+    console.log('Bubble character select updated:', characters.length);
+}
+
 // Initialize page
 async function initTraitBubbles() {
     await loadTraits(); // Ensure traits are loaded
-    updateCharacterSelects(); // Populate dropdown
-    initializeBubbles();
+    updateBubbleCharacterSelect(); // Populate dropdown
+    initializeBubbles(currentCategory);
     updateSelectedTraits();
     initThemeToggle();
     console.log('Trait Bubbles page initialized.');

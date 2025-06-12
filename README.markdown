@@ -1,131 +1,122 @@
-<div align="center">
-  <a href="https://kappter.github.io/CharacterCraft/">
-    <img src="./cclogo.png" alt="CharacterCraft Logo" width="100">
-  </a>
-</div>
-
 # CharacterCraft
 
-CharacterCraft is a web application designed to assist writers in creating vivid, believable characters for their stories. Inspired by *The Writer's Digest Sourcebook for Building Believable Characters* by Marc McCutcheon, the app provides tools to generate character bios, compare characters, manage traits, and save character profiles. With a modern, user-friendly interface, CharacterCraft supports both manual input and randomization to spark creativity, making it ideal for novelists, screenwriters, and role-playing game enthusiasts.
+CharacterCraft is a web-based tool inspired by *The Writer's Digest Sourcebook for Building Believable Characters* by Marc McCutcheon. It helps writers, educators, and storytellers create and manage detailed, believable characters through randomization, trait assignment, and bio generation. The app features a responsive interface with dark mode, exportable HTML reports, and an interactive Trait Bubbles screen with category filtering for dynamic character development.
+
+**Live Demo**: [kappter.github.io/CharacterCraft](https://kappter.github.io/CharacterCraft)
 
 ## Features
 
-### 1. Character Creation
-- **Input Fields**: Create characters by entering details such as name, age, gender, locale, occupation, and personality traits.
-- **Randomization**: Each input field includes a "Randomize" button to auto-generate values (e.g., random names, ages between 18-80, locales like New York or Tokyo, occupations like Writer or Engineer, and 1-3 psychological traits).
-- **Bio Generation**: Generate a short bio (~100 words) and an extended bio (~1000 words, approximated via repetition) based on user inputs and traits from CSV files.
-- **Trait Integration**: Bios incorporate traits from four categories (Physical, Psychological, Background, Motivations) loaded from CSV files, ensuring rich, varied descriptions.
-- **Save Functionality**: Save characters to localStorage for later use or editing.
+- **Create Character**: Build characters with randomized or manual inputs for name, age, gender, locale, occupation, and personality traits. Generate short and detailed bios, and export detailed bios as HTML files (enabled after saving).
+- **Compare Characters**: Select two saved characters, choose a context (e.g., "midnight stakeout"), and generate a comparison highlighting commonalities and conflicts. Export comparisons as HTML reports.
+- **Trait List**: View and add custom traits across categories (Physical, Psychological, Heredity, Background, Motivations, Custom). Traits are sourced from CSV files for easy expansion.
+- **Saved Characters**: Save, view, and edit characters stored in `localStorage`. Edit fields like name, traits, or occupation.
+- **Trait Bubbles**: Assign traits to saved characters via an interactive screen with clickable trait bubbles, filtered by category (e.g., Physical, Psychological). Updates are saved to `localStorage`.
+- **Dark Mode**: Toggle between light and dark themes, with preferences saved in `localStorage`.
+- **Responsive Design**: Built with Tailwind CSS and custom styles for mobile and desktop compatibility.
+- **Data-Driven**: Uses CSV files (`physical_traits.csv`, `psychological_traits.csv`, etc.) and `randomization_data.json` for flexible trait and randomization options.
 
-### 2. Character Comparison
-- Compare two saved characters to identify commonalities, points of contention, and potential transition points in their interactions.
-- **Context Field**: Specify or randomize the context (e.g., work, family, vacation, class, school, in the wild) to explore what brought the characters together, enriching the comparison narrative.
-- Useful for plotting character dynamics or conflicts in a story.
+## Setup
 
-### 3. Trait List Management
-- View a table of all traits, organized by category (Physical, Psychological, Background, Motivations, Custom).
-- Add new traits with a category, characteristic, synonyms, and description, dynamically updating the in-memory trait list.
-- Traits are sourced from four CSV files, allowing for easy expansion of the trait database.
+### Prerequisites
+- A modern web browser (Chrome, Firefox, Safari, Edge).
+- A local server (e.g., Python’s `http.server`) for development to avoid CORS issues with file loading.
+- Git for cloning the repository.
 
-### 4. Saved Characters
-- Display a list of all saved characters with their details (name, age, gender, locale, occupation, traits).
-- Edit saved characters via a form, tweaking any field and updating the stored data.
-- Persistent storage using localStorage ensures characters are retained across sessions.
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/kappter/CharacterCraft.git
+   cd CharacterCraft
+   ```
+2. Ensure all files are in the root directory:
+   - `index.html`, `trait_bubbles.html`
+   - `styles.css`, `script.js`, `utils.js`, `characters.js`, `traits.js`, `ui.js`, `trait_bubbles_logic.js`
+   - `randomization_data.json`
+   - `physical_traits.csv`, `psychological_traits.csv`, `background_details.csv`, `motivations_beliefs.csv`
+   - `favicon.ico`, `cclogo.png`
+3. Start a local server:
+   ```bash
+   python -m http.server 8000
+   ```
+4. Open `http://localhost:8000` in your browser.
 
-### 5. Modern UI
-- **Tabbed Interface**: Navigate between Create Character, Compare Characters, Trait List, and Saved Characters tabs for a focused workflow.
-- **Dark Mode**: Toggle between light and dark themes with a switch in the header, with preferences saved in localStorage.
-- **Fixed Header/Footer**: A fixed header displays the app logo, title, and dark mode toggle; a fixed footer shows a copyright notice.
-- **Responsive Design**: Built with Tailwind CSS and Inter font, the UI adapts to mobile, tablet, and desktop screens.
-- **Animations**: Subtle transitions for tab switches, button hovers, and dark mode toggle enhance user engagement.
+### Deployment
+- **GitHub Pages**: Push to the `gh-pages` branch of your repository (`kappter/CharacterCraft`). The app is live at `https://kappter.github.io/CharacterCraft`.
+- Ensure all assets (CSV, JSON, images) are included in the repository.
+- Clear browser cache (`Ctrl+Shift+R`) if updates don’t appear.
 
-### 6. Data-Driven Traits
-- Traits are loaded from four CSV files:
-  - `physical_traits.csv`: Physical characteristics (e.g., weathered hands, sharp cheekbones).
-  - `psychological_traits.csv`: Personality traits (e.g., restless curiosity, quiet resolve).
-  - `background_details.csv`: Life history (e.g., coastal childhood, wanderer’s past).
-  - `motivations_beliefs.csv`: Core drives and values (e.g., quest for redemption, pursuit of knowledge).
-- Each CSV follows the format: `category,characteristic,synonyms,description`, enabling easy customization.
+## Usage
 
-## Intent
-CharacterCraft aims to streamline the character creation process by providing a structured yet flexible toolset. Drawing from the principles of *The Writer's Digest Sourcebook for Building Believable Characters*, the app emphasizes depth and authenticity in character design. Writers can:
-- Quickly generate character ideas with randomization.
-- Craft detailed bios to flesh out backstories and motivations.
-- Compare characters to explore narrative dynamics.
-- Customize traits to suit specific genres or settings.
-The modern, intuitive interface ensures accessibility for both novice and experienced writers, fostering creativity without overwhelming the user.
+1. **Create a Character**:
+   - Input or randomize name, age, gender, locale, occupation, and traits using the "Randomize" buttons.
+   - Click "Generate Bios" to view short and detailed bios.
+   - Click "Save Character" to enable the "Export Detailed Bio" button and download an HTML file.
+2. **Compare Characters**:
+   - Select two saved characters and a context.
+   - Click "Compare" to see a detailed comparison.
+   - Click "Export Comparison Report" to download an HTML report.
+3. **Trait List**:
+   - View all traits in a table, populated from CSV files.
+   - Add custom traits with category, characteristic, synonyms, and description.
+4. **Saved Characters**:
+   - View all saved characters.
+   - Edit character details via the edit form.
+5. **Trait Bubbles**:
+   - Navigate to the Trait Bubbles tab.
+   - Select a saved character from the dropdown.
+   - Filter traits by category (e.g., Physical, Psychological, Heredity) using buttons.
+   - Click trait bubbles to toggle assignment, then click "Save Traits" to update the character.
+6. **Dark Mode**:
+   - Toggle dark mode in the header. Theme persists across sessions.
 
-## Installation and Usage
+## File Structure
 
-1. **Clone or Download**:
-   - Clone the repository or download the project files from [GitHub](https://github.com/kappter/CharacterCraft).
+- **HTML**:
+  - `index.html`: Main app with Create, Compare, Trait List, and Saved Characters tabs.
+  - `trait_bubbles.html`: Interactive screen for assigning traits via bubbles with category filters.
+- **CSS**:
+  - `styles.css`: Custom styles with CSS variables for light/dark themes, plus Tailwind CSS.
+- **JavaScript**:
+  - `script.js`: Entry point for initializing the app.
+  - `utils.js`: Randomization functions, CSV parsing, and theme toggle.
+  - `characters.js`: Character creation, saving, editing, comparison, and exports.
+  - `traits.js`: Trait loading, display, and management.
+  - `ui.js`: Tab switching, form clearing, and app reset.
+  - `trait_bubbles_logic.js`: Trait bubble interactions and character trait updates.
+- **Data**:
+  - `randomization_data.json`: Names, locales, occupations, and contexts for randomization.
+  - `physical_traits.csv`, `psychological_traits.csv`, `background_details.csv`, `motivations_beliefs.csv`: Trait data, including new Heredity category.
+- **Assets**:
+  - `favicon.ico`, `cclogo.png`: Branding images.
 
-2. **File Structure**:
-   - Ensure the following files are in the same directory:
-     - `index.html`: Main HTML file.
-     - `styles.css`: Custom CSS for theme-specific styles.
-     - `script.js`: JavaScript for functionality.
-     - `cclogo.png`: App logo.
-     - `favicon.ico`: Favicon.
-     - `physical_traits.csv`: Physical trait data.
-     - `psychological_traits.csv`: Psychological trait data.
-     - `background_details.csv`: Background trait data.
-     - `motivations_beliefs.csv`: Motivations and beliefs trait data.
+## Contributing
 
-3. **Serve the App**:
-   - Use a local server to enable CSV fetching (e.g., Python’s HTTP server):
-     ```bash
-     python -m http.server 8000
-     ```
-   - Open `http://localhost:8000` in a web browser.
-   - Alternatively, visit the hosted version at [https://kappter.github.io/CharacterCraft/](https://kappter.github.io/CharacterCraft/).
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a branch (`git checkout -b feature/your-feature`).
+3. Commit changes (`git commit -m 'Add your feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Open a Pull Request.
 
-4. **Usage Instructions**:
-   - **Create Character Tab**:
-     - Enter details manually or click "Randomize" buttons to auto-fill fields.
-     - Click "Generate Bios" to create short and extended bios.
-     - Click "Save Character" to store the character and navigate to the Saved Characters tab.
-   - **Compare Characters Tab**:
-     - Select two saved characters, enter or randomize a context (e.g., work, family), and click "Compare" to view commonalities and conflicts.
-   - **Trait List Tab**:
-     - View existing traits or add new ones by filling out the form and clicking "Add Trait".
-   - **Saved Characters Tab**:
-     - View saved characters or select one to edit, updating details as needed.
-   - **Dark Mode**: Toggle dark mode via the switch in the header.
+Please ensure:
+- Code follows existing style (e.g., Tailwind classes, CSS variables).
+- New features include tests or manual testing steps.
+- Update `README.md` for significant changes.
 
-## Troubleshooting
-- **Dark Mode Not Working**:
-  - Ensure JavaScript is enabled in your browser.
-  - Clear browser cache (Ctrl+Shift+R) and reload.
-  - Check the Console (F12 > Console) for errors related to `theme-toggle`.
-- **CSS Displaying as Text**:
-  - Verify you’re using a local server (`python -m http.server`) instead of opening `index.html` directly.
-  - Confirm `styles.css` is in the project root and referenced correctly.
-- **CSV Loading Issues**:
-  - Ensure CSV files are in the project root with correct names.
-  - Check Console for fetch errors; use a local server to avoid CORS issues.
-- **Browser Extension Errors** (e.g., `content.js`):
-  - Disable extensions like MindStudio temporarily to reduce console noise.
+## Issues
 
-## Development Notes
-- **Tech Stack**:
-  - HTML, Tailwind CSS, and JavaScript for the frontend.
-  - Inter font (via Google Fonts CDN) for typography.
-  - LocalStorage for persistent character and theme storage.
-  - CSV files for trait data, parsed client-side.
-- **Limitations**:
-  - Extended bio length (~1000 words) is approximated via repetition; a future version could use a narrative generator.
-  - New traits are stored in-memory and reset on page refresh; a backend could persist them to CSV files.
-  - Randomization lists (names, occupations, contexts) are small; expand them for greater variety.
-- **Future Enhancements**:
-  - Backend integration for persistent trait storage.
-  - Advanced bio generation with unique narratives.
-  - Export/import characters as JSON or CSV.
-  - Randomize buttons for the Edit Character form.
+- **Buttons Not Working**: If randomization buttons fail, ensure `utils.js` loads correctly and check Console (F12) for errors like `ReferenceError`.
+- **Trait List/Trait Bubbles Empty**: Run on a local server (`python -m http.server`) to avoid CORS issues with CSV loading. Check Console for fetch errors.
+- **Dropdowns Empty**: Verify characters are saved in `localStorage` and `characters.js` is updating dropdowns.
+- **GitHub Pages**: Clear cache (`Ctrl+Shift+R`) if updates don’t appear.
+- Report bugs or feature requests via GitHub Issues.
 
 ## License
-This project is for educational and personal use only, inspired by *The Writer's Digest Sourcebook for Building Believable Characters*. No commercial use is intended. All rights reserved for original content and concepts.
+
+© 2025 CharacterCraft. All Rights Reserved. This project is for educational and personal use, inspired by *The Writer's Digest Sourcebook for Building Believable Characters*.
 
 ## Acknowledgments
-- *The Writer's Digest Sourcebook for Building Believable Characters* by Marc McCutcheon for inspiration.
-- Tailwind CSS and Inter font for design resources.
+
+- Built with [Tailwind CSS](https://tailwindcss.com/) and [Google Fonts (Inter)](https://fonts.google.com/).
+- Inspired by *The Writer's Digest Sourcebook for Building Believable Characters* by Marc McCutcheon.
+- Developed for writers and educators to craft compelling character narratives.

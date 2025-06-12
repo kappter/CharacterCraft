@@ -35,6 +35,51 @@ async function loadRandomizationData() {
     }
 }
 
+// Randomization functions
+function randomizeName() {
+    const first = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
+    const last = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
+    document.getElementById('name').value = `${first} ${last}`;
+}
+
+function randomizeAge() {
+    const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
+    const age = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+    document.getElementById('age').value = age;
+}
+
+function randomizeGender() {
+    const gender = randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+    document.getElementById('gender').value = gender;
+}
+
+function randomizeLocale() {
+    const locale = randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+    document.getElementById('locale').value = locale;
+}
+
+function randomizeOccupation() {
+    const occupation = randomizationData.occupations[Math.floor(Math.random() * randomizationData.occupations.length)];
+    document.getElementById('occupation').value = occupation;
+}
+
+function randomizeTraits() {
+    const psychTraits = traits.filter(t => t.category === 'Psychological' || t.category === 'Heredity');
+    const numTraits = Math.floor(Math.random() * 3) + 1;
+    const selectedTraits = [];
+    for (let i = 0; i < numTraits && psychTraits.length > 0; i++) {
+        const index = Math.floor(Math.random() * psychTraits.length);
+        selectedTraits.push(psychTraits[index].characteristic);
+        psychTraits.splice(index, 1);
+    }
+    document.getElementById('traits').value = selectedTraits.join(', ');
+}
+
+function randomizeContext() {
+    const context = randomizationData.contexts[Math.floor(Math.random() * randomizationData.contexts.length)];
+    document.getElementById('context').value = context;
+}
+
 // Dark mode toggle
 function initThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
