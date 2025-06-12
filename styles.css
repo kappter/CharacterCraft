@@ -45,7 +45,7 @@ header, footer {
     display: none;
 }
 
-input, select, textarea {
+input, select, button {
     background-color: var(--primary-bg);
     border-color: var(--border-color);
     color: var(--primary-text);
@@ -54,6 +54,16 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.2);
+}
+
+button.randomize-btn {
+    background-color: var(--button-bg);
+    color: var(--primary-text);
+    transition: background-color 0.2s;
+}
+
+button.randomize-btn:hover {
+    background-color: var(--button-hover-bg);
 }
 
 .toggle-switch {
