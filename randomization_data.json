@@ -1,47 +1,15 @@
 {
-  "firstNames": [
-    "Aisha", "Hiroshi", "Elena", "Javier", "Ngozi", "Sven", "Priya", "Liam", "Fatima", "Dmitri",
-    "Isabela", "Kwame", "Mei", "Omar", "Sofia", "Arjun", "Chloe", "Youssef", "Anika", "Rafael"
-  ],
-  "lastNames": [
-    "Patel", "Nguyen", "Garcia", "Kim", "Okafor", "Svensson", "Sharma", "O’Connor", "Hassan", "Ivanov",
-    "Silva", "Mensah", "Chen", "Al-Bayati", "Rossi", "Singh", "Dupont", "El-Sayed", "Weber", "Costa"
-  ],
-  "ageRanges": [
-    {"min": 18, "max": 25, "label": "Young Adult"},
-    {"min": 26, "max": 35, "label": "Early Career"},
-    {"min": 36, "max": 50, "label": "Midlife"},
-    {"min": 51, "max": 65, "label": "Mature"},
-    {"min": 66, "max": 90, "label": "Senior"}
-  ],
-  "genders": [
-    "male", "female", "non-binary", "unspecified", "agender", "genderfluid", "two-spirit"
-  ],
-  "locales": [
-    "Mumbai", "Appalachian Trail", "Lagos", "Reykjavik", "Siberian Outpost", "Cairo", "Kyoto", 
-    "Havana", "Nairobi", "Buenos Aires", "Amsterdam", "Ulaanbaatar", "Cape Town", "Vancouver",
-    "Bali", "Riyadh", "Seoul", "Lisbon", "Tbilisi", "Anchorage"
-  ],
-  "occupations": [
-    "Hacker", "Park Ranger", "Diplomat", "Barista", "Gravedigger", "Astrophysicist", "Photojournalist",
-    "Street Vendor", "Librarian", "Marine Biologist", "Union Organizer", "Puppeteer", "Archaeologist",
-    "Game Designer", "Herbalist", "Freight Train Conductor", "Dance Choreographer", "Cryptocurrency Trader",
-    "Urban Farmer", "Voice Actor"
-  ],
-  "contexts": [
-    "work", "family", "vacation", "class", "school", "in the wild", "community event", 
-    "online forum", "shared hobby", "chance encounter", "midnight stakeout", "village festival",
-    "battlefield truce", "stranded spacecraft", "courtroom showdown", "smuggler’s den",
-    "ghost town ruins", "underground fight club", "diplomatic summit", "rain-soaked alley",
-    "desert caravan", "haunted manor", "pirate ship deck", "war-torn refugee camp",
-    "neon-lit nightclub", "mountain rescue", "secret laboratory", "bustling marketplace",
-    "abandoned subway", "temple ritual", "skyline rooftop", "shipwreck dive",
-    "winter siege", "circus big top", "border checkpoint", "hacker’s hideout",
-    "royal masquerade", "fishing village dock", "jungle expedition", "street protest",
-    "doomsday bunker", "art gallery opening", "train heist", "arctic research station",
-    "gladiator arena", "ghostly séance", "smoke-filled tavern", "corporate espionage",
-    "nomad’s campfire", "flooded city ruins", "asteroid mining colony", "rebel safehouse",
-    "ancient library", "stormy lighthouse", "backstage drama", "quarantine zone",
-    "roadside diner", "sky pirate airship", "underworld auction", "festival bonfire"
-  ]
+    "firstNames": ["Alex", "Sam", "Taylor", "Jordan", "Chris", "Morgan", "Casey", "Jamie", "Riley", "Quinn", "Avery", "Skylar", "Cameron", "Peyton", "Dylan", "Logan", "Parker", "Reese", "Kendall", "Emery"],
+    "lastNames": ["Smith", "Johnson", "Brown", "Lee", "Wilson", "Davis", "Clark", "Harris", "Lewis", "Walker", "Hall", "Allen", "Young", "King", "Wright", "Scott", "Green", "Baker", "Adams", "Nelson"],
+    "ageRanges": [
+        {"minAge": 18, "maxAge": 25, "label": "Young Adult"},
+        {"minAge": 26, "maxAge": 35, "label": "Adult"},
+        {"minAge": 36, "maxAge": 50, "label": "Middle Age"},
+        {"minAge": 51, "maxAge": 70, "label": "Senior"},
+        {"minAge": 71, "maxAge": 90, "label": "Elder"}
+    ],
+    "genders": ["male", "female", "non-binary", "unspecified", "agender", "genderfluid", "two-spirit"],
+    "locales": ["New York", "Tokyo", "London", "Mumbai", "Sydney", "Paris", "Rio de Janeiro", "Cape Town", "Moscow", "Beijing", "Toronto", "Berlin", "Mexico City", "Bangkok", "Seoul", "Istanbul", "Lagos", "Jakarta", "Cairo", "Los Angeles"],
+    "occupations": ["Writer", "Engineer", "Teacher", "Doctor", "Artist", "Lawyer", "Chef", "Musician", "Scientist", "Athlete", "Journalist", "Architect", "Nurse", "Programmer", "Designer", "Pilot", "Farmer", "Actor", "Mechanic", "Entrepreneur"],
+    "contexts": ["work", "family", "research", "adventure", "conflict", "romance", "mystery", "travel", "crisis", "celebration"]
 }
