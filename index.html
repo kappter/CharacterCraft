@@ -83,6 +83,7 @@
                     <div class="input-group">
                         <label for="name" class="block text-sm font-medium mb-1">Name</label>
                         <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter name">
+                        <button onclick="randomizeName()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Name</button>
                     </div>
                     <div class="input-group">
                         <label for="age" class="block text-sm font-medium mb-1">Age</label>
@@ -92,18 +93,22 @@
                     <div class="input-group">
                         <label for="gender" class="block text-sm font-medium mb-1">Gender</label>
                         <input type="text" id="gender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter gender">
+                        <button onclick="randomizeGender()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Gender</button>
                     </div>
                     <div class="input-group">
                         <label for="locale" class="block text-sm font-medium mb-1">Locale</label>
                         <input type="text" id="locale" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter locale">
+                        <button onclick="randomizeLocale()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Locale</button>
                     </div>
                     <div class="input-group">
                         <label for="occupation" class="block text-sm font-medium mb-1">Occupation</label>
                         <input type="text" id="occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter occupation">
+                        <button onclick="randomizeOccupation()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Occupation</button>
                     </div>
                     <div class="input-group">
                         <label for="traits" class="block text-sm font-medium mb-1">Traits (comma-separated)</label>
                         <input type="text" id="traits" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter traits">
+                        <button onclick="randomizeTraits()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Traits</button>
                     </div>
                 </div>
                 <div class="mt-6 flex space-x-4">
@@ -210,7 +215,7 @@
             <div class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold">Character Report</h2>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">&times;</button>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">×</button>
                 </div>
                 <div id="characterReportContent"></div>
                 <div class="mt-4 flex justify-end">
