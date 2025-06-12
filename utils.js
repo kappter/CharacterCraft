@@ -4,7 +4,7 @@ async function loadRandomizationData() {
     try {
         const response = await fetch('randomization_data.json');
         randomizationData = await response.json();
-        console.log('Randomization data loaded:', randomizationData);
+        console.log('Randomization data loaded:', JSON.stringify(randomizationData, null, 2));
     } catch (err) {
         console.error('Error loading randomization data:', err);
     }
@@ -24,13 +24,34 @@ function randomizeName() {
 
 function randomizeAge() {
     try {
+        let min = 18, max = 80; // Fallback range
         const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
-        const [min, max] = range.split('-').map(Number);
+        console.log('Selected age range:', range);
+
+        if (typeof range === 'string' && range.includes('-')) {
+            [min, max] = range.split('-').map(Number);
+        } else if (Array.isArray(range) && range.length === 2) {
+            [min, max] = range.map(Number);
+        } else if (typeof range === 'object' && range.min && range.max) {
+            min = range.min;
+            max = range.max;
+        } else {
+            console.warn('Invalid age range format, using fallback:', min, max);
+        }
+
+        if (isNaN(min) || isNaN(max) || min > max) {
+            console.warn('Invalid min/max values, using fallback:', 18, 80);
+            min = 18;
+            max = 80;
+        }
+
         const age = Math.floor(Math.random() * (max - min + 1)) + min;
         document.getElementById('age').value = age;
         console.log('Randomized age:', age);
     } catch (err) {
         console.error('Error randomizing age:', err);
+        document.getElementById('age').value = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+        console.log('Used fallback age due to error');
     }
 }
 
@@ -66,7 +87,7 @@ function randomizeOccupation() {
 
 function randomizeTraits() {
     try {
-        const numTraits = Math.floor(Math.random() * 3) + 1; // 1-3) + traits
+        const numTraits = Math.floor(Math.random() * 3) + 1;
         const shuffledTraits = [...traits].sort(() => 0.5 - Math.random());
         const selected = shuffledTraits.slice(0, numTraits).map(t => t.characteristic);
         document.getElementById('traits').value = selected.join(', ');
