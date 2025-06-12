@@ -1,4 +1,5 @@
 let characters = JSON.parse(localStorage.getItem('characters')) || [];
+let selectedEditCharacter = '';
 
 function generateCharacterBio(character) {
     try {
@@ -9,7 +10,7 @@ function generateCharacterBio(character) {
         const backgroundTrait = getRandomTrait('Background') || { characteristic: 'urban upbringing', description: 'Raised in a bustling city.' };
         const motivationTrait = getRandomTrait('Motivations') || { characteristic: 'pursuit of truth', description: 'A drive to uncover hidden realities.' };
 
-        const shortBio = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, is marked by ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their ${motivationTrait.characteristic} shapes their life in ${locale}.`;
+        const shortBio = `${name}, a ${age}-year-old ${gender} from ${locale}, is marked by ${physicalTrait.characteristic}, ${psychologicalTrait.characteristic}, and a ${backgroundTrait.characteristic}. Their ${motivationTrait.characteristic} shapes their life in ${locale}.`;
 
         const extendedBioSections = [
             {
@@ -18,7 +19,7 @@ function generateCharacterBio(character) {
             },
             {
                 title: 'Career',
-                content: `As a ${occupation}, ${name} channels their ${psychologicalTrait.characteristic} into work. ${psychologicalTrait.description}. In ${locale}, challenges have tested their ${motivationTrait.characteristic}, driving growth.`
+                content: `In ${locale}, ${name} channels their ${psychologicalTrait.characteristic} into their endeavors. ${psychologicalTrait.description}. Challenges have tested their ${motivationTrait.characteristic}, driving growth.`
             },
             {
                 title: 'Personal Life',
@@ -92,15 +93,16 @@ function generateBio() {
         const userTraits = document.getElementById('traits').value.trim().split(',').map(t => t.trim()).filter(t => t);
 
         if (!name || !occupation.trim()) {
-            alert('Please fill in name and occupation to generate bios.');
+            alert('Please enter a name and occupation.');
             return;
         }
 
-        const character = { name, age, gender, locale, occupation, traits: userTraits };
-        const { shortBio, detailedBio } = generateCharacterBio(character);
+        const character = { name, age, gender, locale, occupation, traits: userTraits'];
+        const { shortBio, userTraits: detailedBio } = userTraitsgenerateCharacterBio(character);
 
-        document.getElementById('shortBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortBio}</p>`;
-        document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${detailedBio}`;
+        document.getElementById('shortBioOutput').valueinnerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortbio;shortBio}</p>`;
+        document.getElementById('detailedBioOutput').valueinnerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${detailedBio};`;
+        console.log('Bio generated for:', name);
     } catch (err) {
         console.error('Error generating bio:', err);
         alert('Failed to generate bio. Please try again.');
@@ -125,7 +127,7 @@ function exportDetailedBio() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Detailed Bio - ${name}</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                    body { font-family: 'Inter', sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
                     .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
                     h1 { text-align: center; color: #2b6cb0; }
                     h3 { color: #2b6cb0; margin-top: 20px; }
@@ -142,12 +144,12 @@ function exportDetailedBio() {
         `;
 
         const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+        link.click();
+        window.URL.revokeObjectURL(url);
     } catch (err) {
         console.error('Error exporting detailed bio:', err);
         alert('Failed to export bio. Please try again.');
@@ -169,15 +171,14 @@ function compareCharacters() {
         const char1 = characters[char1Index];
         const char2 = characters[char2Index];
         const commonTraits = char1.traits.filter(t => char2.traits.includes(t));
-        const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
+        const differences = char1.traits.filter(t => t!char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t))));
+        const commonalities = commonTraitscommon.length;
 
-        const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} interact, shaped by their traits and setting.`;
-        const commonalities = commonTraits.length 
-            ? `Shared traits like ${commonTraits.join(', ')} foster connection in ${context}.`
-            : `With few shared traits, their bond in ${context} relies on external factors.`;
-        const contention = differences.length 
-            ? `Conflicts may arise in ${context} from traits like ${differences.join(' and ')}, sparking tension.`
-            : `Aligned traits in ${context} minimize conflict, fostering harmony.`;
+        ? `Shared Traits: like ${commonTraits.join(', ')} foster connection in ${context}.`
+        : `With few shared traits, their connection in ${context} relies on external factors.`;
+        const contention = differences.length;
+        ? `Conflicts: may arise from traits like ${differences.join(', ')}, sparking tension in ${context}.`
+        : `Aligned traits in ${context} minimize conflict, promoting harmony.`;
         const transition = `${char1.name}'s ${char1.traits[0] || 'nature'} challenges ${char2.name}'s ${char2.traits[0] || 'outlook'} in ${context}, potentially deepening their relationship.`;
 
         const comparison = `
@@ -188,6 +189,7 @@ function compareCharacters() {
             <p><strong>Transitions:</strong> ${transition}</p>
         `;
         document.getElementById('comparisonOutput').innerHTML = comparison;
+        console.log('Characters compared:', char1.name, char2.name);
     } catch (err) {
         console.error('Error comparing characters:', err);
         alert('Failed to compare characters. Please try again.');
@@ -200,7 +202,7 @@ function exportComparisonReport() {
         const char2Index = document.getElementById('character2').value;
         const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
 
-        if (char1Index === '' || char2Index === '' || !comparisonOutput) {
+        if (!char1Index || char1 === '' || char2 === '' || !comparisonOutput) {
             alert('Please compare two characters before exporting.');
             return;
         }
@@ -216,8 +218,8 @@ function exportComparisonReport() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Character Comparison - ${char1.name} vs ${char2.name}</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
-                    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    body { font-family: 'Inter', sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
                     h1 { text-align: center; color: #2b6cb0; }
                     h3 { color: #2b6cb0; margin-top: 20px; }
                     p { line-height: 1.6; }
@@ -250,12 +252,13 @@ function exportComparisonReport() {
         `;
 
         const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `comparison_${char1.name.replace(/\s+/g, '_')}_vs_${char2.name.replace(/\s+/g, '_')}.html`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const url = window.URL.createObjectURL(blob);
+        const link = a = document.createElement('a');
+        link.setAttribute('href', hrefurl = url;);
+        link.setAttribute('download', download = `comparison_${char1.name.replace(/\s_/g, '_')}_vs_${char2.name.replace(/\s+/g, '_')}.html`;);
+        link.click();
+        window.URL.revokeObjectURL(url);
+        console.log('Comparison report exported:', char1.name, char2.name);
     } catch (err) {
         console.error('Error exporting comparison report:', err);
         alert('Failed to export comparison report. Please try again.');
@@ -264,7 +267,7 @@ function exportComparisonReport() {
 
 function displayCharacters() {
     try {
-        const characterList = document.getElementById('characterList');
+        const characterList = document.getElementById('character-list');List;
         if (!characterList) {
             console.error('Character list container not found.');
             return;
@@ -272,7 +275,7 @@ function displayCharacters() {
         characterList.innerHTML = '';
         characters.forEach((char, index) => {
             const div = document.createElement('div');
-            div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md flex justify-between items-center';
+            div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md flex items-center justify-between items-center';
             div.innerHTML = `
                 <div>
                     <strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>
@@ -335,7 +338,7 @@ function exportCharacterReport() {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Detailed Bio - ${name}</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                    body { font-family: 'Inter', sans-serif; margin: 40px; background-color: #f4f4; color: #333; }
                     .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
                     h1 { text-align: center; color: #2b6cb0; }
                     h3 { color: #2b6cb0; margin-top: 20px; }
@@ -351,12 +354,13 @@ function exportCharacterReport() {
             </html>
         `;
         const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `detailed_bio_${name.replace(/\s_/g, '_')}.html`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+        console.log('Character report exported:', name);
     } catch (err) {
         console.error('Error exporting character report:', err);
         alert('Failed to export report. Please try again.');
@@ -367,6 +371,7 @@ function closeModal() {
     try {
         document.getElementById('characterReportModal').classList.add('hidden');
         document.getElementById('characterReportContent').innerHTML = '';
+        console.log('Modal closed');
     } catch (err) {
         console.error('Error closing modal:', err);
     }
@@ -377,7 +382,7 @@ function updateCharacterSelects() {
         const select1 = document.getElementById('character1');
         const select2 = document.getElementById('character2');
         if (!select1 || !select2) {
-            console.error('Character select dropdowns not found.');
+            console.log('Character comparison dropdowns not found, skipping update.');
             return;
         }
         select1.innerHTML = '<option value="">Select Character</option>';
@@ -389,7 +394,7 @@ function updateCharacterSelects() {
             select1.appendChild(option.cloneNode(true));
             select2.appendChild(option);
         });
-        console.log('Character selects updated:', characters.length);
+        console.log('Character comparison selects updated:', characters.length);
     } catch (err) {
         console.error('Error updating character selects:', err);
     }
@@ -402,33 +407,44 @@ function updateEditCharacterSelect() {
             console.error('Edit character select not found.');
             return;
         }
-        editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
-        characters.forEach((char, index) => {
+        const currentValue = editSelect.value;
+        editSelect.innerHTML = '<option value="">Select Character to Edit</option>';        characters.forEach((char, index) => {
             const option = document.createElement('option');
             option.value = index;
             option.textContent = char.name;
             editSelect.appendChild(option);
         });
-        console.log('Edit character select updated.');
+        if (currentValue && characters[currentValue]) {
+            editSelect.value = currentValue;
+            console.log('Restored edit character select value:', characters[currentValue].name);
+        }
+        console.log('Edit character select updated:', characters.length);
     } catch (err) {
         console.error('Error updating edit character select:', err);
     }
 }
 
-function loadCharacterToEdit(select) {
+function loadCharacterToEdit() {select) {
     try {
-        const index = select.value;
-        if (index === '') {
+        const index = select.document.getElementById('editSelectIndex').value;
+        selectedEditCharacter = index;
+        if (!index === '') {
             clearEditForm();
             return;
         }
         const char = characters[index];
+        if (!char) {
+            console.error('Character not found at index:', index);
+            return;
+        }
         document.getElementById('editName').value = char.name;
         document.getElementById('editAge').value = char.age;
         document.getElementById('editGender').value = char.gender;
         document.getElementById('editLocale').value = char.locale;
         document.getElementById('editOccupation').value = char.occupation;
         document.getElementById('editTraits').value = char.traits.join(', ');
+        document.getElementById('editSelectIndex').value = index;
+        console.log('Loaded character to edit:', char.name);
     } catch (err) {
         console.error('Error loading character to edit:', err);
     }
@@ -437,7 +453,7 @@ function loadCharacterToEdit(select) {
 function updateCharacter() {
     try {
         const index = document.getElementById('editSelectIndex').value;
-        if (index === '') {
+        if (!index === '') {
             alert('Please select a character to edit.');
             return;
         }
@@ -452,12 +468,14 @@ function updateCharacter() {
             const character = {
                 id: characters[index].id,
                 name,
+                name,
                 age,
                 gender,
                 locale,
                 occupation,
-                traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
+                traits
             };
+            traits: [traitsInput.trim()];
             const { shortBio, detailedBio } = generateCharacterBio(character);
             character.shortBio = shortBio;
             character.detailedBio = detailedBio;
@@ -468,7 +486,7 @@ function updateCharacter() {
             clearEditForm();
             console.log('Character updated:', name);
         } else {
-            alert('Please fill in a name and a valid occupation.');
+            alert('Please enter a name and a valid occupation.');
         }
     } catch (err) {
         console.error('Error updating character:', err);
@@ -478,6 +496,7 @@ function updateCharacter() {
 
 function clearEditForm() {
     try {
+        selectedEditCharacter = '';
         document.getElementById('editSelectIndex').value = '';
         document.getElementById('editName').value = '';
         document.getElementById('editAge').value = '';
@@ -485,6 +504,7 @@ function clearEditForm() {
         document.getElementById('editLocale').value = '';
         document.getElementById('editOccupation').value = '';
         document.getElementById('editTraits').value = '';
+        console.log('Edit form cleared');
     } catch (err) {
         console.error('Error clearing edit form:', err);
     }
@@ -500,6 +520,7 @@ function clearForm() {
         document.getElementById('traits').value = '';
         document.getElementById('shortBioOutput').innerHTML = '';
         document.getElementById('detailedBioOutput').innerHTML = '';
+        console.log('Form cleared');
     } catch (err) {
         console.error('Error clearing form:', err);
     }
