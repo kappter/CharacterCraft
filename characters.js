@@ -1,50 +1,7 @@
 let characters = JSON.parse(localStorage.getItem('characters')) || [];
 
-// Save character
-function saveCharacter() {
-    const name = document.getElementById('name').value;
-    const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
-    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-    const occupation = document.getElementById('occupation').value;
-    const traitsInput = document.getElementById('traits').value;
-
-    if (name && occupation.trim()) {
-        const character = {
-            id: Date.now(), // Unique ID for export validation
-            name,
-            age,
-            gender,
-            locale,
-            occupation,
-            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
-        };
-        characters.push(character);
-        localStorage.setItem('characters', JSON.stringify(characters));
-        displayCharacters();
-        updateCharacterSelects();
-        document.getElementById('exportBioButton').disabled = false;
-        clearForm();
-        showTab('saved');
-        console.log('Character saved:', character.name);
-    } else {
-        alert('Please fill in a name and a valid occupation.');
-    }
-}
-
-// Generate bio
-function generateBio() {
-    const name = document.getElementById('name').value;
-    const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
-    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-    const occupation = document.getElementById('occupation').value;
-    const userTraits = document.getElementById('traits').value.trim().split(',').map(t => t.trim()).filter(t => t);
-
-    if (!name || !occupation.trim()) {
-        alert('Please fill in name and occupation to generate bios.');
-        return;
-    }
+function generateCharacterBio(character) {
+    const { name, age, gender, locale, occupation, traits: userTraits } = character;
 
     const physicalTrait = getRandomTrait('Physical') || { characteristic: 'average build', description: 'An unremarkable physique.' };
     const psychologicalTrait = userTraits.length ? { characteristic: userTraits[0], description: 'User-defined trait.' } : getRandomTrait('Psychological') || { characteristic: 'calm', description: 'A composed demeanor.' };
@@ -77,8 +34,64 @@ function generateBio() {
     ];
     const extendedBio = extendedBioSections.map(s => `<h3 class="text-lg font-semibold mb-2">${s.title}</h3><p>${s.content}</p>`).join('');
 
+    return { shortBio, detailedBio: extendedBio };
+}
+
+// Save character
+function saveCharacter() {
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+    const occupation = document.getElementById('occupation').value;
+    const traitsInput = document.getElementById('traits').value;
+
+    if (name && occupation.trim()) {
+        const character = {
+            id: Date.now(),
+            name,
+            age,
+            gender,
+            locale,
+            occupation,
+            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
+        };
+        const { shortBio, detailedBio } = generateCharacterBio(character);
+        character.shortBio = shortBio;
+        character.detailedBio = detailedBio;
+
+        characters.push(character);
+        localStorage.setItem('characters', JSON.stringify(characters));
+        displayCharacters();
+        updateCharacterSelects();
+        document.getElementById('exportBioButton').disabled = false;
+        clearForm();
+        showTab('saved');
+        console.log('Character saved:', character.name);
+    } else {
+        alert('Please fill in a name and a valid occupation.');
+    }
+}
+
+// Generate bio
+function generateBio() {
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+    const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
+    const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
+    const occupation = document.getElementById('occupation').value;
+    const userTraits = document.getElementById('traits').value.trim().split(',').map(t => t.trim()).filter(t => t);
+
+    if (!name || !occupation.trim()) {
+        alert('Please fill in name and occupation to generate bios.');
+        return;
+    }
+
+    const character = { name, age, gender, locale, occupation, traits: userTraits };
+    const { shortBio, detailedBio } = generateCharacterBio(character);
+
     document.getElementById('shortBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Short Bio</h3><p>${shortBio}</p>`;
-    document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${extendedBio}`;
+    document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${detailedBio}`;
 }
 
 // Export Detailed Bio as HTML
@@ -128,7 +141,9 @@ function exportDetailedBio() {
 function compareCharacters() {
     const char1Index = document.getElementById('character1').value;
     const char2Index = document.getElementById('character2').value;
-    const context = document.getElementById('context').value || 'unspecified setting';
+    const contextElement = document.getElementById('context');
+    const context = contextElement && contextElement.value.trim() ? contextElement.value : 'unspecified setting';
+
     if (char1Index === '' || char2Index === '' || char1Index === char2Index) {
         alert('Please select two different characters.');
         return;
@@ -232,13 +247,81 @@ function displayCharacters() {
     characterList.innerHTML = '';
     characters.forEach((char, index) => {
         const div = document.createElement('div');
-        div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md';
-        div.innerHTML = `<strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>Traits: ${char.traits.join(', ') || 'None'}`;
+        div.className = 'p-4 bg-gray-50 dark:bg-gray-700 rounded-md flex justify-between items-center';
+        div.innerHTML = `
+            <div>
+                <strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation}<br>
+                Traits: ${char.traits.join(', ') || 'None'}
+            </div>
+            <button onclick="viewCharacterReport(${index})" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm">View Report</button>
+        `;
         characterList.appendChild(div);
     });
     updateCharacterSelects();
     updateEditCharacterSelect();
     console.log('Characters displayed:', characters.length);
+}
+
+// View character report
+function viewCharacterReport(index) {
+    const char = characters[index];
+    if (!char.detailedBio) {
+        const { detailedBio } = generateCharacterBio(char);
+        characters[index].detailedBio = detailedBio;
+        localStorage.setItem('characters', JSON.stringify(characters));
+    }
+    document.getElementById('characterReportContent').innerHTML = `
+        <h3 class="text-lg font-semibold mb-2">Detailed Bio for ${char.name}</h3>
+        ${char.detailedBio}
+    `;
+    document.getElementById('characterReportModal').classList.remove('hidden');
+    console.log('Viewing report for:', char.name);
+}
+
+// Export character report
+function exportCharacterReport() {
+    const modalContent = document.getElementById('characterReportContent').innerHTML;
+    if (!modalContent) {
+        alert('No report to export.');
+        return;
+    }
+    const name = modalContent.match(/Detailed Bio for ([^<]+)/)?.[1] || 'Character';
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Detailed Bio - ${name}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                h1 { text-align: center; color: #2b6cb0; }
+                h3 { color: #2b6cb0; margin-top: 20px; }
+                p { line-height: 1.6; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Detailed Bio for ${name}</h1>
+                ${modalContent}
+            </div>
+        </body>
+        </html>
+    `;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Close modal
+function closeModal() {
+    document.getElementById('characterReportModal').classList.add('hidden');
+    document.getElementById('characterReportContent').innerHTML = '';
 }
 
 // Update character select dropdowns
@@ -263,7 +346,7 @@ function updateCharacterSelects() {
 
 // Update edit character select
 function updateEditCharacterSelect() {
-    const editSelect = document.getElementById('editIndex');
+    const editSelect = document.getElementById('editSelectIndex');
     if (!editSelect) {
         console.error('Edit character select not found.');
         return;
@@ -279,8 +362,8 @@ function updateEditCharacterSelect() {
 }
 
 // Load character data into edit form
-function loadCharacterToEdit() {
-    const index = document.getElementById('editIndex').value;
+function loadCharacterToEdit(select) {
+    const index = select.value;
     if (index === '') {
         clearEditForm();
         return;
@@ -296,7 +379,7 @@ function loadCharacterToEdit() {
 
 // Update character
 function updateCharacter() {
-    const index = document.getElementById('editIndex').value;
+    const index = document.getElementById('editSelectIndex').value;
     if (index === '') {
         alert('Please select a character to edit.');
         return;
@@ -309,7 +392,7 @@ function updateCharacter() {
     const traitsInput = document.getElementById('editTraits').value;
 
     if (name && occupation.trim()) {
-        characters[index] = {
+        const character = {
             id: characters[index].id,
             name,
             age,
@@ -318,6 +401,11 @@ function updateCharacter() {
             occupation,
             traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
         };
+        const { shortBio, detailedBio } = generateCharacterBio(character);
+        character.shortBio = shortBio;
+        character.detailedBio = detailedBio;
+
+        characters[index] = character;
         localStorage.setItem('characters', JSON.stringify(characters));
         displayCharacters();
         clearEditForm();

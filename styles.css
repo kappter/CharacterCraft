@@ -127,3 +127,13 @@ footer {
     background-color: var(--primary-color);
     color: #fff;
 }
+
+.modal {
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

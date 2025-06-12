@@ -155,6 +155,7 @@
                 <div class="input-group md:col-span-2 flex items-end">
                     <div class="flex-grow">
                         <label for="context" class="block text-sm font-medium mb-1">Context</label>
+                        <input type="text" id="context" placeholder="Enter context (e.g., midnight stakeout)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <button onclick="randomizeContext()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
                 </div>
@@ -175,6 +176,7 @@
                     <select id="newTraitCategory" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="Physical">Physical</option>
                         <option value="Psychological">Psychological</option>
+                        <option value="Heredity">Heredity</option>
                         <option value="Background">Background</option>
                         <option value="Motivations">Motivations</option>
                         <option value="Custom">Custom</option>
@@ -211,18 +213,20 @@
 
         <!-- Saved Characters Tab -->
         <div id="saved" class="tab-content bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 class="text-xl font-semibold mb-4">Saved Characters</h2>
+            <h2 class="text-xl font-semibold mb-6">Saved Characters</h2>
             <div id="characterList" class="space-y-4"></div>
             <div id="editCharacter" class="edit-section mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-md">
                 <h3 class="text-lg font-semibold mb-4">Edit Character</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="input-group">
                         <label for="editIndex" class="block text-sm font-medium mb-1">Select Character to Edit</label>
-                        <select id="editIndex" onchange="loadCharacterToEdit()" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-                    </div>
+                        <select id="editSelectIndex" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="loadCharacterToEdit(this)">
+            <option value="" disabled selected>Select character to edit</option>
+        </select>
+    </div>
                     <div class="input-group">
                         <label for="editName" class="block text-sm font-medium mb-1">Name</label>
-                        <input type="text" id="editName" placeholder="Enter character name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="editName" placeholder="Enter character name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none">
                     </div>
                     <div class="input-group">
                         <label for="editAge" class="block text-sm font-medium mb-1">Age</label>
@@ -251,13 +255,28 @@
                     </div>
                     <div class="input-group md:col-span-2">
                         <label for="editTraits" class="block text-sm font-medium mb-1">Personality Traits</label>
-                        <textarea id="editTraits" placeholder="Enter personality traits (comma-separated, optional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
+                        <textarea id="editTraits" placeholder="Enter personality traits (comma-separated, optional)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none h-24"></textarea>
                     </div>
                 </div>
                 <button onclick="updateCharacter()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Update Character</button>
             </div>
         </div>
     </main>
+
+    <!-- Character Report Modal -->
+    <div id="characterReportModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold">Character Report</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">×</button>
+            </div>
+            <div id="characterReportContent" class="mt-4"></div>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button onclick="exportCharacterReport()" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">Export Report</button>
+                <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition">Close</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="fixed bottom-0 left-0 w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-3">
         <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
