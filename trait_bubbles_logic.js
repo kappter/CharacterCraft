@@ -5,23 +5,30 @@ let currentCategory = '';
 
 function initializeBubbles() {
     try {
+        console.log('Initializing trait bubbles, traits available:', traits.length);
         const categoryContainer = document.getElementById('categoryContainer');
         if (!categoryContainer) {
             console.error('Category container not found.');
             return;
         }
+        if (!traits.length) {
+            console.error('No traits loaded.');
+            categoryContainer.innerHTML = '<p class="text-red-500">No traits available. Please check trait files.</p>';
+            return;
+        }
         categoryContainer.innerHTML = '';
         const categories = [...new Set(traits.map(t => t.category))];
-        
+        console.log('Categories found:', categories);
+
         categories.forEach(category => {
-            const categorySection = document.createElement('div');
-            categorySection.className = 'category-section mb-4';
-            categorySection.innerHTML = `
-                <h3 class="text-lg font-semibold mb-2 cursor-pointer category-toggle bg-blue-100 dark:bg-blue-900 p-2 rounded" data-category="${category}">${category}</h3>
-                <div id="category-${category}" class="category-bubbles flex flex-wrap gap-2 p-2"></div>
-            `;
-            categoryContainer.appendChild(categorySection);
             if (!currentCategory || currentCategory === category) {
+                const categorySection = document.createElement('div');
+                categorySection.className = 'category-section mb-4';
+                categorySection.innerHTML = `
+                    <h3 class="text-lg font-semibold mb-2 cursor-pointer category-toggle bg-blue-100 dark:bg-blue-900 p-2 rounded" data-category="${category}">${category}</h3>
+                    <div id="category-${category}" class="category-bubbles flex flex-wrap gap-2 p-2"></div>
+                `;
+                categoryContainer.appendChild(categorySection);
                 initializeCategoryBubbles(category, `category-${category}`);
             }
         });
@@ -32,6 +39,7 @@ function initializeBubbles() {
         console.log('Trait bubbles initialized, categories:', categories.length);
     } catch (err) {
         console.error('Error initializing bubbles:', err);
+        document.getElementById('categoryContainer').innerHTML = '<p class="text-red-500">Failed to load traits. Please try again.</p>';
     }
 }
 
@@ -45,6 +53,7 @@ function initializeCategoryBubbles(category, containerId) {
         container.innerHTML = '';
 
         const filteredTraits = traits.filter(t => t.category === category);
+        console.log(`Rendering ${filteredTraits.length} traits for category ${category}`);
         const startIndex = currentPage * traitsPerPage;
         const endIndex = Math.min(startIndex + traitsPerPage, filteredTraits.length);
         const paginatedTraits = filteredTraits.slice(startIndex, endIndex);
@@ -149,6 +158,7 @@ function updatePagination() {
         if (pageInfo) pageInfo.textContent = `Page ${currentPage + 1} of ${totalPages || 1}`;
         if (prevButton) prevButton.disabled = currentPage === 0;
         if (nextButton) nextButton.disabled = currentPage >= totalPages - 1;
+        console.log('Pagination updated, total pages:', totalPages);
     } catch (err) {
         console.error('Error updating pagination:', err);
     }
@@ -235,6 +245,12 @@ function saveBubbleTraits() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Trait Bubbles page loaded, initializing...');
-    initializeBubbles();
+    console.log('Trait Bubbles page loaded, loading data...');
+    loadRandomizationData().then(() => {
+        loadTraits().then(() => {
+            initThemeToggle();
+            initializeBubbles();
+            console.log('Trait Bubbles initialized');
+        });
+    });
 });
