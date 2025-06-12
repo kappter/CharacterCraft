@@ -30,7 +30,7 @@ fetch('./randomization_data.json')
             lastNames: ['Smith', 'Johnson', 'Brown', 'Lee'],
             ageRanges: [{min: 18, max: 80, label: 'Adult'}],
             genders: ['male', 'female', 'non-binary', 'unspecified'],
-            locales: ['New York', 'Tokyo', 'Paris'],
+            locales: ['New York', 'Tokyo', 'London'],
             occupations: ['Writer', 'Engineer', 'Teacher'],
             contexts: ['work', 'family', 'vacation']
         };
@@ -41,7 +41,7 @@ Promise.all(csvFiles.map(file =>
     fetch(file)
         .then(response => {
             if (!response.ok) {
-                console.error(`Failed to load ${file}: ${response.status}`);
+                console.error(`Failed to load ${file}: ${response.statusText}`);
                 throw new Error(`Failed to load ${file}`);
             }
             return response.text();
@@ -136,7 +136,7 @@ function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
-    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
+    document.querySelector(`button[onclick="showTab('${tabId}')"]`)?.classList.add('active');
 }
 
 // Save character
@@ -217,6 +217,49 @@ function generateBio() {
     document.getElementById('detailedBioOutput').innerHTML = `<h3 class="text-lg font-semibold mb-2">Detailed Bio</h3>${extendedBio}`;
 }
 
+// Export Detailed Bio as HTML
+function exportDetailedBio() {
+    const name = document.getElementById('name').value;
+    const detailedBioOutput = document.getElementById('detailedBioOutput').innerHTML;
+
+    if (!name || !detailedBioOutput) {
+        alert('Please generate a detailed bio before exporting.');
+        return;
+    }
+
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Detailed Bio - ${name}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                h1 { text-align: center; color: #2b6cb0; }
+                h3 { color: #2b6cb0; margin-top: 20px; }
+                p { line-height: 1.6; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Detailed Bio for ${name}</h1>
+                ${detailedBioOutput}
+            </div>
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `detailed_bio_${name.replace(/\s+/g, '_')}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 // Compare characters
 function compareCharacters() {
     const char1Index = document.getElementById('character1').value;
@@ -233,7 +276,7 @@ function compareCharacters() {
     const differences = char1.traits.filter(t => !char2.traits.includes(t)).concat(char2.traits.filter(t => !char1.traits.includes(t)));
 
     const contextIntro = `In the context of ${context}, ${char1.name} and ${char2.name} come together, their interactions shaped by their unique traits and the setting.`;
-    const commonality = commonTraits.length 
+    const commonalities = commonTraits.length 
         ? `Their shared traits, such as ${commonTraits.join(', ')}, foster a connection in ${context}, enabling collaboration or mutual understanding.`
         : `With few shared traits, their bond in ${context} relies on external factors or shared goals.`;
     const contention = differences.length 
@@ -244,18 +287,82 @@ function compareCharacters() {
     const comparison = `
         <h3 class="text-lg font-semibold mb-2">Comparison: ${char1.name} vs ${char2.name}</h3>
         <p><strong>Context:</strong> ${contextIntro}</p>
-        <p><strong>Commonalities:</strong> ${commonality}</p>
+        <p><strong>Commonalities:</strong> ${commonalities}</p>
         <p><strong>Points of Contention:</strong> ${contention}</p>
         <p><strong>Transition Points:</strong> ${transition}</p>
     `;
     document.getElementById('comparisonOutput').innerHTML = comparison;
 }
 
+// Export Comparison Report as HTML
+function exportComparisonReport() {
+    const char1Index = document.getElementById('character1').value;
+    const char2Index = document.getElementById('character2').value;
+    const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
+
+    if (char1Index === '' || char2Index === '' || !comparisonOutput) {
+        alert('Please compare two characters before exporting.');
+        return;
+    }
+
+    const char1 = characters[char1Index];
+    const char2 = characters[char2Index];
+
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Character Comparison - ${char1.name} vs ${char2.name}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; color: #333; }
+                .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                h1 { text-align: center; color: #2b6cb0; }
+                h3 { color: #2b6cb0; margin-top: 20px; }
+                p { line-height: 1.6; }
+                .character-details { margin-bottom: 20px; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Character Comparison Report</h1>
+                <div class="character-details">
+                    <h3>${char1.name}</h3>
+                    <p><strong>Age:</strong> ${char1.age}</p>
+                    <p><strong>Gender:</strong> ${char1.gender}</p>
+                    <p><strong>Locale:</strong> ${char1.locale}</p>
+                    <p><strong>Occupation:</strong> ${char1.occupation}</p>
+                    <p><strong>Traits:</strong> ${char1.traits.join(', ') || 'None'}</p>
+                </div>
+                <div class="character-details">
+                    <h3>${char2.name}</h3>
+                    <p><strong>Age:</strong> ${char2.age}</p>
+                    <p><strong>Gender:</strong> ${char2.gender}</p>
+                    <p><strong>Locale:</strong> ${char2.locale}</p>
+                    <p><strong>Occupation:</strong> ${char2.occupation}</p>
+                    <p><strong>Traits:</strong> ${char2.traits.join(', ') || 'None'}</p>
+                </div>
+                ${comparisonOutput}
+            </div>
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `comparison_${char1.name.replace(/\s+/g, '_')}_vs_${char2.name.replace(/\s+/g, '_')}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 // Add new trait
 function addTrait() {
     const category = document.getElementById('newTraitCategory').value;
     const characteristic = document.getElementById('newTrait').value;
-    const synonyms = document.getElementById('newSynonyms').value.split(',').map(t => t.trim());
+    const synonyms = document.getElementById('newSynonyms').value.split(',').map(s => s.trim());
     const description = document.getElementById('newDescription').value;
 
     if (category && characteristic && synonyms.length && description) {
@@ -404,7 +511,7 @@ const themeToggle = document.getElementById('theme-toggle');
 themeToggle.addEventListener('change', () => {
     const newTheme = themeToggle.checked ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', newTheme);
-    document.body.classList.toggle('theme-transition', true);
+    document.body.classList.add('theme-transition');
     localStorage.setItem('theme', newTheme);
     console.log(`Theme switched to: ${newTheme}`);
     setTimeout(() => document.body.classList.remove('theme-transition'), 300);
@@ -415,12 +522,7 @@ window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     themeToggle.checked = savedTheme === 'dark';
-    console.log(`Theme initialized with: ${savedTheme}`);
+    console.log(`Initialized with theme: ${savedTheme}`);
     displayCharacters();
     showTab('create');
-};
-
-// Global error handler for debugging
-window.onerror = (msg, url, line, col, error) => {
-    console.error(`Error: ${msg} at ${url}:${line}:${col}`, error);
 };

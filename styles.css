@@ -83,6 +83,42 @@ button:hover.bg-blue-600 {
 }
 
 footer {
-    background-color: var(--background-color);
+    background-color: var(--header-bg);
     color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.trait-bubble {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 20px;
+    background-color: #e2e8f0;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.trait-bubble:hover {
+    background-color: #cbd5e1;
+    transform: scale(1.05);
+}
+
+.trait-bubble.selected {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+[data-theme="dark"] .trait-bubble {
+    background-color: #4b5563;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .trait-bubble:hover {
+    background-color: #6b7280;
+}
+
+[data-theme="dark"] .trait-bubble.selected {
+    background-color: var(--primary-color);
+    color: #fff;
 }

@@ -1,0 +1,97 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CharacterCraft - Trait Bubbles</title>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css" type="text/css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter min-h-screen flex flex-col">
+    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <div class="flex items-center">
+                <img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
+            </div>
+            <div class="flex items-center">
+                <label for="theme-toggle" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
+                <input type="checkbox" id="theme-toggle" class="toggle-checkbox hidden">
+                <div class="toggle-switch w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full p-1 cursor-pointer transition-colors duration-300">
+                    <div class="toggle-knob w-4 h-4 bg-white rounded-full transform transition-transform duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <div class="tabs flex justify-center space-x-2 mb-6 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+            <a href="index.html" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Create Character</a>
+            <a href="index.html#compare" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Compare Characters</a>
+            <a href="index.html#traits" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait List</a>
+            <a href="index.html#saved" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Saved Characters</a>
+            <button class="tab-button active px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600">Trait Bubbles</button>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Assign Traits with Bubbles</h2>
+            <div class="input-group mb-6">
+                <label for="bubbleCharacterSelect" class="block text-sm font-medium mb-1">Select Character</label>
+                <select id="bubbleCharacterSelect" onchange="updateSelectedTraits()" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select a character</option>
+                </select>
+            </div>
+            <div id="bubbleContainer" class="flex flex-wrap gap-2"></div>
+            <button onclick="saveBubbleTraits()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Save Traits</button>
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-center py-3">
+        <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
+    </footer>
+
+    <script src="./trait_bubbles.js"></script>
+</body>
+</html>

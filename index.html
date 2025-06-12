@@ -72,6 +72,7 @@
             <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('compare')">Compare Characters</button>
             <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('traits')">Trait List</button>
             <button class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600" onclick="showTab('saved')">Saved Characters</button>
+            <a href="trait_bubbles.html" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait Bubbles</a>
         </div>
 
         <!-- Create Character Tab -->
@@ -133,6 +134,7 @@
             <div class="flex space-x-4 mt-4">
                 <button onclick="generateBio()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Generate Bios</button>
                 <button onclick="saveCharacter()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Save Character</button>
+                <button onclick="exportDetailedBio()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Detailed Bio</button>
             </div>
             <div id="shortBioOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
             <div id="detailedBioOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
@@ -158,7 +160,10 @@
                     <button onclick="randomizeContext()" class="ml-2 px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize</button>
                 </div>
             </div>
-            <button onclick="compareCharacters()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare</button>
+            <div class="flex space-x-4 mt-4">
+                <button onclick="compareCharacters()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare</button>
+                <button onclick="exportComparisonReport()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Comparison Report</button>
+            </div>
             <div id="comparisonOutput" class="bio-output mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md"></div>
         </div>
 
