@@ -7,9 +7,9 @@ CharacterCraft is a web-based tool inspired by *The Writer's Digest Sourcebook f
 ## Features
 
 - **Create Character**: Build characters with randomized or manual inputs for name, age, gender, locale, occupation, and personality traits. Generate short and detailed bios, and export detailed bios as HTML files (enabled after saving).
-- **Compare Characters**: Select two saved characters, choose a context (e.g., "midnight stakeout"), and generate a comparison highlighting commonalities and conflicts. Export comparisons as HTML reports.
+- **Compare Characters**: Select two saved characters, enter a context (e.g., "midnight stakeout"), and generate a comparison highlighting commonalities and conflicts. Export comparisons as HTML reports.
 - **Trait List**: View and add custom traits across categories (Physical, Psychological, Heredity, Background, Motivations, Custom). Traits are sourced from CSV files for easy expansion.
-- **Saved Characters**: Save, view, and edit characters stored in `localStorage`. Edit fields like name, traits, or occupation.
+- **Saved Characters**: Save, view, edit, and generate detailed reports for characters stored in `localStorage`. View reports in a modal and export as HTML.
 - **Trait Bubbles**: Assign traits to saved characters via an interactive screen with clickable trait bubbles, filtered by category (e.g., Physical, Psychological). Updates are saved to `localStorage`.
 - **Dark Mode**: Toggle between light and dark themes, with preferences saved in `localStorage`.
 - **Responsive Design**: Built with Tailwind CSS and custom styles for mobile and desktop compatibility.
@@ -50,17 +50,18 @@ CharacterCraft is a web-based tool inspired by *The Writer's Digest Sourcebook f
 1. **Create a Character**:
    - Input or randomize name, age, gender, locale, occupation, and traits using the "Randomize" buttons.
    - Click "Generate Bios" to view short and detailed bios.
-   - Click "Save Character" to enable the "Export Detailed Bio" button and download an HTML file.
+   - Click "Save Character" to store the character with its detailed bio and enable the "Export Detailed Bio" button.
 2. **Compare Characters**:
-   - Select two saved characters and a context.
+   - Select two saved characters and enter a context (e.g., "midnight stakeout").
    - Click "Compare" to see a detailed comparison.
    - Click "Export Comparison Report" to download an HTML report.
 3. **Trait List**:
    - View all traits in a table, populated from CSV files.
    - Add custom traits with category, characteristic, synonyms, and description.
 4. **Saved Characters**:
-   - View all saved characters.
-   - Edit character details via the edit form.
+   - View all saved characters with a "View Report" button to see detailed bios in a modal.
+   - Export reports as HTML from the modal.
+   - Edit character details via the edit form, regenerating the bio on update.
 5. **Trait Bubbles**:
    - Navigate to the Trait Bubbles tab.
    - Select a saved character from the dropdown.
@@ -72,20 +73,20 @@ CharacterCraft is a web-based tool inspired by *The Writer's Digest Sourcebook f
 ## File Structure
 
 - **HTML**:
-  - `index.html`: Main app with Create, Compare, Trait List, and Saved Characters tabs.
+  - `index.html`: Main app with Create, Compare, Trait List, and Saved Characters tabs, including a modal for character reports.
   - `trait_bubbles.html`: Interactive screen for assigning traits via bubbles with category filters.
 - **CSS**:
-  - `styles.css`: Custom styles with CSS variables for light/dark themes, plus Tailwind CSS.
+  - `styles.css`: Custom styles with CSS variables for light/dark themes, plus Tailwind CSS and modal styles.
 - **JavaScript**:
   - `script.js`: Entry point for initializing the app.
   - `utils.js`: Randomization functions, CSV parsing, and theme toggle.
-  - `characters.js`: Character creation, saving, editing, comparison, and exports.
+  - `characters.js`: Character creation, saving, editing, comparison, report generation, and exports.
   - `traits.js`: Trait loading, display, and management.
   - `ui.js`: Tab switching, form clearing, and app reset.
   - `trait_bubbles_logic.js`: Trait bubble interactions and character trait updates.
 - **Data**:
   - `randomization_data.json`: Names, locales, occupations, and contexts for randomization.
-  - `physical_traits.csv`, `psychological_traits.csv`, `background_details.csv`, `motivations_beliefs.csv`: Trait data, including new Heredity category.
+  - `physical_traits.csv`, `psychological_traits.csv`, `background_details.csv`, `motivations_beliefs.csv`: Trait data, including Heredity category.
 - **Assets**:
   - `favicon.ico`, `cclogo.png`: Branding images.
 
@@ -105,7 +106,8 @@ Please ensure:
 
 ## Issues
 
-- **Buttons Not Working**: If randomization buttons fail, ensure `utils.js` loads correctly and check Console (F12) for errors like `ReferenceError`.
+- **Compare Screen Errors**: If the "Compare" button fails, ensure the `#context` input exists in `index.html` and check Console (F12) for errors like `TypeError`.
+- **Character Reports Missing**: Verify characters have `detailedBio` in `localStorage`. If missing, regenerate via editing or resaving.
 - **Trait List/Trait Bubbles Empty**: Run on a local server (`python -m http.server`) to avoid CORS issues with CSV loading. Check Console for fetch errors.
 - **Dropdowns Empty**: Verify characters are saved in `localStorage` and `characters.js` is updating dropdowns.
 - **GitHub Pages**: Clear cache (`Ctrl+Shift+R`) if updates don’t appear.
