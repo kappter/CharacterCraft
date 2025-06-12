@@ -43,18 +43,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="content-security-policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; script-src 'self'; font-src 'self';">
+    <meta http-equiv="content-security-policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; script-src 'self'; font-src 'self';">
     <title>CharacterCraft</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" type="text/css">
+    <link rel="stylesheet" href="styles.css?v=1.0.1" type="text/css">
+    <style>
+        /* Fallback CSS for critical elements */
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1f2937; margin: 0; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .input-group input, .input-group select { border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem; width: 100%; box-sizing: border-box; }
+        button { cursor: pointer; padding: 0.5rem 1rem; border-radius: 0.375rem; }
+        header { background-color: #ffffff; }
+        main { padding-top: 80px; }
+    </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-inter min-h-screen flex flex-col">
     <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
             <div class="flex items-center">
-                <a href="index.html" onclick="resetApp()"><img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABlBMVEUAAAD///+l2Z/dAAAAAnRSTlMAAHaTzTgAAAA3SURBVHja7cwxAQAwEAKx6P9/uQvY6gK3YAFBi6iB5ABN0CpqIDlAE7SKGkgO0AStogZ6AOCrAT8kLxyPAAAAAElFTkSuQmCC'"></a>
+                <a href="index.html" onclick="resetApp()"><img src="cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABlBMVEUAAAD///+l2Z/dAAAAAnRSTlMAAHaTzTgAAAA3SURBVHja7cwxAQAwEAKx6P9/uQvY6gK3YAFBi6iB5ABN0CpqIDlAE7SKGkgO0AStogZ6AOCrAT8kLxyPAAAAAElFTkSuQmCC'"></a>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
             </div>
             <div class="flex items-center">
@@ -70,7 +80,7 @@
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div class="tabs flex justify-center space-x-2 mb-6 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
             <button onclick="showTab('create')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600 active">Create Character</button>
-            <button onclick="showTab('compare')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Compare Characters</button>
+            <button onclick="showTab('compare')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-600">Compare Characters</button>
             <button onclick="showTab('traits')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait List</button>
             <button onclick="showTab('saved')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Saved Characters</button>
             <a href="trait_bubbles.html" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait Bubbles</a>
@@ -93,7 +103,7 @@
                     </div>
                     <div class="input-group">
                         <label for="gender" class="block text-sm font-medium mb-1">Gender</label>
-                        <input type="text" id="gender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter gender">
+                        <input type="text" id="gender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-blue-500" placeholder="Enter gender">
                         <button onclick="randomizeGender()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Gender</button>
                     </div>
                     <div class="input-group">
@@ -103,7 +113,7 @@
                     </div>
                     <div class="input-group">
                         <label for="occupation" class="block text-sm font-medium mb-1">Occupation</label>
-                        <input type="text" id="occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter occupation">
+                        <input type="text" id="occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-blue-500" placeholder="Enter occupation">
                         <button onclick="randomizeOccupation()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Occupation</button>
                     </div>
                     <div class="input-group">
@@ -237,9 +247,9 @@
         <p class="text-sm">© 2025 CharacterCraft. All Rights Reserved.</p>
     </footer>
 
-    <script src="./utils.js"></script>
-    <script src="./characters.js"></script>
-    <script src="./traits.js"></script>
-    <script src="./script.js"></script>
+    <script src="utils.js"></script>
+    <script src="characters.js"></script>
+    <script src="traits.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
