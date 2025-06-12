@@ -16,23 +16,38 @@ async function loadTraits() {
                     console.warn(`Failed to load ${file}: ${response.status} ${response.statusText}`);
                     continue;
                 }
-                const text = await response.text();
-                const lines = text.split('\n').slice(1).filter(line => line.trim());
-                lines.forEach(line => {
-                    const [category, characteristic, synonyms, description] = line.split(',').map(item => item.trim());
+                const textContent = await response.text();
+                const lines = textContent.trim().split('\n').slice(1).filter(line => line.trim());
+                for (const line of lines) {
+                    const [category, characteristic, synonyms, description] = line.split(',').map(item => item?.trim() || '');
                     if (category && characteristic) {
-                        traits.push({ category, characteristic, synonyms, description });
+                        traits.push({ category, characteristic, synonyms: synonyms || '', description: description || '' });
                     }
-                });
-                console.log(`Loaded traits from ${file}:`, lines.length);
+                }
+                console.log(`Loaded traits from ${file}: ${lines.length}`);
             } catch (err) {
-                console.warn(`Error loading ${file}:`, err.message);
+                console.warn(`Error loading ${file}: ${err.message}`);
             }
         }
-        console.log('Total traits loaded:', traits.length);
+
+        // Add fallback traits for missing categories
+        const requiredCategories = ['Heredity', 'Background', 'Motivations'];
+        requiredCategories.forEach(category => {
+            if (!traits.some(t => t.category === category)) {
+                console.warn(`No traits found for ${category}, adding fallbacks`);
+                traits.push({
+                    category,
+                    characteristic: `default-${category.toLowerCase()}`,
+                    synonyms: '',
+                    description: `A default ${category.toLowerCase()} trait due to missing data.`
+                });
+            }
+        });
+
         if (document.getElementById('traitTableBody')) {
             displayTraits();
         }
+        console.log('Total traits loaded:', traits.length);
     } catch (err) {
         console.error('Error loading traits:', err);
     }
@@ -42,7 +57,7 @@ function displayTraits() {
     try {
         const tableBody = document.getElementById('traitTableBody');
         if (!tableBody) {
-            console.error('#traitTableBody not found in DOM');
+            console.error('Error: traitTableBody not found in DOM');
             return;
         }
         tableBody.innerHTML = '';
@@ -51,8 +66,8 @@ function displayTraits() {
             row.innerHTML = `
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category}</td>
                 <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms || ''}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description || ''}</td>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms}</td>
+                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -67,11 +82,11 @@ function getRandomTrait(category) {
         const filteredTraits = traits.filter(t => t.category === category);
         if (filteredTraits.length === 0) {
             console.warn(`No traits found for category: ${category}`);
-            return null;
+            return { characteristic: `default-${category.toLowerCase()}`, description: `A default ${category.toLowerCase()} trait.` };
         }
         return filteredTraits[Math.floor(Math.random() * filteredTraits.length)];
     } catch (err) {
         console.error('Error getting random trait:', err);
-        return null;
+        return { characteristic: 'unknown', description: 'Error retrieving trait.' };
     }
 }

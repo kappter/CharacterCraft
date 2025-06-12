@@ -43,7 +43,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="content-security-policy" content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self'; script-src 'self'; font-src 'self' https://fonts.googleapis.com;">
+    <meta http-equiv="content-security-policy" content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self'; script-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;">
     <title>CharacterCraft</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -64,7 +64,7 @@
     <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
             <div class="flex items-center">
-                <a href="index.html" onclick="resetApp()"><img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABlBMVEUAAAD///+l2Z/dAAAAAnRSTlMAAHaTzTgAAAA3SURBVHja7cwxAQAwEAKx6P9/uQvY6gK3YAFBi6iB5ABN0CpqIDlAE7SKGkgO0AStogZ6AOCrAT8kLxyPAAAAAElFTkSuQmCC'"></a>
+                <a href="index.html" class="reset-app"><img src="./cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABlBMVEUAAAD///+l2Z/dAAAAAnRSTlMAAHaTzTgAAAA3SURBVHja7cwxAQAwEAKx6P9/uQvY6gK3YAFBi6iB5ABN0CpqIDlAE7SKGkgO0AStogZ6AOCrAT8kLxyPAAAAAElFTkSuQmCC'"></a>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CharacterCraft</h1>
             </div>
             <div class="flex items-center">
@@ -79,11 +79,11 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div class="tabs flex justify-center space-x-2 mb-6 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
-            <button onclick="showTab('create')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600 active">Create Character</button>
-            <button onclick="showTab('compare')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Compare Characters</button>
-            <button onclick="showTab('traits')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait List</button>
-            <button onclick="showTab('saved')" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Saved Characters</button>
-            <a href="trait_bubbles.html" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait Bubbles</a>
+            <button data-tab="create" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600 active">Create Character</button>
+            <button data-tab="compare" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Compare Characters</button>
+            <button data-tab="traits" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait List</button>
+            <button data-tab="saved" class="tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Saved Characters</button>
+            <a href="trait_bubbles.html" class="trait-bubbles-link tab-button px-4 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-600">Trait Bubbles</a>
         </div>
 
         <div id="tabContent" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -94,39 +94,39 @@
                     <div class="input-group">
                         <label for="name" class="block text-sm font-medium mb-1">Name</label>
                         <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter name">
-                        <button onclick="randomizeName()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Name</button>
+                        <button class="randomize-name mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Name</button>
                     </div>
                     <div class="input-group">
                         <label for="age" class="block text-sm font-medium mb-1">Age</label>
                         <input type="number" id="age" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter age">
-                        <button onclick="randomizeAge()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Age</button>
+                        <button class="randomize-age mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Age</button>
                     </div>
                     <div class="input-group">
                         <label for="gender" class="block text-sm font-medium mb-1">Gender</label>
                         <input type="text" id="gender" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter gender">
-                        <button onclick="randomizeGender()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Gender</button>
+                        <button class="randomize-gender mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Gender</button>
                     </div>
                     <div class="input-group">
                         <label for="locale" class="block text-sm font-medium mb-1">Locale</label>
                         <input type="text" id="locale" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter locale">
-                        <button onclick="randomizeLocale()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Locale</button>
+                        <button class="randomize-locale mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Locale</button>
                     </div>
                     <div class="input-group">
                         <label for="occupation" class="block text-sm font-medium mb-1">Occupation</label>
-                        <input type="text" id="occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter occupation">
-                        <button onclick="randomizeOccupation()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Occupation</button>
+                        <input type="text" id="occupation" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Occupation">
+                        <button class="randomize-occupation mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Occupation</button>
                     </div>
                     <div class="input-group">
                         <label for="traits" class="block text-sm font-medium mb-1">Traits (comma-separated)</label>
-                        <input type="text" id="traits" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter traits">
-                        <button onclick="randomizeTraits()" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Traits</button>
+                        <input type="text" id="traits-input" class="w-full px-3 px-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter traits">
+                        <button class="randomize-traits mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm">Randomize Traits</button>
                     </div>
                 </div>
                 <div class="mt-6 flex space-x-4">
-                    <button onclick="generateBio()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Generate Bio</button>
-                    <button onclick="saveCharacter()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Save Character</button>
-                    <button onclick="randomizeEverything()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize Everything</button>
-                    <button id="exportBioButton" onclick="exportDetailedBio()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition" disabled>Export Bio</button>
+                    <button class="generate-bio px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Generate Bio</button>
+                    <button class="save-character px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Save Character</button>
+                    <button class="randomize-everything px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize Everything</button>
+                    <button id="exportBioButton" class="export-bio px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition" disabled>Export Bio</button>
                 </div>
                 <div id="shortBioOutput" class="mt-6 bio-output p-4 rounded"></div>
                 <div id="detailedBioOutput" class="mt-4 bio-output p-4 rounded"></div>
@@ -151,18 +151,18 @@
                     <div class="input-group">
                         <label for="context1" class="block text-sm font-medium mb-1">Context 1 (Optional)</label>
                         <input type="text" id="context1" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter context (e.g., work)">
-                        <button onclick="randomizeContext('context1')" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Context</button>
+                        <button class="randomize-context1 mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize Context</button>
                     </div>
                     <div class="input-group">
                         <label for="context2" class="block text-sm font-medium mb-1">Context 2 (Optional)</label>
                         <input type="text" id="context2" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-800 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter context (e.g., family)">
-                        <button onclick="randomizeContext('context2')" class="mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize</button>
+                        <button class="randomize-context2 mt-2 px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition text-sm randomize-btn">Randomize</button>
                     </div>
                 </div>
                 <div class="mt-6 flex space-x-4">
-                    <button onclick="compareCharacters()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare Characters</button>
-                    <button onclick="randomizeComparison()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize All</button>
-                    <button onclick="exportComparisonReport()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Comparison</button>
+                    <button class="compare-characters px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Compare Characters</button>
+                    <button class="randomize-comparison px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">Randomize All</button>
+                    <button class="export-comparison px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Comparison</button>
                 </div>
                 <div id="comparisonOutput" class="mt-6 bio-output p-4 rounded"></div>
             </div>
@@ -193,7 +193,7 @@
                     <h3 class="text-lg font-semibold mb-2">Edit Character</h3>
                     <div class="input-group mb-4">
                         <label for="editSelectIndex" class="block text-sm font-medium mb-1">Select Character to Edit</label>
-                        <select id="editSelectIndex" onchange="loadCharacterToEdit(this)" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="editSelectIndex" class="edit-select w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">Select Character</option>
                         </select>
                     </div>
@@ -223,7 +223,7 @@
                             <input type="text" id="editTraits" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
-                    <button onclick="updateCharacter()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Update Character</button>
+                    <button class="update-character mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Update Character</button>
                 </div>
             </div>
         </div>
@@ -233,11 +233,11 @@
             <div class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold">Character Report</h2>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">×</button>
+                    <button class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100">×</button>
                 </div>
                 <div id="characterReportContent"></div>
                 <div class="mt-4 flex justify-end">
-                    <button onclick="exportCharacterReport()" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Report</button>
+                    <button class="export-report px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Export Report</button>
                 </div>
             </div>
         </div>
