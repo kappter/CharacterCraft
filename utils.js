@@ -40,9 +40,29 @@ function randomizeName() {
 }
 
 function randomizeAge() {
-    const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
-    const age = Math.floor(Math.random() * (range.maxAge - range.minAge + 1)) + range.minAge;
-    document.getElementById('age').value = age;
+    try {
+        if (!randomizationData.ageRanges?.length) {
+            console.error('No age ranges available, using fallback');
+            document.getElementById('age').value = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+            return;
+        }
+        const validRanges = randomizationData.ageRanges.filter(range => 
+            typeof range.minAge === 'number' && typeof range.maxAge === 'number' && range.minAge <= range.maxAge
+        );
+        if (!validRanges.length) {
+            console.error('No valid age ranges, using fallback');
+            document.getElementById('age').value = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+            return;
+        }
+        const range = validRanges[Math.floor(Math.random() * validRanges.length)];
+        console.log('Selected age range:', range);
+        const age = Math.floor(Math.random() * (range.maxAge - range.minAge + 1)) + range.minAge;
+        document.getElementById('age').value = age;
+        console.log('Randomized age:', age);
+    } catch (err) {
+        console.error('Error randomizing age:', err);
+        document.getElementById('age').value = 30; // Fallback age
+    }
 }
 
 function randomizeGender() {
