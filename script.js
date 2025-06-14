@@ -4,8 +4,10 @@ function showTab(tabId) {
         const buttons = document.querySelectorAll('.tab-button');
         tabs.forEach(tab => tab.classList.add('hidden'));
         buttons.forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`${tabId}-tab`).classList.remove('hidden');
-        document.querySelector(`button[data-tab="${tabId}"]`)?.classList.add('active');
+        const tabElement = document.getElementById(`${tabId}-tab`);
+        if (tabElement) tabElement.classList.remove('hidden');
+        const buttonElement = document.querySelector(`button[data-tab="${tabId}"]`);
+        if (buttonElement) buttonElement.classList.add('active');
         console.log('Switched to tab:', tabId);
     } catch (err) {
         console.error('Error switching tabs:', err);
@@ -14,16 +16,16 @@ function showTab(tabId) {
 
 function resetApp() {
     try {
-        document.getElementById('name').value = '';
-        document.getElementById('age').value = '';
-        document.getElementById('gender').value = '';
-        document.getElementById('locale').value = '';
-        document.getElementById('occupation').value = '';
-        document.getElementById('traits').value = '';
-        document.getElementById('shortBioOutput').innerHTML = '';
-        document.getElementById('detailedBioOutput').innerHTML = '';
-        document.getElementById('exportBioButton').disabled = true;
-        document.getElementById('comparisonOutput').innerHTML = '';
+        const fields = ['name', 'age', 'gender', 'locale', 'occupation', 'traits', 'shortBioOutput', 'detailedBioOutput', 'comparisonOutput'];
+        fields.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                if (element.tagName === 'INPUT') element.value = '';
+                else element.innerHTML = '';
+            }
+        });
+        const exportBioButton = document.getElementById('exportBioButton');
+        if (exportBioButton) exportBioButton.disabled = true;
         showTab('create');
         console.log('App reset');
     } catch (err) {
@@ -47,35 +49,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Reset app link
-        document.querySelector('.reset-app')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            resetApp();
-        });
+        const resetLink = document.querySelector('.reset-app');
+        if (resetLink) {
+            resetLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetApp();
+            });
+        }
 
         // Randomize buttons
-        document.querySelector('.randomize-name')?.addEventListener('click', randomizeName);
-        document.querySelector('.randomize-age')?.addEventListener('click', randomizeAge);
-        document.querySelector('.randomize-gender')?.addEventListener('click', randomizeGender);
-        document.querySelector('.randomize-locale')?.addEventListener('click', randomizeLocale);
-        document.querySelector('.randomize-occupation')?.addEventListener('click', randomizeOccupation);
-        document.querySelector('.randomize-traits')?.addEventListener('click', randomizeTraits);
-        document.querySelector('.randomize-everything')?.addEventListener('click', randomizeEverything);
-        document.querySelector('.randomize-context1')?.addEventListener('click', () => randomizeContext('context1'));
-        document.querySelector('.randomize-context2')?.addEventListener('click', () => randomizeContext('context2'));
-        document.querySelector('.randomize-comparison')?.addEventListener('click', randomizeComparison);
+        const randomizeButtons = {
+            '.randomize-name': randomizeName,
+            '.randomize-age': randomizeAge,
+            '.randomize-gender': randomizeGender,
+            '.randomize-locale': randomizeLocale,
+            '.randomize-occupation': randomizeOccupation,
+            '.randomize-traits': randomizeTraits,
+            '.randomize-everything': randomizeEverything,
+            '.randomize-context1': () => randomizeContext('context1'),
+            '.randomize-context2': () => randomizeContext('context2'),
+            '.randomize-comparison': randomizeComparison
+        };
+        Object.entries(randomizeButtons).forEach(([selector, fn]) => {
+            const button = document.querySelector(selector);
+            if (button) button.addEventListener('click', fn);
+            else console.warn(`Button not found: ${selector}`);
+        });
 
         // Action buttons
-        document.querySelector('.generate-bio')?.addEventListener('click', generateBio);
-        document.querySelector('.save-character')?.addEventListener('click', saveCharacter);
-        document.querySelector('.export-bio')?.addEventListener('click', exportDetailedBio);
-        document.querySelector('.compare-characters')?.addEventListener('click', compareCharacters);
-        document.querySelector('.export-comparison')?.addEventListener('click', exportComparisonReport);
-        document.querySelector('.update-character')?.addEventListener('click', updateCharacter);
-        document.querySelector('.export-report')?.addEventListener('click', exportCharacterReport);
-        document.querySelector('.close-modal')?.addEventListener('click', closeModal);
+        const actionButtons = {
+            '.generate-bio': generateBio,
+            '.save-character': saveCharacter,
+            '.export-bio': exportDetailedBio,
+            '.compare-characters': compareCharacters,
+            '.export-comparison': exportComparisonReport,
+            '.update-character': updateCharacter,
+            '.export-report': exportCharacterReport,
+            '.close-modal': closeModal
+        };
+        Object.entries(actionButtons).forEach(([selector, fn]) => {
+            const button = document.querySelector(selector);
+            if (button) button.addEventListener('click', fn);
+            else console.warn(`Button not found: ${selector}`);
+        });
 
         // Edit select
-        document.querySelector('.edit-select')?.addEventListener('change', (e) => loadCharacterToEdit(e.target));
+        const editSelect = document.querySelector('.edit-select');
+        if (editSelect) {
+            editSelect.addEventListener('change', (e) => loadCharacterToEdit(e.target));
+        }
 
         console.log('Page loaded, initialized create tab and event listeners');
     } catch (err) {

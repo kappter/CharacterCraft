@@ -213,7 +213,7 @@ function exportComparisonReport() {
         const char2Index = parseInt(document.getElementById('character2').value);
         const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
 
-        if (!char1Index || !char2Index || !comparisonOutput) {
+        if (isNaN(char1Index) || isNaN(char2Index) || !comparisonOutput) {
             alert('Please compare two characters before exporting.');
             return;
         }
@@ -447,7 +447,7 @@ function loadCharacterToEdit(select) {
     try {
         const index = parseInt(select.value);
         selectedEditCharacter = index;
-        if (index === '') {
+        if (isNaN(index)) {
             clearEditForm();
             return;
         }

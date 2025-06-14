@@ -145,6 +145,10 @@ function initThemeToggle() {
     try {
         const toggleCheckbox = document.getElementById('theme-toggle');
         const html = document.documentElement;
+        if (!toggleCheckbox || !html) {
+            console.error('Theme toggle elements not found');
+            return;
+        }
         const savedTheme = localStorage.getItem('theme') || 'light';
         html.setAttribute('data-theme', savedTheme);
         toggleCheckbox.checked = savedTheme === 'dark';
