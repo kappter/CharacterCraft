@@ -1,30 +1,36 @@
 let randomizationData = null;
+let dataLoadedPromise = null;
 
 async function loadRandomizationData() {
-    try {
-        const response = await fetch('./randomization_data.json');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        randomizationData = await response.json();
-        console.log('Randomization data loaded:', randomizationData);
-    } catch (err) {
-        console.error('Error loading randomization data:', err);
-        // Fallback data
-        randomizationData = {
-            firstNames: ['John', 'Emma', 'Liam', 'Olivia', 'Quinn'],
-            lastNames: ['Smith', 'Johnson', 'Walker', 'Brown', 'Li'],
-            genders: ['Male', 'Female', 'Non-binary'],
-            locales: ['New York', 'Tokyo', 'Bangkok', 'London', 'Rio de Janeiro'],
-            occupations: ['Engineer', 'Teacher', 'Architect', 'Artist', 'Doctor'],
-            ageRanges: ['18-25', '26-35', '36-50', '51-75', '76-100']
-        };
-        console.warn('Using fallback randomization data');
-    }
+    if (dataLoadedPromise) return dataLoadedPromise;
+    dataLoadedPromise = (async () => {
+        try {
+            const response = await fetch('./randomization_data.json');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            randomizationData = await response.json();
+            console.log('Randomization data loaded:', randomizationData);
+        } catch (err) {
+            console.error('Error loading randomization data:', err);
+            randomizationData = {
+                firstNames: ['John', 'Emma', 'Liam', 'Olivia', 'Quinn'],
+                lastNames: ['Smith', 'Johnson', 'Walker', 'Brown', 'Li'],
+                genders: ['Male', 'Female', 'Non-binary'],
+                locales: ['New York', 'Tokyo', 'Bangkok', 'London', 'Rio de Janeiro'],
+                occupations: ['Engineer', 'Teacher', 'Architect', 'Artist', 'Doctor'],
+                ageRanges: ['18-25', '26-35', '36-50', '51-75', '76-100']
+            };
+            console.warn('Using fallback randomization data');
+        }
+        return randomizationData;
+    })();
+    return dataLoadedPromise;
 }
 
-function randomizeName() {
+async function randomizeName() {
     try {
-        if (!randomizationData || !randomizationData.firstNames || !randomizationData.lastNames) {
-            throw new Error('Randomization data not loaded');
+        await loadRandomizationData();
+        if (!randomizationData.firstNames || !randomizationData.lastNames) {
+            throw new Error('Randomization data incomplete');
         }
         const firstName = randomizationData.firstNames[Math.floor(Math.random() * randomizationData.firstNames.length)];
         const lastName = randomizationData.lastNames[Math.floor(Math.random() * randomizationData.lastNames.length)];
@@ -40,23 +46,24 @@ function randomizeName() {
     }
 }
 
-function getRandomAgeRange() {
+async function getRandomAgeRange() {
     try {
-        if (!randomizationData || !randomizationData.ageRanges) {
-            throw new Error('Randomization data not loaded');
+        await loadRandomizationData();
+        if (!randomizationData.ageRanges) {
+            throw new Error('Randomization data incomplete');
         }
         const range = randomizationData.ageRanges[Math.floor(Math.random() * randomizationData.ageRanges.length)];
         console.log('Selected age range:', range);
         return range;
     } catch (err) {
         console.error('Error selecting age range:', err);
-        return '18-25'; // Fallback
+        return '18-25';
     }
 }
 
-function randomizeAge() {
+async function randomizeAge() {
     try {
-        const range = getRandomAgeRange();
+        const range = await getRandomAgeRange();
         const [min, max] = range.split('-').map(Number);
         if (isNaN(min) || isNaN(max)) throw new Error('Invalid age range');
         const age = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -72,10 +79,11 @@ function randomizeAge() {
     }
 }
 
-function randomizeGender() {
+async function randomizeGender() {
     try {
-        if (!randomizationData || !randomizationData.genders) {
-            throw new Error('Randomization data not loaded');
+        await loadRandomizationData();
+        if (!randomizationData.genders) {
+            throw new Error('Randomization data incomplete');
         }
         const gender = randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
         document.getElementById('gender').value = gender;
@@ -89,10 +97,11 @@ function randomizeGender() {
     }
 }
 
-function randomizeLocale() {
+async function randomizeLocale() {
     try {
-        if (!randomizationData || !randomizationData.locales) {
-            throw new Error('Randomization data not loaded');
+        await loadRandomizationData();
+        if (!randomizationData.locales) {
+            throw new Error('Randomization data incomplete');
         }
         const locale = randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
         document.getElementById('locale').value = locale;
@@ -106,10 +115,11 @@ function randomizeLocale() {
     }
 }
 
-function randomizeOccupation() {
+async function randomizeOccupation() {
     try {
-        if (!randomizationData || !randomizationData.occupations) {
-            throw new Error('Randomization data not loaded');
+        await loadRandomizationData();
+        if (!randomizationData.occupations) {
+            throw new Error('Randomization data incomplete');
         }
         const occupation = randomizationData.occupations[Math.floor(Math.random() * randomizationData.occupations.length)];
         document.getElementById('occupation').value = occupation;
@@ -123,46 +133,22 @@ function randomizeOccupation() {
     }
 }
 
-function randomizeTraits() {
+async function randomizeEverything() {
     try {
-        const traits = getTraits();
-        if (!traits || traits.length === 0) {
-            throw new Error('No traits available');
-        }
-        const numTraits = Math.floor(Math.random() * 3) + 1; // 1-3 traits
-        const selectedTraits = [];
-        for (let i = 0; i < numTraits; i++) {
-            const randomTrait = traits[Math.floor(Math.random() * traits.length)];
-            if (randomTrait && !selectedTraits.includes(randomTrait.characteristic)) {
-                selectedTraits.push(randomTrait.characteristic);
-            }
-        }
-        document.getElementById('traits').value = selectedTraits.join(', ');
-        console.log('Randomized traits:', selectedTraits);
-        return selectedTraits;
-    } catch (err) {
-        console.error('Error randomizing traits:', err);
-        document.getElementById('traits').value = '';
-        console.log('Randomized traits: []');
-        return [];
-    }
-}
-
-function randomizeEverything() {
-    try {
-        randomizeName();
-        randomizeAge();
-        randomizeGender();
-        randomizeLocale();
-        randomizeOccupation();
-        randomizeTraits();
+        await loadRandomizationData();
+        await randomizeName();
+        await randomizeAge();
+        await randomizeGender();
+        await randomizeLocale();
+        await randomizeOccupation();
+        await randomizeTraits(); // Defined in traits.js
         console.log('Randomized all fields');
     } catch (err) {
         console.error('Error randomizing everything:', err);
     }
 }
 
-function randomizeContext(contextId) {
+async function randomizeContext(contextId) {
     try {
         const contexts = ['Work', 'Family', 'Social', 'Hobby', 'Travel'];
         const context = contexts[Math.floor(Math.random() * contexts.length)];

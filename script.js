@@ -41,17 +41,153 @@ function resetApp() {
     }
 }
 
+function generateBio() {
+    try {
+        const name = document.getElementById('name').value || 'Unnamed';
+        const age = document.getElementById('age').value || 'Unknown';
+        const gender = document.getElementById('gender').value || 'Unknown';
+        const locale = document.getElementById('locale').value || 'Unknown';
+        const occupation = document.getElementById('occupation').value || 'Unknown';
+        const traits = document.getElementById('traits').value || 'None';
+        const bio = `${name} is a ${age}-year-old ${gender} ${occupation} from ${locale}. They are characterized by ${traits}.`;
+        document.getElementById('shortBioOutput').innerHTML = `<p>${bio}</p>`;
+        document.getElementById('exportBioButton').disabled = false;
+        console.log('Generated bio:', bio);
+    } catch (err) {
+        console.error('Error generating bio:', err);
+        document.getElementById('shortBioOutput').innerHTML = '<p>Error generating bio.</p>';
+    }
+}
+
+function exportDetailedBio() {
+    try {
+        const bio = document.getElementById('shortBioOutput').innerText || 'No bio available';
+        const blob = new Blob([bio], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'character_bio.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        console.log('Exported bio');
+    } catch (err) {
+        console.error('Error exporting bio:', err);
+    }
+}
+
+function compareCharacters() {
+    try {
+        const char1 = document.getElementById('character1').value;
+        const char2 = document.getElementById('character2').value;
+        const context1 = document.getElementById('context1').value || 'General';
+        const context2 = document.getElementById('context2').value || 'General';
+        const comparison = `Comparing ${char1} (${context1}) and ${char2} (${context2}): [Comparison logic placeholder].`;
+        document.getElementById('comparisonOutput').innerHTML = `<p>${comparison}</p>`;
+        console.log('Compared characters:', { char1, char2, context1, context2 });
+    } catch (err) {
+        console.error('Error comparing characters:', err);
+        document.getElementById('comparisonOutput').innerHTML = '<p>Error comparing characters.</p>';
+    }
+}
+
+function exportComparisonReport() {
+    try {
+        const comparison = document.getElementById('comparisonOutput').innerText || 'No comparison available';
+        const blob = new Blob([comparison], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'comparison_report.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        console.log('Exported comparison report');
+    } catch (err) {
+        console.error('Error exporting comparison:', err);
+    }
+}
+
+function updateCharacter() {
+    try {
+        const id = document.getElementById('editSelectIndex').value;
+        const character = {
+            id: parseInt(id),
+            name: document.getElementById('editName').value,
+            age: parseInt(document.getElementById('editAge').value),
+            gender: document.getElementById('editGender').value,
+            locale: document.getElementById('editLocale').value,
+            occupation: document.getElementById('editOccupation').value,
+            traits: document.getElementById('editTraits').value.split(',').map(t => t.trim())
+        };
+        saveCharacter(character); // Assumes saveCharacter can update
+        console.log('Updated character:', character);
+    } catch (err) {
+        console.error('Error updating character:', err);
+    }
+}
+
+function exportCharacterReport() {
+    try {
+        const report = document.getElementById('characterReportContent').innerText || 'No report available';
+        const blob = new Blob([report], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'character_report.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        console.log('Exported character report');
+    } catch (err) {
+        console.error('Error exporting report:', err);
+    }
+}
+
+function closeModal() {
+    try {
+        const modal = document.getElementById('characterReportModal');
+        if (modal) modal.classList.add('hidden');
+        console.log('Closed modal');
+    } catch (err) {
+        console.error('Error closing modal:', err);
+    }
+}
+
+function randomizeComparison() {
+    try {
+        randomizeContext('context1');
+        randomizeContext('context2');
+        console.log('Randomized comparison contexts');
+    } catch (err) {
+        console.error('Error randomizing comparison:', err);
+    }
+}
+
+function loadCharacterToEdit(select) {
+    try {
+        const id = select.value;
+        const character = getCharacterById(id); // Assumes this function exists in characters.js
+        if (character) {
+            document.getElementById('editName').value = character.name || '';
+            document.getElementById('editAge').value = character.age || '';
+            document.getElementById('editGender').value = character.gender || '';
+            document.getElementById('editLocale').value = character.locale || '';
+            document.getElementById('editOccupation').value = character.occupation || '';
+            document.getElementById('editTraits').value = (character.traits || []).join(', ');
+            console.log('Loaded character for editing:', character);
+        }
+    } catch (err) {
+        console.error('Error loading character to edit:', err);
+    }
+}
+
 function handleButtonClick(e) {
     const target = e.target;
     e.stopPropagation();
     e.preventDefault();
 
-    // Debug log for all clicks
     console.log(`Click detected: event=${e.type}, tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
 
     let matched = false;
 
-    // Tab buttons
     if (target.matches('.tab-button[data-tab]')) {
         const tabId = target.getAttribute('data-tab');
         showTab(tabId);
@@ -59,20 +195,17 @@ function handleButtonClick(e) {
         matched = true;
     }
 
-    // Trait Bubbles link
     if (target.matches('.trait-bubbles-link')) {
         console.log('Trait Bubbles link clicked');
-        matched = true; // Allow default navigation
+        matched = true;
     }
 
-    // Reset app link
     if (target.matches('.reset-app')) {
         resetApp();
         console.log('Reset app link clicked');
         matched = true;
     }
 
-    // Randomize buttons
     if (target.matches('.randomize-name, .randomize-btn.randomize-name')) {
         randomizeName();
         console.log('Randomize name clicked');
@@ -124,7 +257,6 @@ function handleButtonClick(e) {
         matched = true;
     }
 
-    // Action buttons
     if (target.matches('.generate-bio')) {
         generateBio();
         console.log('Generate bio clicked');
@@ -166,7 +298,6 @@ function handleButtonClick(e) {
         matched = true;
     }
 
-    // Log unmatched clicks only if no match was found
     if (!matched && (target.tagName === 'BUTTON' || target.tagName === 'A')) {
         console.warn(`Unmatched click: tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
     }
@@ -174,10 +305,8 @@ function handleButtonClick(e) {
 
 function bindEventListeners() {
     try {
-        // Use only 'click' to trigger on release
         document.addEventListener('click', handleButtonClick, { capture: true });
 
-        // Edit select change event
         const editSelect = document.querySelector('.edit-select');
         if (editSelect) {
             editSelect.addEventListener('change', (e) => {
@@ -195,17 +324,16 @@ function bindEventListeners() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Initialize theme toggle
         initThemeToggle();
-        loadRandomizationData().then(() => loadTraits());
+        await loadRandomizationData();
+        await loadTraits();
         showTab('create');
 
-        // Bind event listeners with retries
         bindEventListeners();
-        setTimeout(bindEventListeners, 2000); // Retry after 2s
-        setTimeout(bindEventListeners, 5000); // Retry after 5s
+        setTimeout(bindEventListeners, 2000);
+        setTimeout(bindEventListeners, 5000);
 
         console.log('Page loaded, initialized create tab and event listeners');
     } catch (err) {
