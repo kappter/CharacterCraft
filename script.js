@@ -174,10 +174,8 @@ function handleButtonClick(e) {
 
 function bindEventListeners() {
     try {
-        // Multiple event types to capture clicks early
-        ['click', 'mousedown', 'touchstart'].forEach(eventType => {
-            document.addEventListener(eventType, handleButtonClick, { capture: true });
-        });
+        // Use only 'click' to trigger on release
+        document.addEventListener('click', handleButtonClick, { capture: true });
 
         // Edit select change event
         const editSelect = document.querySelector('.edit-select');
@@ -191,7 +189,7 @@ function bindEventListeners() {
             console.warn('Edit select not found');
         }
 
-        console.log('Event listeners bound for: click, mousedown, touchstart');
+        console.log('Event listeners bound for: click');
     } catch (err) {
         console.error('Error binding event listeners:', err);
     }
