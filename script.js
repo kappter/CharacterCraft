@@ -46,90 +46,128 @@ function handleButtonClick(e) {
     e.stopPropagation();
     e.preventDefault();
 
-    // Simplified debug log
+    // Debug log for all clicks
     console.log(`Click detected: event=${e.type}, tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
+
+    let matched = false;
 
     // Tab buttons
     if (target.matches('.tab-button[data-tab]')) {
         const tabId = target.getAttribute('data-tab');
         showTab(tabId);
         console.log(`Tab button clicked: ${tabId}`);
+        matched = true;
     }
 
     // Trait Bubbles link
     if (target.matches('.trait-bubbles-link')) {
         console.log('Trait Bubbles link clicked');
-        // Allow default navigation
+        matched = true; // Allow default navigation
     }
 
     // Reset app link
     if (target.matches('.reset-app')) {
         resetApp();
         console.log('Reset app link clicked');
+        matched = true;
     }
 
     // Randomize buttons
-    if (target.matches('.randomize-name')) {
+    if (target.matches('.randomize-name, .randomize-btn.randomize-name')) {
         randomizeName();
         console.log('Randomize name clicked');
-    } else if (target.matches('.randomize-age')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-age, .randomize-btn.randomize-age')) {
         randomizeAge();
         console.log('Randomize age clicked');
-    } else if (target.matches('.randomize-gender')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-gender, .randomize-btn.randomize-gender')) {
         randomizeGender();
         console.log('Randomize gender clicked');
-    } else if (target.matches('.randomize-locale')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-locale, .randomize-btn.randomize-locale')) {
         randomizeLocale();
         console.log('Randomize locale clicked');
-    } else if (target.matches('.randomize-occupation')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-occupation, .randomize-btn.randomize-occupation')) {
         randomizeOccupation();
         console.log('Randomize occupation clicked');
-    } else if (target.matches('.randomize-traits')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-traits, .randomize-btn.randomize-traits')) {
         randomizeTraits();
         console.log('Randomize traits clicked');
-    } else if (target.matches('.randomize-everything')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-everything')) {
         randomizeEverything();
         console.log('Randomize everything clicked');
-    } else if (target.matches('.randomize-context1')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-context1, .randomize-btn.randomize-context1')) {
         randomizeContext('context1');
         console.log('Randomize context1 clicked');
-    } else if (target.matches('.randomize-context2')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-context2, .randomize-btn.randomize-context2')) {
         randomizeContext('context2');
         console.log('Randomize context2 clicked');
-    } else if (target.matches('.randomize-comparison')) {
+        matched = true;
+    }
+    if (target.matches('.randomize-comparison')) {
         randomizeComparison();
         console.log('Randomize comparison clicked');
+        matched = true;
     }
 
     // Action buttons
     if (target.matches('.generate-bio')) {
         generateBio();
         console.log('Generate bio clicked');
-    } else if (target.matches('.save-character')) {
+        matched = true;
+    }
+    if (target.matches('.save-character')) {
         saveCharacter();
         console.log('Save character clicked');
-    } else if (target.matches('.export-bio')) {
+        matched = true;
+    }
+    if (target.matches('.export-bio')) {
         exportDetailedBio();
         console.log('Export bio clicked');
-    } else if (target.matches('.compare-characters')) {
+        matched = true;
+    }
+    if (target.matches('.compare-characters')) {
         compareCharacters();
         console.log('Compare characters clicked');
-    } else if (target.matches('.export-comparison')) {
+        matched = true;
+    }
+    if (target.matches('.export-comparison')) {
         exportComparisonReport();
         console.log('Export comparison clicked');
-    } else if (target.matches('.update-character')) {
+        matched = true;
+    }
+    if (target.matches('.update-character')) {
         updateCharacter();
         console.log('Update character clicked');
-    } else if (target.matches('.export-report')) {
+        matched = true;
+    }
+    if (target.matches('.export-report')) {
         exportCharacterReport();
         console.log('Export report clicked');
-    } else if (target.matches('.close-modal')) {
+        matched = true;
+    }
+    if (target.matches('.close-modal')) {
         closeModal();
         console.log('Close modal clicked');
+        matched = true;
     }
 
-    // Log unmatched button clicks
-    else if (target.tagName === 'BUTTON' || target.tagName === 'A') {
+    // Log unmatched clicks only if no match was found
+    if (!matched && (target.tagName === 'BUTTON' || target.tagName === 'A')) {
         console.warn(`Unmatched click: tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
     }
 }
