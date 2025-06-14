@@ -12,14 +12,14 @@ const exportReportButton = document.querySelector('.export-report');
 const closeModalButton = document.querySelector('.close-modal');
 const resetAppButton = document.querySelector('.reset-app');
 const traitBubblesLink = document.querySelector('.trait-bubbles-link');
-const randomizeNameButton = document.querySelector('.randomize-name');
-const randomizeAgeButton = document.querySelector('.randomize-age');
-const randomizeGenderButton = document.querySelector('.randomize-gender');
-const randomizeLocaleButton = document.querySelector('.randomize-locale');
-const randomizeOccupationButton = document.querySelector('.randomize-occupation');
-const randomizeTraitsButton = document.querySelector('.randomize-traits');
-const randomizeContext1Button = document.querySelector('.randomize-context1');
-const randomizeContext2Button = document.querySelector('.randomize-context2');
+const randomizeName = document.querySelector('.randomize-name');
+const randomizeAge = document.querySelector('.randomize-age');
+const randomizeGender = document.querySelector('.randomize-gender');
+const randomizeLocation = document.querySelector('.randomize-locale');
+const randomizeOccupation = document.querySelector('.randomize-occupation');
+const randomizeTraits = document.querySelector('.randomize-traits');
+const randomizeContext1 = document.querySelector('.randomize-context1');
+const randomizeContext2 = document.querySelector('.randomize-context2');
 const themeToggle = document.querySelector('#theme-toggle');
 
 function switchTab(tabId) {
@@ -91,6 +91,7 @@ function handleClick(event) {
         const occupation = document.querySelector('#occupation').value || 'Unknown';
         const traits = document.querySelector('#traits').value || 'Unknown';
         document.querySelector('#shortBioOutput').innerHTML = `${name}, a ${age}-year-old ${gender} ${occupation} from ${locale}, is ${traits}.`;
+        document.querySelector('#exportBioButton').disabled = false;
     } else if (className.includes('save-character')) {
         console.log('Save character clicked');
         if (typeof characters !== 'undefined' && characters.saveCharacter) {
@@ -125,7 +126,9 @@ function handleClick(event) {
         URL.revokeObjectURL(url);
     } else if (className.includes('compare-characters')) {
         console.log('Compare characters clicked');
-        document.querySelector('#comparisonOutput').innerHTML = 'Comparison placeholder';
+        const char1 = document.querySelector('#character1').value || 'Unknown';
+        const char2 = document.querySelector('#character2').value || 'Unknown';
+        document.querySelector('#comparisonOutput').innerHTML = `Comparing ${char1} and ${char2} (placeholder).`;
     } else if (className.includes('randomize-comparison')) {
         console.log('Randomize comparison clicked');
         document.querySelector('#context1').value = 'Context 1';
@@ -230,6 +233,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTheme();
     document.addEventListener('click', handleClick);
     themeToggle.addEventListener('change', toggleTheme);
-    console.log('Event listeners bound for: click');
-    console.log('Page loaded, initialized create tab and event listeners');
+    console.log('Page loaded, initialized event listeners');
 });

@@ -45,7 +45,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval';">
     <title>CharacterCraft</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/CharacterCraft/styles.css">
+    <link rel="stylesheet" href="/CharacterCraft/css/styles.css">
     <style>
         /* Fallback CSS */
         body {
@@ -54,6 +54,7 @@
             padding: 0;
             background: #f9fafb;
             color: #1f2937;
+            overflow-x: hidden;
         }
         header {
             position: fixed;
@@ -61,26 +62,30 @@
             left: 0;
             right: 0;
             background: #fff;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 0.75rem 1rem;
+            box-shadow: 0 4px 4px rgba(0,0,0,0.1);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 48px;
         }
         nav {
             position: fixed;
-            top: 64px;
+            top: 48px;
             left: 0;
             right: 0;
             background: #fff;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             z-index: 999;
+            height: 40px;
         }
         main {
-            padding: 200px 1rem 80px;
-            min-height: calc(100vh - 144px);
+            padding: 136px 0.5rem 80px;
+            min-height: calc(100vh - 88px);
+            position: relative;
+            z-index: 1;
         }
         footer {
             position: fixed;
@@ -88,18 +93,40 @@
             left: 0;
             right: 0;
             background: #fff;
-            padding: 1rem;
+            padding: 0.5rem;
             text-align: center;
             border-top: 1px solid #d1d5db;
+            font-size: 0.75rem;
+            z-index: 1000;
+            height: 40px;
+        }
+        .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 0.5rem; }
+        nav button, nav a { 
+            margin-right: 0.5rem; 
+            padding: 0.4rem 0.75rem; 
+            border-radius: 0.25rem; 
+            background: #f9fafb; 
+            color: #333; 
+            text-decoration: none; 
             font-size: 0.875rem;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-        nav button, nav a { margin-right: 0.75rem; padding: 0.5rem 1.25rem; border-radius: 0.375rem; background: #f9fafb; color: #1f2937; text-decoration: none; }
         nav button:hover, nav a:hover { background: #e5e7eb; }
         .tab-content { display: none; }
         .tab-content:not(.hidden) { display: block; }
-        input, select { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
-        button { padding: 0.75rem 1.5rem; border: none; border-radius: 0.375rem; cursor: pointer; }
+        input, select { 
+            width: 100%; 
+            padding: 0.5rem; 
+            border: 1px solid #d1d5db; 
+            border-radius: 0.25rem; 
+            font-size: 0.875rem; 
+        }
+        button { 
+            padding: 0.5rem 1rem; 
+            border: none; 
+            border-radius: 0.25rem; 
+            cursor: pointer; 
+            font-size: 0.875rem; 
+        }
         .randomize-everything { background: #6b7280; color: #fff; }
         .randomize-everything:hover { background: #4b5563; }
         .generate-bio { background: #3b82f6; color: #fff; }
@@ -108,47 +135,68 @@
         .save-character:hover { background: #059669; }
         .export-bio { background: #8b5cf6; color: #fff; }
         .export-bio:hover { background: #7c3aed; }
-        .randomize-name, .randomize-age, .randomize-gender, .randomize-locale, .randomize-occupation, .randomize-traits { background: #6b7280; color: #fff; }
-        .randomize-name:hover, .randomize-age:hover, .randomize-gender:hover, .randomize-locale:hover, .randomize-occupation:hover, .randomize-traits:hover { background: #4b5563; }
-        #shortBioOutput { margin-top: 1rem; padding: 1rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
+        .randomize-name, .randomize-age, .randomize-gender, .randomize-locale, .randomize-occupation, .randomize-traits { 
+            background: #6b7280; 
+            color: #fff; 
+            font-size: 0.875rem; 
+        }
+        .randomize-name:hover, .randomize-age:hover, .randomize-gender:hover, .randomize-locale:hover, .randomize-occupation:hover, .randomize-traits:hover { 
+            background: #4b5563; 
+        }
+        #shortBioOutput { 
+            margin-top: 1rem; 
+            padding: 0.75rem; 
+            border: 1px solid #d1d5db; 
+            border-radius: 0.25rem; 
+            font-size: 0.875rem; 
+        }
         table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #d1d5db; padding: 1rem; }
+        th, td { border: 1px solid #d1d5db; padding: 0.5rem; font-size: 0.875rem; }
         [data-theme="dark"] body { background: #111827; color: #f3f4f6; }
         [data-theme="dark"] header { background: #1f2937; border-bottom: 1px solid #4b5563; }
         [data-theme="dark"] nav { background: #1f2937; }
         [data-theme="dark"] footer { background: #1f2937; border-top: 1px solid #4b5563; }
-        [data-theme="dark"] nav button, [data-theme="dark"] nav a { background: #111827; color: #f3f4f6; }
+        [data-theme="dark"] nav button, [data-theme="dark"] nav a { background: #111827; color: #f3f4f6 }
         [data-theme="dark"] nav button:hover, [data-theme="dark"] nav a:hover { background: #4b5563; }
         [data-theme="dark"] input, [data-theme="dark"] select { background: #1f2937; border: 1px solid #4b5563; color: #f3f4f6; }
         [data-theme="dark"] #shortBioOutput { background: #1f2937; border: 1px solid #4b5563; }
-        [data-theme="dark"] th, [data-theme="dark"] td { border: 1px solid #4b5563; }
+        [data-theme="dark"] th, td { border-color: #4b5563; color: #f3f4f6; }
+        @media (max-width: 640px) {
+            header { padding: 0.5rem; height: 40px; }
+            nav { padding: 0.5rem; height: 40px; overflow-x: auto; white-space: nowrap; }
+            main { padding-top: 120px; padding-bottom: 72px; padding-left: 0.25rem; padding-right: 0.25rem; }
+            footer { padding: 0.25rem; height: 32px; font-size: 0.625rem; }
+            nav button, nav a { padding: 0.25rem 0.75rem; font-size: 0.75rem; }
+            input, button { padding: 0.5rem; font-size: 0.75rem; }
+            #shortBioOutput { padding: 0.5rem; font-size: 0.75rem; }
+        }
     </style>
-    <script src="/CharacterCraft/utils.js" defer></script>
-    <script src="/CharacterCraft/traits.js" defer></script>
-    <script src="/CharacterCraft/characters.js" defer></script>
-    <script src="/CharacterCraft/script.js" defer></script>
+    <script src="/CharacterCraft/js/utils.js" defer></script>
+    <script src="/CharacterCraft/js/traits.js" defer></script>
+    <script src="/CharacterCraft/js/characters.js" defer></script>
+    <script src="/CharacterCraft/js/script.js" defer></script>
 </head>
 <body>
     <header>
         <div class="flex items-center">
-            <img src="/CharacterCraft/cclogo.png" alt="CharacterCraft Logo" class="h-10 mr-2" onerror="this.src='https://via.placeholder.com/40';">
-            <h1>CharacterCraft</h1>
+            <img src="/CharacterCraft/images/cclogo.png" alt="CharacterCraft Logo" style="height: 32px;" onerror="this.src='https://via.placeholder.com/32';">
+            <h1 style="font-size: 1.5rem;">CharacterCraft</h1>
         </div>
         <div class="flex items-center">
-            <label class="mr-2">Theme:</label>
+            <label class="mr-2" style="font-size: 0.875rem;">Theme:</label>
             <input type="checkbox" id="theme-toggle" class="toggle">
         </div>
     </header>
     <nav>
-        <button class="tab-button" data-tab="create">Create Character</button>
-        <button class="tab-button" data-tab="compare">Compare Characters</button>
+        <button class="tab-button" data-tab="create-character">Create Character</button>
+        <button class="tab-button" data-tab="compare-character">Compare Characters</button>
         <button class="tab-button" data-tab="traits">Trait List</button>
-        <button class="tab-button" data-tab="saved">Saved Characters</button>
-        <a href="/CharacterCraft/trait_bubbles.html" class="trait-bubbles-link">Trait Bubbles</a>
+        <button class="tab-button" data-tab="saved-character">Saved Characters</button>
+        <a href="/Character/nav/trait_bubble.html" class="trait-bubble-link">Trait Bubble</a>
         <button class="reset-app">Reset App</button>
     </nav>
     <main class="container">
-        <div id="create-tab" class="tab-content">
+        <div id="create-character-tab" class="tab-content">
             <h2>Create Character</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -159,7 +207,7 @@
                 <div>
                     <label for="age" class="block mb-1">Age</label>
                     <input type="number" id="age">
-                    <button class="randomize-age">Randomize</button>
+                    <button class="randomize-age-button">Randomize</button>
                 </div>
                 <div>
                     <label for="gender" class="block mb-1">Gender</label>
@@ -182,7 +230,7 @@
                     <button class="randomize-traits">Randomize</button>
                 </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-2">
                 <button class="randomize-everything">Randomize Everything</button>
                 <button class="generate-bio">Generate Bio</button>
                 <button class="save-character">Save Character</button>
@@ -190,7 +238,7 @@
             </div>
             <div id="shortBioOutput"></div>
         </div>
-        <div id="compare-tab" class="tab-content hidden">
+        <div id="compare-character-tab" class="tab-content hidden">
             <h2>Compare Characters</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -212,7 +260,7 @@
                     <button class="randomize-context2">Randomize Context</button>
                 </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-2">
                 <button class="compare-characters">Compare Characters</button>
                 <button class="randomize-comparison">Randomize All</button>
                 <button class="export-comparison">Export Comparison</button>
@@ -233,7 +281,7 @@
                 <tbody id="traitTableBody"></tbody>
             </table>
         </div>
-        <div id="saved-tab" class="tab-content hidden">
+        <div id="saved-character-tab" class="tab-content hidden">
             <h2>Saved Characters</h2>
             <div id="characterList"></div>
             <h3>Edit Character</h3>
