@@ -213,7 +213,7 @@ function exportComparisonReport() {
         const char2Index = parseInt(document.getElementById('character2').value);
         const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
 
-        if (isNaN(char1Index) || isNaN(char2Index) || !comparisonOutput) {
+        if (!char1Index || !char2Index || !comparisonOutput) {
             alert('Please compare two characters before exporting.');
             return;
         }
@@ -293,14 +293,20 @@ function displayCharacters() {
                     <strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation || 'None'}<br>
                     Traits: ${char.traits.join(', ') || 'None'}
                 </div>
-                <button class="view-report" data-index="${index}" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">View Report</button>
+                <button class="view-report px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition" data-index="${index}">View Report</button>
             `;
             characterList.appendChild(div);
         });
+
         // Bind view report buttons
         document.querySelectorAll('.view-report').forEach(button => {
-            button.addEventListener('click', () => viewCharacterReport(button.getAttribute('data-index')));
+            button.addEventListener('click', () => {
+                const index = parseInt(button.getAttribute('data-index'));
+                viewCharacterReport(index);
+                console.log(`View report clicked for index: ${index}`);
+            });
         });
+
         updateCharacterSelects();
         updateEditCharacterSelect();
         console.log('Characters displayed:', characters.length);
@@ -323,7 +329,7 @@ function viewCharacterReport(index) {
             characters[index].detailedBio = detailedBio;
             localStorage.setItem('characters', JSON.stringify(characters));
         }
-        const traitsSection = char.traits && char.traits.length > 0 
+        const traitsSection = char.traits && char.traits.length > 0
             ? `<h3 class="text-lg font-semibold mb-2">Personality Traits</h3><p>${char.traits.join(', ')}</p>`
             : `<h3 class="text-lg font-semibold mb-2">Personality Traits</h3><p>No traits assigned.</p>`;
         document.getElementById('characterReportContent').innerHTML = `
@@ -399,7 +405,7 @@ function updateCharacterSelects() {
         const select1 = document.getElementById('character1');
         const select2 = document.getElementById('character2');
         if (!select1 || !select2) {
-            console.log('Character select dropdowns not found, skipping update');
+            console.warn('Character select dropdowns not found, skipping update');
             return;
         }
         const currentValue1 = select1.value;
@@ -413,8 +419,12 @@ function updateCharacterSelects() {
             select1.appendChild(option.cloneNode(true));
             select2.appendChild(option);
         });
-        select1.value = currentValue1 && characters[currentValue1] ? currentValue1 : '';
-        select2.value = currentValue2 && characters[currentValue2] ? currentValue2 : '';
+        if (currentValue1 && characters[currentValue1]) {
+            select1.value = currentValue1;
+        }
+        if (currentValue2 && characters[currentValue2]) {
+            select2.value = currentValue2;
+        }
         console.log('Character selects updated:', characters.length);
     } catch (err) {
         console.error('Error updating character selects:', err);
@@ -436,7 +446,10 @@ function updateEditCharacterSelect() {
             option.textContent = char.name;
             editSelect.appendChild(option);
         });
-        editSelect.value = currentValue && characters[currentValue] ? currentValue : '';
+        if (currentValue && characters[currentValue]) {
+            editSelect.value = currentValue;
+            console.log('Restored character for edit:', currentValue);
+        }
         console.log('Edit character select updated:', characters.length);
     } catch (err) {
         console.error('Error updating edit character select:', err);
@@ -447,14 +460,14 @@ function loadCharacterToEdit(select) {
     try {
         const index = parseInt(select.value);
         selectedEditCharacter = index;
-        if (isNaN(index)) {
+        if (index === '') {
             clearEditForm();
             return;
         }
         const char = characters[index];
         if (!char) {
             console.error('Character not found at index:', index);
-            alert('Error: Character not found to load for edit.');
+            alert('Error: Character not found.');
             return;
         }
         document.getElementById('editName').value = char.name;
@@ -502,15 +515,9 @@ function updateCharacter() {
             traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
         };
 
-        try {
-            const { shortBio, detailedBio } = generateCharacterBio(character);
-            character.shortBio = shortBio;
-            character.detailedBio = detailedBio;
-        } catch (bioErr) {
-            console.error('Error generating bio for updated character:', bioErr);
-            alert('Failed to generate bio for updated character.');
-            return;
-        }
+        const { shortBio, detailedBio } = generateCharacterBio(character);
+        character.shortBio = shortBio;
+        character.detailedBio = detailedBio;
 
         characters[index] = character;
         localStorage.setItem('characters', JSON.stringify(characters));
