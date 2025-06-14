@@ -45,17 +45,13 @@ function generateCharacterBio(character) {
 
 function saveCharacter() {
     try {
-        const name = document.getElementById('name').value;
+        console.log('Attempting to save character');
+        const name = document.getElementById('name').value.trim() || 'Unnamed';
         const age = parseInt(document.getElementById('age').value) || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
         const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
         const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-        const occupation = document.getElementById('occupation').value || '';
+        const occupation = document.getElementById('occupation').value.trim() || 'Unemployed';
         const traitsInput = document.getElementById('traits').value;
-
-        if (!name || !occupation.trim()) {
-            alert('Please enter a name and a valid occupation.');
-            return;
-        }
 
         const character = {
             id: Date.now(),
@@ -66,6 +62,8 @@ function saveCharacter() {
             occupation,
             traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
         };
+        console.log('Character data:', character);
+
         const { shortBio, detailedBio } = generateCharacterBio(character);
         character.shortBio = shortBio;
         character.detailedBio = detailedBio;
@@ -87,17 +85,12 @@ function saveCharacter() {
 
 function generateBio() {
     try {
-        const name = document.getElementById('name').value;
+        const name = document.getElementById('name').value.trim() || 'Unnamed';
         const age = parseInt(document.getElementById('age').value) || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
         const gender = document.getElementById('gender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
         const locale = document.getElementById('locale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-        const occupation = document.getElementById('occupation').value || '';
+        const occupation = document.getElementById('occupation').value.trim() || 'Unemployed';
         const userTraits = document.getElementById('traits').value.trim().split(',').map(t => t.trim()).filter(t => t);
-
-        if (!name || !occupation.trim()) {
-            alert('Please enter a name and occupation.');
-            return;
-        }
 
         const character = { name, age, gender, locale, occupation, traits: userTraits };
         const { shortBio, detailedBio } = generateCharacterBio(character);
@@ -114,10 +107,10 @@ function generateBio() {
 
 function exportDetailedBio() {
     try {
-        const name = document.getElementById('name').value;
+        const name = document.getElementById('name').value.trim() || 'Unnamed';
         const detailedBioOutput = document.getElementById('detailedBioOutput').innerHTML;
 
-        if (!name || !detailedBioOutput) {
+        if (!detailedBioOutput) {
             alert('Please generate a detailed bio before exporting.');
             return;
         }
@@ -380,7 +373,7 @@ function exportCharacterReport() {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `character_report_${name.replace(/\s+/g, '_')}.html`;
+        link.download = `character-${name.replace(/\s+/g, '_')}.html`;
         link.click();
         window.URL.revokeObjectURL(url);
         console.log('Character report exported:', name);
@@ -492,18 +485,12 @@ function updateCharacter() {
             return;
         }
 
-        const name = document.getElementById('editName').value.trim();
+        const name = document.getElementById('editName').value.trim() || 'Unnamed';
         const age = parseInt(document.getElementById('editAge').value) || Math.floor(Math.random() * (80 - 18 + 1)) + 18;
         const gender = document.getElementById('editGender').value || randomizationData.genders[Math.floor(Math.random() * randomizationData.genders.length)];
         const locale = document.getElementById('editLocale').value || randomizationData.locales[Math.floor(Math.random() * randomizationData.locales.length)];
-        const occupation = document.getElementById('editOccupation').value || '';
+        const occupation = document.getElementById('editOccupation').value.trim() || 'Unemployed';
         const traitsInput = document.getElementById('editTraits').value;
-
-        if (!name || !occupation.trim()) {
-            alert('Please enter a valid name and occupation.');
-            console.log('Invalid name or occupation:', name, occupation);
-            return;
-        }
 
         const character = {
             id: characters[index].id,

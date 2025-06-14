@@ -41,6 +41,105 @@ function resetApp() {
     }
 }
 
+function bindEventListeners() {
+    try {
+        // Event delegation for buttons
+        document.addEventListener('click', (e) => {
+            const target = e.target;
+
+            // Tab buttons
+            if (target.matches('.tab-button[data-tab]')) {
+                const tabId = target.getAttribute('data-tab');
+                showTab(tabId);
+                console.log(`Tab button clicked: ${tabId}`);
+                e.preventDefault();
+            }
+
+            // Reset app link
+            if (target.matches('.reset-app')) {
+                resetApp();
+                console.log('Reset app link clicked');
+                e.preventDefault();
+            }
+
+            // Randomize buttons
+            if (target.matches('.randomize-name')) {
+                randomizeName();
+                console.log('Randomize name clicked');
+            } else if (target.matches('.randomize-age')) {
+                randomizeAge();
+                console.log('Randomize age clicked');
+            } else if (target.matches('.randomize-gender')) {
+                randomizeGender();
+                console.log('Randomize gender clicked');
+            } else if (target.matches('.randomize-locale')) {
+                randomizeLocale();
+                console.log('Randomize locale clicked');
+            } else if (target.matches('.randomize-occupation')) {
+                randomizeOccupation();
+                console.log('Randomize occupation clicked');
+            } else if (target.matches('.randomize-traits')) {
+                randomizeTraits();
+                console.log('Randomize traits clicked');
+            } else if (target.matches('.randomize-everything')) {
+                randomizeEverything();
+                console.log('Randomize everything clicked');
+            } else if (target.matches('.randomize-context1')) {
+                randomizeContext('context1');
+                console.log('Randomize context1 clicked');
+            } else if (target.matches('.randomize-context2')) {
+                randomizeContext('context2');
+                console.log('Randomize context2 clicked');
+            } else if (target.matches('.randomize-comparison')) {
+                randomizeComparison();
+                console.log('Randomize comparison clicked');
+            }
+
+            // Action buttons
+            if (target.matches('.generate-bio')) {
+                generateBio();
+                console.log('Generate bio clicked');
+            } else if (target.matches('.save-character')) {
+                saveCharacter();
+                console.log('Save character clicked');
+            } else if (target.matches('.export-bio')) {
+                exportDetailedBio();
+                console.log('Export bio clicked');
+            } else if (target.matches('.compare-characters')) {
+                compareCharacters();
+                console.log('Compare characters clicked');
+            } else if (target.matches('.export-comparison')) {
+                exportComparisonReport();
+                console.log('Export comparison clicked');
+            } else if (target.matches('.update-character')) {
+                updateCharacter();
+                console.log('Update character clicked');
+            } else if (target.matches('.export-report')) {
+                exportCharacterReport();
+                console.log('Export report clicked');
+            } else if (target.matches('.close-modal')) {
+                closeModal();
+                console.log('Close modal clicked');
+            }
+        });
+
+        // Edit select change event
+        const editSelect = document.querySelector('.edit-select');
+        if (editSelect) {
+            editSelect.addEventListener('change', (e) => {
+                loadCharacterToEdit(e.target);
+                console.log('Edit select changed');
+            });
+        } else {
+            console.warn('Edit select not found');
+        }
+
+        console.log('Event listeners bound via delegation');
+    } catch (err) {
+        console.error('Error binding event listeners:', err);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     try {
         // Initialize theme toggle
@@ -48,81 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadRandomizationData().then(() => loadTraits());
         showTab('create');
 
-        // Tab buttons
-        const tabButtons = document.querySelectorAll('.tab-button');
-        tabButtons.forEach(button => {
-            const tabId = button.getAttribute('data-tab');
-            if (tabId) {
-                button.addEventListener('click', () => {
-                    showTab(tabId);
-                    console.log(`Tab button clicked: ${tabId}`);
-                });
-            }
-        });
-        console.log(`Bound ${tabButtons.length} tab buttons`);
-
-        // Reset app link
-        const resetLink = document.querySelector('.reset-app');
-        if (resetLink) {
-            resetLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                resetApp();
-                console.log('Reset app link clicked');
-            });
-        }
-
-        // Randomize buttons
-        const randomizeButtons = [
-            { selector: '.randomize-name', handler: randomizeName },
-            { selector: '.randomize-age', handler: randomizeAge },
-            { selector: '.randomize-gender', handler: randomizeGender },
-            { selector: '.randomize-locale', handler: randomizeLocale },
-            { selector: '.randomize-occupation', handler: randomizeOccupation },
-            { selector: '.randomize-traits', handler: randomizeTraits },
-            { selector: '.randomize-everything', handler: randomizeEverything },
-            { selector: '.randomize-context1', handler: () => randomizeContext('context1') },
-            { selector: '.randomize-context2', handler: () => randomizeContext('context2') },
-            { selector: '.randomize-comparison', handler: randomizeComparison }
-        ];
-        randomizeButtons.forEach(({ selector, handler }) => {
-            const button = document.querySelector(selector);
-            if (button) {
-                button.addEventListener('click', handler);
-                console.log(`Bound ${selector} button`);
-            } else {
-                console.warn(`Button not found: ${selector}`);
-            }
-        });
-
-        // Action buttons
-        const actionButtons = [
-            { selector: '.generate-bio', handler: generateBio },
-            { selector: '.save-character', handler: saveCharacter },
-            { selector: '.export-bio', handler: exportDetailedBio },
-            { selector: '.compare-characters', handler: compareCharacters },
-            { selector: '.export-comparison', handler: exportComparisonReport },
-            { selector: '.update-character', handler: updateCharacter },
-            { selector: '.export-report', handler: exportCharacterReport },
-            { selector: '.close-modal', handler: closeModal }
-        ];
-        actionButtons.forEach(({ selector, handler }) => {
-            const button = document.querySelector(selector);
-            if (button) {
-                button.addEventListener('click', handler);
-                console.log(`Bound ${selector} button`);
-            } else {
-                console.warn(`Button not found: ${selector}`);
-            }
-        });
-
-        // Edit select
-        const editSelect = document.querySelector('.edit-select');
-        if (editSelect) {
-            editSelect.addEventListener('change', (e) => loadCharacterToEdit(e.target));
-            console.log('Bound edit-select');
-        } else {
-            console.warn('Edit select not found');
-        }
+        // Bind event listeners with retry
+        bindEventListeners();
+        setTimeout(bindEventListeners, 1000); // Retry after 1s for dynamic DOM
 
         console.log('Page loaded, initialized create tab and event listeners');
     } catch (err) {
