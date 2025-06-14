@@ -44,6 +44,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval';">
     <title>CharacterCraft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/CharacterCraft/styles.css">
     <style>
         /* Fallback CSS */
@@ -51,7 +52,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #f3f4f6;
+            background: #f9fafb;
             color: #1f2937;
         }
         header {
@@ -60,8 +61,8 @@
             left: 0;
             right: 0;
             background: #fff;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
@@ -69,15 +70,17 @@
         }
         nav {
             position: fixed;
-            top: 60px;
+            top: 64px;
             left: 0;
             right: 0;
-            background: #e5e7eb;
-            padding: 1rem;
+            background: #fff;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             z-index: 999;
         }
         main {
-            padding: 120px 1rem 60px;
+            padding: 140px 1rem 80px;
+            min-height: calc(100vh - 144px);
         }
         footer {
             position: fixed;
@@ -88,14 +91,15 @@
             padding: 1rem;
             text-align: center;
             border-top: 1px solid #d1d5db;
+            font-size: 0.875rem;
         }
         .container { max-width: 1200px; margin: 0 auto; }
-        nav button, nav a { margin-right: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.375rem; background: #fff; color: #1f2937; text-decoration: none; }
-        nav button:hover, nav a:hover { background: #d1d5db; }
+        nav button, nav a { margin-right: 0.75rem; padding: 0.5rem 1.25rem; border-radius: 0.375rem; background: #f9fafb; color: #1f2937; text-decoration: none; }
+        nav button:hover, nav a:hover { background: #e5e7eb; }
         .tab-content { display: none; }
         .tab-content:not(.hidden) { display: block; }
-        input, select { width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
-        button { padding: 0.5rem 1rem; border: none; border-radius: 0.375rem; cursor: pointer; }
+        input, select { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
+        button { padding: 0.75rem 1.5rem; border: none; border-radius: 0.375rem; cursor: pointer; }
         .randomize-everything { background: #6b7280; color: #fff; }
         .randomize-everything:hover { background: #4b5563; }
         .generate-bio { background: #3b82f6; color: #fff; }
@@ -108,15 +112,15 @@
         .randomize-name:hover, .randomize-age:hover, .randomize-gender:hover, .randomize-locale:hover, .randomize-occupation:hover, .randomize-traits:hover { background: #4b5563; }
         #shortBioOutput { margin-top: 1rem; padding: 1rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #d1d5db; padding: 0.75rem; }
-        [data-theme="dark"] body { background: #1f2937; color: #f3f4f6; }
-        [data-theme="dark"] header { background: #374151; border-bottom-color: #4b5563; }
-        [data-theme="dark"] nav { background: #4b5563; }
-        [data-theme="dark"] footer { background: #374151; border-top-color: #4b5563; }
-        [data-theme="dark"] nav button, [data-theme="dark"] nav a { background: #374151; color: #f3f4f6; }
-        [data-theme="dark"] nav button:hover, [data-theme="dark"] nav a:hover { background: #6b7280; }
-        [data-theme="dark"] input, [data-theme="dark"] select { background: #374151; border-color: #4b5563; color: #f3f4f6; }
-        [data-theme="dark"] #shortBioOutput { border-color: #4b5563; background: #374151; }
+        th, td { border: 1px solid #d1d5db; padding: 1rem; }
+        [data-theme="dark"] body { background: #111827; color: #f3f4f6; }
+        [data-theme="dark"] header { background: #1f2937; border-bottom-color: #4b5563; }
+        [data-theme="dark"] nav { background: #1f2937; }
+        [data-theme="dark"] footer { background: #1f2937; border-top-color: #4b5563; }
+        [data-theme="dark"] nav button, [data-theme="dark"] nav a { background: #111827; color: #f3f4f6; }
+        [data-theme="dark"] nav button:hover, [data-theme="dark"] nav a:hover { background: #4b5563; }
+        [data-theme="dark"] input, [data-theme="dark"] select { background: #1f2937; border-color: #4b5563; color: #f3f4f6; }
+        [data-theme="dark"] #shortBioOutput { border-color: #4b5563; background: #1f2937; }
         [data-theme="dark"] th, [data-theme="dark"] td { border-color: #4b5563; }
     </style>
     <script src="/CharacterCraft/utils.js" defer></script>
@@ -246,7 +250,7 @@
                     <input type="number" id="editAge">
                 </div>
                 <div>
-                    <label for="editGender" class="block mb-1">Gender</label>
+                    <label for="gender" class="block mb-1">Gender</label>
                     <input type="text" id="editGender">
                 </div>
                 <div>
@@ -266,7 +270,7 @@
         </div>
     </main>
     <footer>
-        <p>&copy; 2025 CharacterCraft. All rights reserved.</p>
+        <p>© 2025 CharacterCraft. All rights reserved.</p>
     </footer>
     <div id="characterReportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div>
