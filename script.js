@@ -46,10 +46,8 @@ function handleButtonClick(e) {
     e.stopPropagation();
     e.preventDefault();
 
-    // Log all clicks for debugging
-    if (target.tagName === 'BUTTON' || target.tagName === 'A') {
-        console.log(`Click detected on: ${e.type} - ${target.tagName}}, class: ${target.className}, id: ${target.id || 'unknown''}, data-tab: ${target.getAttribute('data-tab') || 'none'}`);
-    }
+    // Simplified debug log
+    console.log(`Click detected: event=${e.type}, tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
 
     // Tab buttons
     if (target.matches('.tab-button[data-tab]')) {
@@ -65,7 +63,7 @@ function handleButtonClick(e) {
     }
 
     // Reset app link
-    if (target.matches('reset-app')) {
+    if (target.matches('.reset-app')) {
         resetApp();
         console.log('Reset app link clicked');
     }
@@ -74,28 +72,28 @@ function handleButtonClick(e) {
     if (target.matches('.randomize-name')) {
         randomizeName();
         console.log('Randomize name clicked');
-    } else if (target.matches('randomize-age')) {
+    } else if (target.matches('.randomize-age')) {
         randomizeAge();
         console.log('Randomize age clicked');
-    } else if (target.matches('randomize-gender')) {
+    } else if (target.matches('.randomize-gender')) {
         randomizeGender();
         console.log('Randomize gender clicked');
-    } else if (target.matches('randomize-locale')) {
+    } else if (target.matches('.randomize-locale')) {
         randomizeLocale();
         console.log('Randomize locale clicked');
-    } else if (target.matches('randomize-occupation')) {
+    } else if (target.matches('.randomize-occupation')) {
         randomizeOccupation();
         console.log('Randomize occupation clicked');
-    } else if (target.matches('randomize-traits')) {
+    } else if (target.matches('.randomize-traits')) {
         randomizeTraits();
         console.log('Randomize traits clicked');
-    } else if (target.matches('randomize-everything')) {
+    } else if (target.matches('.randomize-everything')) {
         randomizeEverything();
         console.log('Randomize everything clicked');
-    } else if (target.matches('randomize-context1')) {
+    } else if (target.matches('.randomize-context1')) {
         randomizeContext('context1');
         console.log('Randomize context1 clicked');
-    } else if (target.matches('randomize-context2')) {
+    } else if (target.matches('.randomize-context2')) {
         randomizeContext('context2');
         console.log('Randomize context2 clicked');
     } else if (target.matches('.randomize-comparison')) {
@@ -107,19 +105,19 @@ function handleButtonClick(e) {
     if (target.matches('.generate-bio')) {
         generateBio();
         console.log('Generate bio clicked');
-    } else if (target.matches('save-character')) {
+    } else if (target.matches('.save-character')) {
         saveCharacter();
         console.log('Save character clicked');
-    } else if (target.matches('export-bio')) {
+    } else if (target.matches('.export-bio')) {
         exportDetailedBio();
         console.log('Export bio clicked');
     } else if (target.matches('.compare-characters')) {
         compareCharacters();
         console.log('Compare characters clicked');
-    } else if (target.matches('export-comparison')) {
+    } else if (target.matches('.export-comparison')) {
         exportComparisonReport();
         console.log('Export comparison clicked');
-    } else if (target.matches('update-character')) {
+    } else if (target.matches('.update-character')) {
         updateCharacter();
         console.log('Update character clicked');
     } else if (target.matches('.export-report')) {
@@ -128,34 +126,34 @@ function handleButtonClick(e) {
     } else if (target.matches('.close-modal')) {
         closeModal();
         console.log('Close modal clicked');
+    }
 
-    // Log unmatched clicks on buttons
-    } else if (target.tagName === 'BUTTON' || target.tagName === 'A') {
-        console.warn(`Unmatched click on: ${target.tagName}}, class: ${target.className}, value: ${target.id || 'unknown''}, data-tab: ${target.getAttribute('data-tab') || 'none''}`);
+    // Log unmatched button clicks
+    else if (target.tagName === 'BUTTON' || target.tagName === 'A') {
+        console.warn(`Unmatched click: tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
     }
 }
 
 function bindEventListeners() {
     try {
         // Multiple event types to capture clicks early
-        ['click', 'click', 'mousedown', 'touchstart'].forEach(eventType => {
+        ['click', 'mousedown', 'touchstart'].forEach(eventType => {
             document.addEventListener(eventType, handleButtonClick, { capture: true });
         });
 
         // Edit select change event
-        const editSelect = document.querySelector('edit-select');
+        const editSelect = document.querySelector('.edit-select');
         if (editSelect) {
-            editSelect.addEventListener('change', 'click', (e) => {
+            editSelect.addEventListener('change', (e) => {
                 e.stopPropagation();
                 loadCharacterToEdit(e.target);
                 console.log('Edit select changed');
             });
         } else {
             console.warn('Edit select not found');
-        console.log('Event listeners bound for: ' + eventTypes.join(', '));
-    }
+        }
 
-    console.log('Event listeners bound');
+        console.log('Event listeners bound for: click, mousedown, touchstart');
     } catch (err) {
         console.error('Error binding event listeners:', err);
     }
@@ -172,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bindEventListeners();
         setTimeout(bindEventListeners, 2000); // Retry after 2s
         setTimeout(bindEventListeners, 5000); // Retry after 5s
+
         console.log('Page loaded, initialized create tab and event listeners');
     } catch (err) {
         console.error('Error initializing app:', err);
