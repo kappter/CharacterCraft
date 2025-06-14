@@ -118,7 +118,7 @@ function updateCharacter() {
             occupation: document.getElementById('editOccupation').value,
             traits: document.getElementById('editTraits').value.split(',').map(t => t.trim())
         };
-        saveCharacter(character); // Assumes saveCharacter can update
+        saveCharacter(character);
         console.log('Updated character:', character);
     } catch (err) {
         console.error('Error updating character:', err);
@@ -164,7 +164,7 @@ function randomizeComparison() {
 function loadCharacterToEdit(select) {
     try {
         const id = select.value;
-        const character = getCharacterById(id); // Assumes this function exists in characters.js
+        const character = getCharacterById(id);
         if (character) {
             document.getElementById('editName').value = character.name || '';
             document.getElementById('editAge').value = character.age || '';
@@ -297,14 +297,25 @@ function handleButtonClick(e) {
         console.log('Close modal clicked');
         matched = true;
     }
+    if (target.matches('.view-report')) {
+        console.log('View report clicked');
+        matched = true;
+    }
 
     if (!matched && (target.tagName === 'BUTTON' || target.tagName === 'A')) {
         console.warn(`Unmatched click: tag=${target.tagName}, class=${target.className}, id=${target.id || 'unknown'}, data-tab=${target.getAttribute('data-tab') || 'none'}`);
     }
 }
 
+let listenersBound = false;
+
 function bindEventListeners() {
     try {
+        if (listenersBound) {
+            console.log('Event listeners already bound, skipping');
+            return;
+        }
+
         document.addEventListener('click', handleButtonClick, { capture: true });
 
         const editSelect = document.querySelector('.edit-select');
@@ -319,6 +330,7 @@ function bindEventListeners() {
         }
 
         console.log('Event listeners bound for: click');
+        listenersBound = true;
     } catch (err) {
         console.error('Error binding event listeners:', err);
     }
@@ -332,8 +344,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         showTab('create');
 
         bindEventListeners();
-        setTimeout(bindEventListeners, 2000);
-        setTimeout(bindEventListeners, 5000);
 
         console.log('Page loaded, initialized create tab and event listeners');
     } catch (err) {
