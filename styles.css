@@ -82,7 +82,7 @@ nav a:hover {
 
 /* Main Content */
 main {
-    padding-top: calc(var(--header-height, 64px) + var(--nav-height, 56px) + 2rem);
+    padding-top: calc(var(--header-height, 64px) + var(--nav-height, 56px) + 3rem);
     padding-bottom: calc(var(--footer-height, 48px) + 2rem);
     padding-left: 1rem;
     padding-right: 1rem;

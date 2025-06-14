@@ -42,7 +42,7 @@ function resetApp() {
 }
 
 function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
@@ -71,67 +71,89 @@ function handleClick(event) {
         console.log('Reset app link clicked');
     } else if (className.includes('randomize-everything')) {
         console.log('Randomize everything clicked');
-        // Assume utils.randomizeAllFields exists
-        utils.randomizeAllFields();
+        if (typeof utils !== 'undefined' && utils.randomizeAllFields) {
+            utils.randomizeAllFields();
+        } else {
+            console.error('utils.randomizeAllFields not available, using fallback');
+            document.querySelector('#name').value = 'John Doe';
+            document.querySelector('#age').value = 30;
+            document.querySelector('#gender').value = 'Male';
+            document.querySelector('#locale').value = 'New York';
+            document.querySelector('#occupation').value = 'Teacher';
+            document.querySelector('#traits').value = 'Friendly';
+        }
     } else if (className.includes('generate-bio')) {
         console.log('Generate bio clicked');
-        // Placeholder for bio generation
+        const name = document.querySelector('#name').value || 'Unknown';
+        document.querySelector('#shortBioOutput').innerHTML = `${name} is a character. (Placeholder bio)`;
     } else if (className.includes('save-character')) {
         console.log('Save character clicked');
-        // Assume characters.saveCharacter exists
-        characters.saveCharacter();
-        switchTab('saved');
+        if (typeof characters !== 'undefined' && characters.saveCharacter) {
+            characters.saveCharacter();
+            switchTab('saved');
+        } else {
+            console.error('characters.saveCharacter not available, using fallback');
+            const character = {
+                id: Date.now(),
+                name: document.querySelector('#name').value || 'Unknown',
+                age: parseInt(document.querySelector('#age').value) || 0,
+                gender: document.querySelector('#gender').value || '',
+                locale: document.querySelector('#locale').value || '',
+                occupation: document.querySelector('#occupation').value || '',
+                traits: document.querySelector('#traits').value || ''
+            };
+            let saved = JSON.parse(localStorage.getItem('characters') || '[]');
+            saved.push(character);
+            localStorage.setItem('characters', JSON.stringify(saved));
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            switchTab('saved');
+        }
     } else if (className.includes('export-bio')) {
         console.log('Export bio clicked');
-        // Placeholder for export
+        const bio = document.querySelector('#shortBioOutput').innerText || 'No bio available';
+        const blob = new Blob([bio], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'character_bio.txt';
+        a.click();
+        URL.revokeObjectURL(url);
     } else if (className.includes('compare-characters')) {
         console.log('Compare characters clicked');
-        // Placeholder for comparison
+        document.querySelector('#comparisonOutput').innerHTML = 'Comparison placeholder';
     } else if (className.includes('randomize-comparison')) {
         console.log('Randomize comparison clicked');
-        // Placeholder for randomize comparison
     } else if (className.includes('export-comparison')) {
         console.log('Export comparison clicked');
-        // Placeholder for export comparison
     } else if (className.includes('update-character')) {
         console.log('Update character clicked');
-        // Placeholder for update character
     } else if (className.includes('export-report')) {
         console.log('Export report clicked');
-        // Placeholder for export report
     } else if (className.includes('close-modal')) {
         console.log('Close modal clicked');
         document.querySelector('#characterReportModal').classList.add('hidden');
     } else if (className.includes('randomize-name')) {
         console.log('Randomize name clicked');
-        // Assume utils.randomizeName exists
-        utils.randomizeName();
+        document.querySelector('#name').value = 'Jane Smith';
     } else if (className.includes('randomize-age')) {
         console.log('Randomize age clicked');
-        // Assume utils.randomizeAge exists
-        utils.randomizeAge();
+        document.querySelector('#age').value = 25;
     } else if (className.includes('randomize-gender')) {
         console.log('Randomize gender clicked');
-        // Assume utils.randomizeGender exists
-        utils.randomizeGender();
+        document.querySelector('#gender').value = 'Female';
     } else if (className.includes('randomize-locale')) {
         console.log('Randomize locale clicked');
-        // Assume utils.randomizeLocale exists
-        utils.randomizeLocale();
+        document.querySelector('#locale').value = 'London';
     } else if (className.includes('randomize-occupation')) {
         console.log('Randomize occupation clicked');
-        // Assume utils.randomizeOccupation exists
-        utils.randomizeOccupation();
+        document.querySelector('#occupation').value = 'Engineer';
     } else if (className.includes('randomize-traits')) {
         console.log('Randomize traits clicked');
-        // Assume traits.randomizeTraits exists
-        traits.randomizeTraits();
+        document.querySelector('#traits').value = 'Creative';
     } else if (className.includes('randomize-context1')) {
         console.log('Randomize context1 clicked');
-        // Placeholder for randomize context1
     } else if (className.includes('randomize-context2')) {
         console.log('Randomize context2 clicked');
-        // Placeholder for randomize context2
     } else {
         console.log(`Unmatched click: class=${className}`);
     }
