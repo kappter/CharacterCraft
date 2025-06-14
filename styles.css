@@ -65,6 +65,7 @@ nav a {
     transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
     color: var(--text-primary);
     background-color: var(--bg-primary);
+    text-decoration: none;
 }
 
 nav button:hover,
@@ -82,7 +83,7 @@ nav a:hover {
 
 /* Main Content */
 main {
-    padding-top: calc(var(--header-height, 64px) + var(--nav-height, 56px) + 3rem);
+    padding-top: calc(var(--header-height, 64px) + var(--nav-height, 56px) + 4rem);
     padding-bottom: calc(var(--footer-height, 48px) + 2rem);
     padding-left: 1rem;
     padding-right: 1rem;
@@ -299,6 +300,27 @@ body {
     padding: 1.5rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Trait Bubbles */
+.trait-bubbles-container {
+    padding: 2rem;
+    text-align: center;
+}
+
+.trait-bubble {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--accent-blue);
+    color: var(--button-text);
+    font-size: 0.875rem;
+    transition: transform 0.2s;
+}
+
+.trait-bubble:hover {
+    transform: scale(1.1);
 }
 
 /* Responsive Design */

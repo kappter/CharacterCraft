@@ -45,170 +45,63 @@
     <title>CharacterCraft - Trait Bubbles</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/CharacterCraft/styles.css">
-    <style>
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-        }
-        header, nav, footer, main, .container {
-            display: none;
-        }
-        .trait-bubbles-container {
-            padding: 2rem;
-            text-align: center;
-        }
-        .trait-bubble {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            margin: 0.5rem;
-            border-radius: 9999px;
-            background-color: var(--accent-blue);
-            color: var(--button-text);
-            font-size: 0.875rem;
-            transition: transform 0.2s;
-        }
-        .trait-bubble:hover {
-            transform: scale(1.1);
-        }
-        a {
-            display: block;
-            margin-top: 1rem;
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-        a:hover {
-            color: var(--accent-blue-hover);
-        }
-    </style>
 </head>
 <body>
-    <div class="trait-bubbles-container">
-        <h2>Trait Bubbles</h2>
-        <p>Visualize character traits (placeholder).</p>
-        <div class="trait-bubble">Barrel Chest</div>
-        <div class="trait-bubble">Skeptical Pragmatism</div>
-        <a href="/CharacterCraft/index.html">Back to CharacterCraft</a>
-    </div>
+    <header>
+        <div class="flex items-center">
+            <img src="/CharacterCraft/cclogo.png" alt="CharacterCraft Logo" class="h-10 mr-2" onerror="this.src='https://via.placeholder.com/40';">
+            <h1>CharacterCraft</h1>
+        </div>
+        <div class="flex items-center">
+            <label class="mr-2">Theme:</label>
+            <input type="checkbox" id="theme-toggle" class="toggle">
+        </div>
+    </header>
+    <nav>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html'">Create Character</button>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html#compare-tab'">Compare Characters</button>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html#traits-tab'">Trait List</button>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html#saved-tab'">Saved Characters</button>
+        <a href="/CharacterCraft/trait_bubbles.html" class="trait-bubbles-link">Trait Bubbles</a>
+        <button class="reset-app">Reset App</button>
+    </nav>
+    <main class="container">
+        <div class="trait-bubbles-container">
+            <h2>Trait Bubbles</h2>
+            <p>Visualize character traits.</p>
+            <div class="trait-bubble">Barrel Chest</div>
+            <div class="trait-bubble">Skeptical Pragmatism</div>
+            <a href="/CharacterCraft/index.html">Back to CharacterCraft</a>
+        </div>
+    </main>
+    <footer>
+        <p>© 2025 CharacterCraft. All rights reserved.</p>
+    </footer>
+    <script>
+        const themeToggle = document.querySelector('#theme-toggle');
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.checked = newTheme === 'dark';
+            console.log(`Theme toggled to: ${newTheme}`);
+        }
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.checked = savedTheme === 'dark';
+            console.log(`Initialized theme: ${savedTheme}`);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTheme();
+            themeToggle.addEventListener('change', toggleTheme);
+            document.querySelector('.reset-app').addEventListener('click', () => {
+                localStorage.clear();
+                console.log('App reset');
+                window.location.href = '/CharacterCraft/index.html';
+            });
+        });
+    </script>
 </body>
 </html>
-```
-
-#### 8. Disable `MindStudio` (Critical)
-`MindStudio` is interfering with scripts and buttons.
-
-- **Steps**:
-  1. **Chrome**:
-     - Three-dot menu > `Extensions` > `Manage Extensions`.
-     - Find `MindStudio`, toggle off, or click “Remove.”
-     - Restart Chrome.
-  2. **Safari** (if applicable):
-     - Safari > Settings > Extensions.
-     - Find `MindStudio`, toggle off or uninstall.
-     - Restart Safari.
-  3. **Quick Alternative** (Demo Must-Do):
-     - Open incognito window (Chrome: Ctrl+Shift+N; Safari: Cmd+Shift+N).
-     - Navigate to `https://kappter.github.io/CharacterCraft/index.html`.
-  4. **Verify**:
-     - Console (F12 > Console): No `[MindStudio][Content]` log.
-
-### Testing Instructions (3 Hours 8 Minutes to Demo)
-
-1. **Update Files**:
-   - Upload `index.html`, `styles.css`, `script.js`, `utils.js`, `characters.js`, `traits.js`, `trait_bubbles.html` to `https://github.com/kappter/CharacterCraft/`.
-   - Push:
-     ```bash
-     git add index.html styles.css script.js utils.js characters.js traits.js trait_bubbles.html
-     git commit -m "Emergency fix: buttons, overlap, UI, dark mode, trait bubbles"
-     git push origin main
-     ```
-   - Wait 2 minutes, refresh `https://kappter.github.io/CharacterCraft/` files.
-
-2. **Clear Cache**:
-   - **Chrome**: F12 > Network > Right-click refresh → “Empty Cache and Hard Reload.”
-   - **Safari**: Cmd+Option+R.
-   - Use incognito mode.
-
-3. **Disable `MindStudio`**:
-   - Follow steps above, test in incognito.
-   - Confirm no `[MindStudio][Content]` log.
-
-4. **Test Styling**:
-   - Open `https://kappter.github.io/CharacterCraft/` in incognito.
-   - **Expect**:
-     - Header (logo, title, theme toggle) at top, no overlap.
-     - Nav below header, footer at bottom, no overlap.
-     - “Create” fields (Name, Age, etc.) fully visible.
-     - “Compare” dropdowns, inputs, buttons visible.
-     - Clean UI: Inter font, shadows, hover effects, transitions.
-     - Dark mode: Toggle to dark (dark background, light text).
-   - **Verify**:
-     - F12 > Elements: `<main>` has `padding-top: calc(64px + 56px + 3rem)`.
-     - Network: `styles.css`, `utils.js`, `characters.js`, `traits.js`, `trait_bubbles.html` status 200.
-     - Console: No errors.
-
-5. **Test Buttons (Focus “Create”)**:
-   - **Randomize**:
-     - “Randomize Everything”: Fields populate (e.g., “Randomized name: Emma Johnson”).
-     - Individual: “Randomize Name,” “Randomize Age,” etc. (e.g., “Randomize name clicked”).
-   - **Create**:
-     - “Generate Bio”: Bio in `shortBioOutput` (e.g., “John Doe is a character...”).
-     - “Save Character”: Saves, switches to “Saved” (e.g., “Character saved: John Doe”).
-     - “Export Bio”: Downloads `character_bio.txt`.
-   - **Navigation**:
-     - Tabs: “Create,” “Compare,” “Traits,” “Saved,” “Trait Bubbles” (e.g., “Tab button clicked: create”).
-     - “Trait Bubbles”: Loads `trait_bubbles.html`.
-   - **Compare**:
-     - “Compare Characters”: Updates `comparisonOutput`.
-     - “Export Comparison”: Downloads `comparison_report.txt`.
-   - **Saved**:
-     - “Update Character”: Updates character.
-     - “Export Report”: Downloads `character_report.txt`.
-
-6. **Test Dark Mode**:
-   - Toggle theme: Verify dark background, light text.
-   - Console: “Theme toggled to: dark”.
-
-7. **Test Trait Bubbles**:
-   - Click “Trait Bubbles”: Loads `trait_bubbles.html` with placeholders.
-
-8. **Check Logs**:
-   - **Expect**:
-     - “Click detected: event=click, tag=[tag], class=[class]...”.
-     - Button logs (e.g., “Generate bio clicked”).
-     - No “utils is not defined” or “characters.saveCharacter is not a function”.
-   - **Errors**: Share (e.g., “utils.js 404”).
-   - **Unmatched Clicks**: Note failing buttons.
-
-9. **Verify Features**:
-   - **Styling**: No overlap, clean UI.
-   - **Dark Mode**: Toggles correctly.
-   - **Trait Bubbles**: Loads.
-   - **Randomization**: Fields populate.
-   - **Save**: Characters saved (console: “Characters displayed: 1”).
-   - **Export**: Files download.
-   - **Bio**: Appears in `shortBioOutput`.
-
-### If Issues Persist
-- **Buttons Fail**:
-  - Share errors (e.g., “utils.js 404”).
-  - Check Network tab for script 404s.
-  - Confirm `MindStudio` disabled.
-  - Inspect buttons: Verify classes (e.g., `<button class="generate-bio">`).
-- **Overlap**:
-  - Share screenshot.
-  - F12: Confirm `<main>` padding.
-- **UI/Dark Mode**:
-  - Describe issues (e.g., “no shadows”).
-  - Share `styles.css`.
-- **Trait Bubbles**:
-  - Network: Check `trait_bubbles.html` status.
-- **Demo**:
-  - By 10:30 AM MDT, share logs/screenshots.
-  - Focus on incognito, “Create” tab.
-  - Workaround: Demo “Generate Bio” fallback.
-
-### Notes
-The updated files fix JavaScript errors with fallbacks, increase padding to prevent overlap, restore a clean UI, and repair dark mode. `MindStudio` must be disabled. With 3 hours 8 minutes, prioritize incognito, uploading files, and testing “Create”. Share logs by 10:30 AM MDT if issues remain. We’ll get it demo-ready! 😊 Test now, disable `MindStudio`, and let me know any problems.
