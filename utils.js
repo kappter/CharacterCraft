@@ -147,9 +147,7 @@ function initThemeToggle() {
         const html = document.documentElement;
         const savedTheme = localStorage.getItem('theme') || 'light';
         html.setAttribute('data-theme', savedTheme);
-        if (savedTheme === 'dark') {
-            toggleCheckbox.checked = true;
-        }
+        toggleCheckbox.checked = savedTheme === 'dark';
 
         toggleCheckbox.addEventListener('change', () => {
             const newTheme = toggleCheckbox.checked ? 'dark' : 'light';

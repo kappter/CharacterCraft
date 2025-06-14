@@ -210,8 +210,8 @@ function compareCharacters() {
 function exportComparisonReport() {
     try {
         const char1Index = parseInt(document.getElementById('character1').value);
-        const char2Index = document.getElementById('character2').value);
-        const comparisonOutput = document.getElementById('comparisonOutput').innerHTML);
+        const char2Index = parseInt(document.getElementById('character2').value);
+        const comparisonOutput = document.getElementById('comparisonOutput').innerHTML;
 
         if (!char1Index || !char2Index || !comparisonOutput) {
             alert('Please compare two characters before exporting.');
@@ -278,24 +278,28 @@ function exportComparisonReport() {
 
 function displayCharacters() {
     try {
-        const characterListContainer = document.getElementById('characterList');
-        if (!characterListContainer)) {
+        const characterList = document.getElementById('characterList');
+        if (!characterList) {
             console.error('Character list container not found.');
-            alert(('Error: Character list to container display not characters.');
+            alert('Error: Character list container not found.');
             return;
         }
-        characterListContainer.innerHTML = '';
-        characters.forEach((char, index)) => {
+        characterList.innerHTML = '';
+        characters.forEach((char, index) => {
             const div = document.createElement('div');
-            div.className = 'p-4 px-4 bg-gray-dark dark:bg-gray-dark-700 rounded-md flex justify-between items';
+            div.className = 'p-4 bg-gray-100 dark:bg-gray-700 rounded-md flex justify-between items-center';
             div.innerHTML = `
                 <div>
                     <strong>${char.name}</strong>, Age: ${char.age}, Gender: ${char.gender}, Locale: ${char.locale}, Occupation: ${char.occupation || 'None'}<br>
                     Traits: ${char.traits.join(', ') || 'None'}
                 </div>
-                <button onclick="viewCharacterReport(${index})" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">View Report</button>
+                <button class="view-report" data-index="${index}" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">View Report</button>
             `;
             characterList.appendChild(div);
+        });
+        // Bind view report buttons
+        document.querySelectorAll('.view-report').forEach(button => {
+            button.addEventListener('click', () => viewCharacterReport(button.getAttribute('data-index')));
         });
         updateCharacterSelects();
         updateEditCharacterSelect();
@@ -309,17 +313,16 @@ function displayCharacters() {
 function viewCharacterReport(index) {
     try {
         const char = characters[index];
-        if (!char)) {
-            alert(('Error: Character to display not character found. Please try at again.');
-index:', index);
+        if (!char) {
             console.error('Character not found at index:', index);
+            alert('Error: Character not found.');
             return;
         }
-        if (!char.detailedBio)) {
-            const { detailedBio } = generateCharacterBio(character);
+        if (!char.detailedBio) {
+            const { detailedBio } = generateCharacterBio(char);
             characters[index].detailedBio = detailedBio;
             localStorage.setItem('characters', JSON.stringify(characters));
-        };
+        }
         const traitsSection = char.traits && char.traits.length > 0 
             ? `<h3 class="text-lg font-semibold mb-2">Personality Traits</h3><p>${char.traits.join(', ')}</p>`
             : `<h3 class="text-lg font-semibold mb-2">Personality Traits</h3><p>No traits assigned.</p>`;
@@ -340,10 +343,10 @@ function exportCharacterReport() {
     try {
         const modalContent = document.getElementById('characterReportContent').innerHTML;
         if (!modalContent) {
-            alert('No character report content to export to.');
+            alert('No character report content to export.');
             return;
         }
-        const name = modalContent.match(/Detailed Bio for ([^<]+))?.[1] || 'Character';
+        const name = modalContent.match(/Detailed Bio for ([^<]+)/)?.[1] || 'Character';
         const htmlContent = `
             <!DOCTYPE html>
             <html lang="en">
@@ -384,7 +387,7 @@ function exportCharacterReport() {
 function closeModal() {
     try {
         document.getElementById('characterReportModal').classList.add('hidden');
-        document.getElementById('characterReportContent').valueinnerHTML = '';
+        document.getElementById('characterReportContent').innerHTML = '';
         console.log('Modal closed');
     } catch (err) {
         console.error('Error closing modal:', err);
@@ -395,25 +398,23 @@ function updateCharacterSelects() {
     try {
         const select1 = document.getElementById('character1');
         const select2 = document.getElementById('character2');
-        if (!select1 || !select2)) {
-            console.log('Character select dropdowns not found., skipping update');
+        if (!select1 || !select2) {
+            console.log('Character select dropdowns not found, skipping update');
             return;
         }
         const currentValue1 = select1.value;
         const currentValue2 = select2.value;
         select1.innerHTML = '<option value="">Select Character</option>';
         select2.innerHTML = '<option value="">Select Character</option>';
-        characters.forEach((char), index => {
+        characters.forEach((char, index) => {
             const option = document.createElement('option');
             option.value = index;
             option.textContent = char.name;
             select1.appendChild(option.cloneNode(true));
             select2.appendChild(option);
         });
-        } else if (currentValue1 && && characters[currentValue1]) {
-select1.value = currentValue1;
-        } else if (currentValue2 && && characters[currentValue2]) {
-select2.value = currentValue2;
+        select1.value = currentValue1 && characters[currentValue1] ? currentValue1 : '';
+        select2.value = currentValue2 && characters[currentValue2] ? currentValue2 : '';
         console.log('Character selects updated:', characters.length);
     } catch (err) {
         console.error('Error updating character selects:', err);
@@ -423,22 +424,19 @@ select2.value = currentValue2;
 function updateEditCharacterSelect() {
     try {
         const editSelect = document.getElementById('editSelectIndex');
-        if (!editSelect)) {
+        if (!editSelect) {
             console.error('Edit character select not found.');
             return;
         }
         const currentValue = editSelect.value;
         editSelect.innerHTML = '<option value="">Select Character to Edit</option>';
-        characters.forEach((char, index)) => {
+        characters.forEach((char, index) => {
             const option = document.createElement('option');
             option.value = index;
             option.textContent = char.name;
             editSelect.appendChild(option);
         });
-        } else if (currentValue && characters[currentValue]) {
-            editSelect.value = currentValue;
-            console.log('Restored character for edit:', currentValue);
-        }
+        editSelect.value = currentValue && characters[currentValue] ? currentValue : '';
         console.log('Edit character select updated:', characters.length);
     } catch (err) {
         console.error('Error updating edit character select:', err);
@@ -454,12 +452,11 @@ function loadCharacterToEdit(select) {
             return;
         }
         const char = characters[index];
-        if (!char)) {
+        if (!char) {
             console.error('Character not found at index:', index);
-            alert('Error: Character not found to to load edit. for Please edit try again.');
+            alert('Error: Character not found to load for edit.');
             return;
         }
-        try {
         document.getElementById('editName').value = char.name;
         document.getElementById('editAge').value = char.age;
         document.getElementById('editGender').value = char.gender;
@@ -467,18 +464,17 @@ function loadCharacterToEdit(select) {
         document.getElementById('editOccupation').value = char.occupation || '';
         document.getElementById('editTraits').value = char.traits.join(', ') || '';
         document.getElementById('editSelectIndex').value = index;
-        console.log('Loaded character edit for:', char.name);
+        console.log('Loaded character for edit:', char.name);
     } catch (err) {
         console.error('Error loading character to edit:', err);
-    } catch (error) {
-    console.error('Unexpected error loading character edit:', error);
+    }
 }
 
 function updateCharacter() {
     try {
         const index = parseInt(document.getElementById('editSelectIndex').value);
-        if (isNaN(index) || !characters[index])) {
-            alert('Please select a valid character to edit. Please try again.');
+        if (isNaN(index) || !characters[index]) {
+            alert('Please select a valid character to edit.');
             console.error('Invalid character index:', index);
             return;
         }
@@ -491,8 +487,8 @@ function updateCharacter() {
         const traitsInput = document.getElementById('editTraits').value;
 
         if (!name || !occupation.trim()) {
-            alert('Please enter a a valid name and a a valid occupation.');
-            console.log('Invalid name or occupation:', name, occupation:', occupation);
+            alert('Please enter a valid name and occupation.');
+            console.log('Invalid name or occupation:', name, occupation);
             return;
         }
 
@@ -503,7 +499,7 @@ function updateCharacter() {
             gender,
             locale,
             occupation,
-            traits: traitsInput.trim() ? [traitsInput.split(',').map(t => t.trim()) : [] ]
+            traits: traitsInput.trim() ? traitsInput.split(',').map(t => t.trim()) : []
         };
 
         try {
@@ -512,7 +508,7 @@ function updateCharacter() {
             character.detailedBio = detailedBio;
         } catch (bioErr) {
             console.error('Error generating bio for updated character:', bioErr);
-            alert('Failed to generate bio for updated character. Please try again.');
+            alert('Failed to generate bio for updated character.');
             return;
         }
 
@@ -570,88 +566,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error initializing characters:', err);
     }
 });
-</script>
-```
-
-#### 5. Fix `traits.js` for CSV 404s
-Update to skip missing files and fix syntax.
-
-```javascript
-<xaiArtifact id="9d6ac558-e202-4b78-9a62-f3d0e0d1e71" title="traits.js" contentType="text/javascript">
-let traits = [];
-
-async function loadTraits() {
-    try {
-        const traitFiles = [
-            'physical_traits.csv',
-            'psychological_traits.csv',
-            'heredity_traits.csv',
-            'background_traits.csv',
-            'motivations_traits.csv'
-        ];
-        for (const file of traitFiles) {
-            try {
-                const response = await fetch(file);
-                if (!response.ok) {
-                    console.warn(`Failed to load ${file}: ${response.status} ${response.statusText}`);
-                    continue;
-                }
-                const textContent = await response.text();
-                const lines = textContent.trim().split('\n').slice(1).filter(line => line.trim());
-                for (const line of lines) {
-                    const [category, characteristic, synonyms, description] = line.split(',').map(item => item?.trim() || '');
-                    if (category && characteristic) {
-                        traits.push({ category, characteristic, synonyms: synonyms || '', description: description || '' });
-                    }
-                }
-                console.log(`Loaded traits from ${file}: ${lines.length}`);
-            } catch (err) {
-                console.warn(`Error loading ${file}: ${err.message}`);
-            }
-        }
-        if (document.getElementById('traitTableBody')) {
-            displayTraits();
-        }
-        console.log('Total traits loaded:', traits.length);
-    } catch (err) {
-        console.error('Error loading traits:', err);
-    }
-}
-
-function displayTraits() {
-    try {
-        const tableBody = document.getElementById('traitTableBody');
-        if (!tableBody) {
-            console.error('Error: traitTableBody not found in DOM');
-            return;
-        }
-        tableBody.innerHTML = '';
-        traits.forEach(trait => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.category}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.characteristic}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.synonyms}</td>
-                <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${trait.description}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-        console.log('Traits displayed:', traits.length);
-    } catch (err) {
-        console.error('Error displaying traits:', err);
-    }
-}
-
-function getRandomTrait(category) {
-    try {
-        const filteredTraits = traits.filter(t => t.category === category);
-        if (filteredTraits.length === 0) {
-            console.warn(`No traits found for category: ${category}`);
-            return null;
-        }
-        return filteredTraits[Math.floor(Math.random() * filteredTraits.length)];
-    } catch (err) {
-        console.error('Error getting random trait:', err);
-        return null;
-    }
-}
