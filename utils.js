@@ -1,51 +1,58 @@
-const utils = {
-    randomizationData: {
-        firstNames: ['Emma', 'Liam', 'Olivia', 'Noah', 'Ava'],
-        lastNames: ['Johnson', 'Smith', 'Brown', 'Taylor', 'Wilson'],
-        genders: ['Male', 'Female', 'Non-binary'],
-        locales: ['New York', 'London', 'Tokyo', 'Paris', 'Sydney'],
-        occupations: ['Engineer', 'Teacher', 'Doctor', 'Artist', 'Writer'],
-        ageRanges: ['18-25', '26-35', '36-50', '51-75']
-    },
-    randomizeName() {
-        const first = this.randomizationData.firstNames[Math.floor(Math.random() * this.randomizationData.firstNames.length)];
-        const last = this.randomizationData.lastNames[Math.floor(Math.random() * this.randomizationData.lastNames.length)];
-        document.querySelector('#name').value = `${first} ${last}`;
-        console.log(`Randomized name: ${first} ${last}`);
-    },
-    randomizeAge() {
-        const range = this.randomizationData.ageRanges[Math.floor(Math.random() * this.randomizationData.ageRanges.length)];
-        const [min, max] = range.split('-').map(Number);
-        const age = Math.floor(Math.random() * (max - min + 1)) + min;
-        document.querySelector('#age').value = age;
-        console.log(`Randomized age: ${age}`);
-    },
-    randomizeGender() {
-        const gender = this.randomizationData.genders[Math.floor(Math.random() * this.randomizationData.genders.length)];
-        document.querySelector('#gender').value = gender;
-        console.log(`Randomized gender: ${gender}`);
-    },
-    randomizeLocale() {
-        const locale = this.randomizationData.locales[Math.floor(Math.random() * this.randomizationData.locales.length)];
-        document.querySelector('#locale').value = locale;
-        console.log(`Randomized locale: ${locale}`);
-    },
-    randomizeOccupation() {
-        const occupation = this.randomizationData.occupations[Math.floor(Math.random() * this.randomizationData.occupations.length)];
-        document.querySelector('#occupation').value = occupation;
-        console.log(`Randomized occupation: ${occupation}`);
-    },
-    randomizeAllFields() {
-        this.randomizeName();
-        this.randomizeAge();
-        this.randomizeGender();
-        this.randomizeLocale();
-        this.randomizeOccupation();
-        traits.randomizeTraits();
-        console.log('Randomized all fields');
-    }
+const randomizationData = {
+    firstNames: ['John', 'Jane', 'Alex', 'Sam', 'Taylor'],
+    lastNames: ['Smith', 'Doe', 'Brown', 'Taylor', 'Wilson'],
+    genders: ['Male', 'Female', 'Non-binary'],
+    locales: ['New York', 'London', 'Tokyo', 'Paris', 'Sydney'],
+    occupations: ['Engineer', 'Artist', 'Teacher', 'Doctor', 'Writer'],
+    ages: Array.from({ length: 80 }, (_, i) => i + 18)
 };
 
+function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function randomizeName() {
+    const firstName = getRandomItem(randomizationData.firstNames);
+    const lastName = getRandomItem(randomizationData.lastNames);
+    const nameInput = document.querySelector('#name');
+    nameInput.value = `${firstName} ${lastName}`;
+    console.log(`Randomized name: ${nameInput.value}`);
+}
+
+function randomizeAge() {
+    const age = getRandomItem(randomizationData.ages);
+    document.querySelector('#age').value = age;
+    console.log(`Randomized age: ${age}`);
+}
+
+function randomizeGender() {
+    const gender = getRandomItem(randomizationData.genders);
+    document.querySelector('#gender').value = gender;
+    console.log(`Randomized gender: ${gender}`);
+}
+
+function randomizeLocale() {
+    const locale = getRandomItem(randomizationData.locales);
+    document.querySelector('#locale').value = locale;
+    console.log(`Randomized locale: ${locale}`);
+}
+
+function randomizeOccupation() {
+    const occupation = getRandomItem(randomizationData.occupations);
+    document.querySelector('#occupation').value = occupation;
+    console.log(`Randomized occupation: ${occupation}`);
+}
+
+function randomizeAllFields() {
+    randomizeName();
+    randomizeAge();
+    randomizeGender();
+    randomizeLocale();
+    randomizeOccupation();
+    console.log('Randomization data loaded:', randomizationData);
+    setTimeout(() => console.log('Randomization applied and persisted'), 100);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Randomization data loaded:', utils.randomizationData);
+    console.log('Randomization data loaded:', randomizationData);
 });
