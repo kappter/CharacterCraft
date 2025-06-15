@@ -45,292 +45,251 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval';">
     <title>CharacterCraft</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/CharacterCraft/css/styles.css">
+    <link rel="stylesheet" href="/CharacterCraft/styles.css">
     <style>
         /* Fallback CSS */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f9fafb;
-            color: #1f2937;
-            overflow-x: hidden;
-        }
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #fff;
-            padding: 0.75rem 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 48px;
-        }
-        nav {
-            position: fixed;
-            top: 48px;
-            left: 0;
-            right: 0;
-            background: #fff;
-            padding: 0.75rem 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            z-index: 999;
-            height: 48px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        main {
-            padding: 144px 0.5rem 80px;
-            min-height: calc(100vh - 96px);
-            position: relative;
-            z-index: 1;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #fff;
-            padding: 0.5rem;
-            text-align: center;
-            border-top: 1px solid #d1d5db;
-            font-size: 0.75rem;
-            z-index: 1000;
-            height: 40px;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 0.5rem; }
-        nav button, nav a {
-            margin: 0 0.25rem;
-            padding: 0.4rem 0.75rem;
-            border-radius: 0.25rem;
-            background: #f9fafb;
-            color: #1f2937;
-            text-decoration: none;
-            font-size: 0.875rem;
-            display: inline-block;
-        }
-        nav button:hover, nav a:hover { background: #e5e7eb; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9fafb; color: #1f2937; }
+        header { position: fixed; top: 0; left: 0; right: 0; background: #fff; padding: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        nav { position: fixed; top: 64px; left: 0; right: 0; background: #fff; padding: 0.5rem 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 999; }
+        main { padding: 180px 1rem 80px; min-height: calc(100vh - 144px); }
+        footer { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 0.5rem; text-align: center; border-top: 1px solid #d1d5db; font-size: 0.875rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        nav button { margin-right: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.375rem; background: #f9fafb; color: #1f2937; }
+        nav button:hover { background: #e5e7eb; }
         .tab-content { display: none; }
         .tab-content:not(.hidden) { display: block; }
-        input, select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-        button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-            margin: 0.25rem;
-        }
-        .randomize-everything { background: #6b7280; color: #fff; }
-        .randomize-everything:hover { background: #4b5563; }
+        input, select { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
+        button { padding: 0.75rem 1rem; border: none; border-radius: 0.375rem; cursor: pointer; }
+        .randomize-everything, .randomize-name, .randomize-age, .randomize-gender, .randomize-locale, .randomize-occupation, .randomize-traits { background: #6b7280; color: #fff; }
+        .randomize-everything:hover, .randomize-name:hover, .randomize-age:hover, .randomize-gender:hover, .randomize-locale:hover, .randomize-occupation:hover, .randomize-traits:hover { background: #4b5563; }
         .generate-bio { background: #3b82f6; color: #fff; }
         .generate-bio:hover { background: #2563eb; }
         .save-character { background: #10b981; color: #fff; }
         .save-character:hover { background: #059669; }
         .export-bio { background: #8b5cf6; color: #fff; }
         .export-bio:hover { background: #7c3aed; }
-        .randomize-name, .randomize-age, .randomize-gender, .randomize-locale, .randomize-occupation, .randomize-traits {
-            background: #6b7280;
-            color: #fff;
-            font-size: 0.875rem;
-        }
-        .randomize-name:hover, .randomize-age:hover, .randomize-gender:hover, .randomize-locale:hover, .randomize-occupation:hover, .randomize-traits:hover {
-            background: #4b5563;
-        }
-        #shortBioOutput {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-        }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #d1d5db; padding: 0.5rem; font-size: 0.875rem; }
+        #shortBioOutput { margin-top: 1rem; padding: 1rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
         [data-theme="dark"] body { background: #111827; color: #f3f4f6; }
-        [data-theme="dark"] header { background: #1f2937; border-bottom: 1px solid #4b5563; }
-        [data-theme="dark"] nav { background: #1f2937; }
-        [data-theme="dark"] footer { background: #1f2937; border-top: 1px solid #4b5563; }
-        [data-theme="dark"] nav button, [data-theme="dark"] nav a { background: #111827; color: #f3f4f6; }
-        [data-theme="dark"] nav button:hover, [data-theme="dark"] nav a:hover { background: #4b5563; }
-        [data-theme="dark"] input, [data-theme="dark"] select { background: #1f2937; border: 1px solid #4b5563; color: #f3f4f6; }
-        [data-theme="dark"] #shortBioOutput { background: #1f2937; border: 1px solid #4b5563; }
-        [data-theme="dark"] th, td { border-color: #4b5563; }
-        @media (max-width: 640px) {
-            header { padding: 0.5rem; height: 40px; }
-            nav { padding: 0.5rem; height: 40px; }
-            main { padding: 120px 0.25rem 72px; }
-            footer { padding: 0.25rem; height: 32px; font-size: 0.625rem; }
-            nav button, nav a { padding: 0.25rem 0.5rem; font-size: 0.75rem; margin: 0 0.1rem; }
-            input, select, button { padding: 0.4rem; font-size: 0.75rem; }
-            #shortBioOutput { padding: 0.5rem; font-size: 0.75rem; }
-        }
+        [data-theme="dark"] header, [data-theme="dark"] nav, [data-theme="dark"] footer { background: #1f2937; border-color: #4b5563; }
+        [data-theme="dark"] nav button { background: #111827; color: #f3f4f6; }
+        [data-theme="dark"] nav button:hover { background: #4b5563; }
+        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] #shortBioOutput { background: #1f2937; border: 1px solid #4b5563; color: #f3f4f6; }
     </style>
-    <script src="/CharacterCraft/js/utils.js" defer></script>
-    <script src="/CharacterCraft/js/traits.js" defer></script>
-    <script src="/CharacterCraft/js/characters.js" defer></script>
-    <script src="/CharacterCraft/js/script.js" defer></script>
+    <script src="/CharacterCraft/utils.js" defer></script>
+    <script src="/CharacterCraft/traits.js" defer></script>
+    <script src="/CharacterCraft/characters.js" defer></script>
+    <script src="/CharacterCraft/script.js" defer></script>
 </head>
 <body>
     <header>
         <div class="flex items-center">
-            <img src="/CharacterCraft/images/cclogo.png" alt="CharacterCraft Logo" style="height: 32px;" onerror="this.src='https://via.placeholder.com/32';">
-            <h1 style="font-size: 1.5rem;">CharacterCraft</h1>
+            <img src="/CharacterCraft/cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='https://via.placeholder.com/32';">
+            <h1 class="text-xl font-bold">CharacterCraft</h1>
         </div>
         <div class="flex items-center">
-            <label class="mr-2" style="font-size: 0.875rem;">Theme:</label>
+            <label class="mr-2 text-sm">Dark Mode</label>
             <input type="checkbox" id="theme-toggle" class="toggle">
         </div>
     </header>
     <nav>
-        <button class="tab-button" data-tab="create">Create Character</button>
-        <button class="tab-button" data-tab="compare">Compare Characters</button>
-        <button class="tab-button" data-tab="traits">Trait List</button>
-        <button class="tab-button" data-tab="saved">Saved Characters</button>
-        <a href="/CharacterCraft/nav/trait_bubble.html" class="trait-bubbles-link">Trait Bubbles</a>
-        <button class="reset-app">Reset App</button>
+        <button class="tab-button" data-tab="create">Create</button>
+        <button class="tab-button" data-tab="compare">Compare</button>
+        <button class="tab-button" data-tab="traits">Traits</button>
+        <button class="tab-button" data-tab="saved">Saved</button>
+        <button class="tab-button" data-tab="trait_bubbles">Trait Bubbles</button>
+        <button class="reset-app text-sm">Reset</button>
     </nav>
     <main class="container">
         <div id="create-tab" class="tab-content">
-            <h2>Create Character</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="name" class="block mb-1">Name</label>
-                    <input type="text" id="name">
-                    <button class="randomize-name">Randomize</button>
+            <div class="two-column">
+                <div class="column">
+                    <h2 class="text-lg font-semibold mb-4">Create Character</h2>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label for="name" class="block text-sm mb-1">Name</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="name" class="flex-1">
+                                <button class="randomize-name text-sm">Random</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="age" class="block text-sm mb-1">Age</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="age" class="flex-1">
+                                <button class="randomize-age text-sm">Random</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="gender" class="block text-sm mb-1">Gender</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="gender" class="flex-1">
+                                <button class="randomize-gender text-sm">Random</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="locale" class="block text-sm mb-1">Locale</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="locale" class="flex-1">
+                                <button class="randomize-locale text-sm">Random</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="occupation" class="block text-sm mb-1">Occupation</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="occupation" class="flex-1">
+                                <button class="randomize-occupation text-sm">Random</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="traits" class="block text-sm mb-1">Traits</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="traits" class="flex-1">
+                                <button class="randomize-traits text-sm">Random</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex gap-2">
+                        <button class="randomize-everything text-sm">Randomize All</button>
+                        <button class="generate-bio text-sm">Generate Bio</button>
+                        <button class="save-character text-sm">Save</button>
+                        <button class="export-bio text-sm" id="exportBioButton" disabled>Export Bio</button>
+                    </div>
                 </div>
-                <div>
-                    <label for="age" class="block mb-1">Age</label>
-                    <input type="number" id="age">
-                    <button class="randomize-age">Randomize</button>
-                </div>
-                <div>
-                    <label for="gender" class="block mb-1">Gender</label>
-                    <input type="text" id="gender">
-                    <button class="randomize-gender">Randomize</button>
-                </div>
-                <div>
-                    <label for="locale" class="block mb-1">Locale</label>
-                    <input type="text" id="locale">
-                    <button class="randomize-locale">Randomize</button>
-                </div>
-                <div>
-                    <label for="occupation" class="block mb-1">Occupation</label>
-                    <input type="text" id="occupation">
-                    <button class="randomize-occupation">Randomize</button>
-                </div>
-                <div>
-                    <label for="traits" class="block mb-1">Traits</label>
-                    <input type="text" id="traits">
-                    <button class="randomize-traits">Randomize</button>
+                <div class="column">
+                    <h3 class="text-md font-semibold mb-2">Bio Preview</h3>
+                    <div id="shortBioOutput" class="p-4 border rounded-md"></div>
                 </div>
             </div>
-            <div class="mt-4">
-                <button class="randomize-everything">Randomize Everything</button>
-                <button class="generate-bio">Generate Bio</button>
-                <button class="save-character">Save Character</button>
-                <button class="export-bio" id="exportBioButton">Export Bio</button>
-            </div>
-            <div id="shortBioOutput"></div>
         </div>
         <div id="compare-tab" class="tab-content hidden">
-            <h2>Compare Characters</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="character1" class="block mb-1">Character 1</label>
-                    <select id="character1">
-                        <option value="">Select Character</option>
-                    </select>
-                    <label for="context1" class="block mt-2 mb-1">Context</label>
-                    <input type="text" id="context1">
-                    <button class="randomize-context1">Randomize Context</button>
+            <div class="two-column">
+                <div class="column">
+                    <h2 class="text-lg font-semibold mb-4">Compare Characters</h2>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label for="character1" class="block text-sm mb-1">Character 1</label>
+                            <select id="character1">
+                                <option value="">Select Character</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="context1" class="block text-sm mb-1">Context</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="context1" class="flex-1">
+                                <button class="randomize-context1 text-sm">Random</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="character2" class="block text-sm mb-1">Character 2</label>
+                            <select id="character2">
+                                <option value="">Select Character</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="context2" class="block text-sm mb-1">Context</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="context2" class="flex-1">
+                                <button class="randomize-context2 text-sm">Random</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex gap-2">
+                        <button class="compare-characters text-sm">Compare</button>
+                        <button class="randomize-comparison text-sm">Randomize All</button>
+                        <button class="export-comparison text-sm">Export</button>
+                    </div>
                 </div>
-                <div>
-                    <label for="character2" class="block mb-1">Character 2</label>
-                    <select id="character2">
-                        <option value="">Select Character</option>
-                    </select>
-                    <label for="context2" class="block mt-2 mb-1">Context</label>
-                    <input type="text" id="context2">
-                    <button class="randomize-context2">Randomize Context</button>
+                <div class="column">
+                    <h3 class="text-md font-semibold mb-2">Comparison</h3>
+                    <div id="comparisonOutput" class="p-4 border rounded-md"></div>
                 </div>
             </div>
-            <div class="mt-4">
-                <button class="compare-characters">Compare Characters</button>
-                <button class="randomize-comparison">Randomize All</button>
-                <button class="export-comparison">Export Comparison</button>
-            </div>
-            <div id="comparisonOutput"></div>
         </div>
         <div id="traits-tab" class="tab-content hidden">
-            <h2>Trait List</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Characteristic</th>
-                        <th>Synonyms</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody id="traitTableBody"></tbody>
-            </table>
-        </div>
-        <div id="saved-tab" class="tab-content hidden">
-            <h2>Saved Characters</h2>
-            <div id="characterList"></div>
-            <h3>Edit Character</h3>
-            <select id="editSelectIndex" class="edit-select">
-                <option value="">Select Character</option>
-            </select>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="editName" class="block mb-1">Name</label>
-                    <input type="text" id="editName">
+            <div class="two-column">
+                <div class="column">
+                    <h2 class="text-lg font-semibold mb-4">Trait List</h2>
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="border p-2 text-sm">Category</th>
+                                <th class="border p-2 text-sm">Characteristic</th>
+                            </tr>
+                        </thead>
+                        <tbody id="traitTableBody"></tbody>
+                    </table>
                 </div>
-                <div>
-                    <label for="editAge" class="block mb-1">Age</label>
-                    <input type="number" id="editAge">
-                </div>
-                <div>
-                    <label for="editGender" class="block mb-1">Gender</label>
-                    <input type="text" id="editGender">
-                </div>
-                <div>
-                    <label for="editLocale" class="block mb-1">Locale</label>
-                    <input type="text" id="editLocale">
-                </div>
-                <div>
-                    <label for="editOccupation" class="block mb-1">Occupation</label>
-                    <input type="text" id="editOccupation">
-                </div>
-                <div>
-                    <label for="editTraits" class="block mb-1">Traits</label>
-                    <input type="text" id="editTraits">
+                <div class="column">
+                    <h3 class="text-md font-semibold mb-2">Trait Details</h3>
+                    <div id="traitDetails" class="p-4 border rounded-md">Select a trait to view details.</div>
                 </div>
             </div>
-            <button class="update-character">Update Character</button>
+        </div>
+        <div id="saved-tab" class="tab-content hidden">
+            <div class="two-column">
+                <div class="column">
+                    <h2 class="text-lg font-semibold mb-4">Saved Characters</h2>
+                    <div id="characterList" class="p-4 border rounded-md"></div>
+                </div>
+                <div class="column">
+                    <h3 class="text-md font-semibold mb-2">Edit Character</h3>
+                    <select id="editSelectIndex" class="edit-select mb-4">
+                        <option value="">Select Character</option>
+                    </select>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label for="editName" class="block text-sm mb-1">Name</label>
+                            <input type="text" id="editName">
+                        </div>
+                        <div>
+                            <label for="editAge" class="block text-sm mb-1">Age</label>
+                            <input type="number" id="editAge">
+                        </div>
+                        <div>
+                            <label for="editGender" class="block text-sm mb-1">Gender</label>
+                            <input type="text" id="editGender">
+                        </div>
+                        <div>
+                            <label for="editLocale" class="block text-sm mb-1">Locale</label>
+                            <input type="text" id="editLocale">
+                        </div>
+                        <div>
+                            <label for="editOccupation" class="block text-sm mb-1">Occupation</label>
+                            <input type="text" id="editOccupation">
+                        </div>
+                        <div>
+                            <label for="editTraits" class="block text-sm mb-1">Traits</label>
+                            <input type="text" id="editTraits">
+                        </div>
+                    </div>
+                    <button class="update-character text-sm mt-4">Update</button>
+                </div>
+            </div>
+        </div>
+        <div id="trait_bubbles-tab" class="tab-content hidden">
+            <div class="two-column">
+                <div class="column">
+                    <h2 class="text-lg font-semibold mb-4">Trait Bubbles</h2>
+                    <div id="traitBubbles" class="p-4 border rounded-md"></div>
+                </div>
+                <div class="column">
+                    <h3 class="text-md font-semibold mb-2">Selected Traits</h3>
+                    <div id="selectedTraits" class="p-4 border rounded-md">Click a bubble to view details.</div>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
-        <p>© 2025 CharacterCraft. All rights reserved.</p>
+        <p class="text-sm">© 2025 CharacterCraft. All rights reserved.</p>
     </footer>
     <div id="characterReportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div>
-            <h3>Character Report</h3>
-            <div id="characterReportContent"></div>
-            <button class="export-report">Export Report</button>
-            <button class="close-modal">Close</button>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full">
+            <h3 class="text-md font-semibold mb-4">Character Report</h3>
+            <div id="characterReportContent" class="mb-4"></div>
+            <div class="flex gap-2">
+                <button class="export-report text-sm">Export</button>
+                <button class="close-modal text-sm">Close</button>
+            </div>
         </div>
     </div>
 </body>

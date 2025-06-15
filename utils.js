@@ -41,7 +41,7 @@ const utils = {
         this.randomizeGender();
         this.randomizeLocale();
         this.randomizeOccupation();
-        document.querySelector('#traits').value = 'Creative';
+        traits.randomizeTraits();
         console.log('Randomized all fields');
     }
 };
