@@ -47,14 +47,11 @@ function handleClick(event) {
 
     if (tagName === 'BUTTON' && dataset.tab) {
         switchTab(dataset.tab);
-        console.log(`Tab button clicked: ${dataset.tab}`);
     } else if (className.includes('reset-app')) {
         resetApp();
     } else if (className.includes('randomize-everything')) {
-        console.log('Randomize everything clicked');
         utils.randomizeAllFields();
     } else if (className.includes('generate-bio')) {
-        console.log('Generate bio clicked');
         const char = {
             name: document.querySelector('#name').value || 'Unknown',
             age: document.querySelector('#age').value || 'Unknown',
@@ -66,11 +63,9 @@ function handleClick(event) {
         document.querySelector('#shortBioOutput').innerHTML = `${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, is characterized by ${char.traits}.`;
         document.querySelector('#exportBioButton').disabled = false;
     } else if (className.includes('save-character')) {
-        console.log('Save character clicked');
         characters.saveCharacter();
         switchTab('saved');
     } else if (className.includes('export-bio')) {
-        console.log('Export bio clicked');
         const bio = document.querySelector('#shortBioOutput').innerText || 'No bio available';
         const blob = new Blob([bio], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
@@ -80,7 +75,6 @@ function handleClick(event) {
         a.click();
         URL.revokeObjectURL(url);
     } else if (className.includes('compare-characters')) {
-        console.log('Compare characters clicked');
         const char1Id = document.querySelector('#character1').value;
         const char2Id = document.querySelector('#character2').value;
         const chars = JSON.parse(localStorage.getItem('characters') || '[]');
@@ -91,11 +85,9 @@ function handleClick(event) {
             <p><strong>${char2.name || 'None'}</strong>: ${char2.traits || ''}</p>
         `;
     } else if (className.includes('randomize-comparison')) {
-        console.log('Randomize comparison clicked');
         document.querySelector('#context1').value = 'Context A';
         document.querySelector('#context2').value = 'Context B';
     } else if (className.includes('export-comparison')) {
-        console.log('Export comparison clicked');
         const comparison = document.querySelector('#comparisonOutput').innerText || 'No comparison available';
         const blob = new Blob([comparison], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
@@ -105,10 +97,8 @@ function handleClick(event) {
         a.click();
         URL.revokeObjectURL(url);
     } else if (className.includes('update-character')) {
-        console.log('Update character clicked');
         characters.updateCharacter();
     } else if (className.includes('export-report')) {
-        console.log('Export report clicked');
         const report = document.querySelector('#characterReportContent').innerText || 'No report available';
         const blob = new Blob([report], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
@@ -118,34 +108,24 @@ function handleClick(event) {
         a.click();
         URL.revokeObjectURL(url);
     } else if (className.includes('close-modal')) {
-        console.log('Close modal clicked');
         document.querySelector('#characterReportModal').classList.add('hidden');
     } else if (className.includes('randomize-name')) {
-        console.log('Randomize name clicked');
         utils.randomizeName();
     } else if (className.includes('randomize-age')) {
-        console.log('Randomize age clicked');
         utils.randomizeAge();
     } else if (className.includes('randomize-gender')) {
-        console.log('Randomize gender clicked');
         utils.randomizeGender();
     } else if (className.includes('randomize-locale')) {
-        console.log('Randomize locale clicked');
         utils.randomizeLocale();
     } else if (className.includes('randomize-occupation')) {
-        console.log('Randomize occupation clicked');
         utils.randomizeOccupation();
     } else if (className.includes('randomize-traits')) {
-        console.log('Randomize traits clicked');
         traits.randomizeTraits();
     } else if (className.includes('randomize-context1')) {
-        console.log('Randomize context1 clicked');
         document.querySelector('#context1').value = 'Context A';
     } else if (className.includes('randomize-context2')) {
-        console.log('Randomize context2 clicked');
         document.querySelector('#context2').value = 'Context B';
     } else if (className.includes('trait-bubble')) {
-        console.log('Trait bubble clicked');
         document.querySelector('#selectedTraits').innerHTML = `Trait: ${event.target.textContent}`;
     }
 }
