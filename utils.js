@@ -15,32 +15,46 @@ function randomizeName() {
     const firstName = getRandomItem(randomizationData.firstNames);
     const lastName = getRandomItem(randomizationData.lastNames);
     const nameInput = document.querySelector('#name');
-    nameInput.value = `${firstName} ${lastName}`;
-    console.log(`Randomized name: ${nameInput.value}`);
+    if (nameInput) {
+        nameInput.value = `${firstName} ${lastName}`;
+        console.log(`Randomized name: ${nameInput.value}`);
+    }
 }
 
 function randomizeAge() {
     const age = getRandomItem(randomizationData.ages);
-    document.querySelector('#age').value = age;
-    console.log(`Randomized age: ${age}`);
+    const ageInput = document.querySelector('#age');
+    if (ageInput) {
+        ageInput.value = age;
+        console.log(`Randomized age: ${age}`);
+    }
 }
 
 function randomizeGender() {
     const gender = getRandomItem(randomizationData.genders);
-    document.querySelector('#gender').value = gender;
-    console.log(`Randomized gender: ${gender}`);
+    const genderInput = document.querySelector('#gender');
+    if (genderInput) {
+        genderInput.value = gender;
+        console.log(`Randomized gender: ${gender}`);
+    }
 }
 
 function randomizeLocale() {
     const locale = getRandomItem(randomizationData.locales);
-    document.querySelector('#locale').value = locale;
-    console.log(`Randomized locale: ${locale}`);
+    const localeInput = document.querySelector('#locale');
+    if (localeInput) {
+        localeInput.value = locale;
+        console.log(`Randomized locale: ${locale}`);
+    }
 }
 
 function randomizeOccupation() {
     const occupation = getRandomItem(randomizationData.occupations);
-    document.querySelector('#occupation').value = occupation;
-    console.log(`Randomized occupation: ${occupation}`);
+    const occupationInput = document.querySelector('#occupation');
+    if (occupationInput) {
+        occupationInput.value = occupation;
+        console.log(`Randomized occupation: ${occupation}`);
+    }
 }
 
 function randomizeAllFields() {

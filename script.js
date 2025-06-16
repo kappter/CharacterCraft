@@ -62,6 +62,7 @@ function handleClick(event) {
         };
         document.querySelector('#shortBioOutput').innerHTML = `${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, is characterized by ${char.traits}.`;
         document.querySelector('#exportBioButton').disabled = false;
+        console.log('Bio generated:', char);
     } else if (className.includes('save-character')) {
         characters.saveCharacter();
         switchTab('saved');

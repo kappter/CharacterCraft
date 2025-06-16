@@ -129,10 +129,29 @@
                 <div id="shortBioOutput" class="preview-box"></div>
             </div>
         </div>
-        <div id="compare-tab" class="tab-content hidden">...</div>
-        <div id="traits-tab" class="tab-content hidden">...</div>
-        <div id="saved-tab" class="tab-content hidden">...</div>
-        <div id="trait_bubbles-tab" class="tab-content hidden">...</div>
+        <div id="compare-tab" class="tab-content hidden">
+            <h2 class="section-title">Compare Characters</h2>
+            <select id="character1"></select>
+            <select id="character2"></select>
+            <button class="compare-characters">Compare</button>
+            <button class="randomize-comparison">Randomize Context</button>
+            <div id="comparisonOutput" class="preview-box"></div>
+            <button class="export-comparison" disabled>Export Comparison</button>
+        </div>
+        <div id="traits-tab" class="tab-content hidden">
+            <h2 class="section-title">Traits</h2>
+            <div id="traitDetails"></div>
+        </div>
+        <div id="saved-tab" class="tab-content hidden">
+            <h2 class="section-title">Saved Characters</h2>
+            <select id="characterSelect"></select>
+            <button class="update-character">Update</button>
+            <div id="characterList"></div>
+        </div>
+        <div id="trait_bubbles-tab" class="tab-content hidden">
+            <h2 class="section-title">Trait Bubbles</h2>
+            <div id="selectedTraits"></div>
+        </div>
     </main>
     <footer>
         <p>© 2025 CharacterCraft. All rights reserved.</p>
