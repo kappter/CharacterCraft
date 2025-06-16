@@ -20,8 +20,8 @@ function resetApp() {
     document.querySelectorAll('input').forEach(input => input.value = '');
     document.querySelector('#shortBioOutput').innerHTML = '';
     document.querySelector('#comparisonOutput').innerHTML = '';
-    characters.updateCharacterSelects();
-    characters.displayCharacters();
+    if (typeof characters.updateCharacterSelects === 'function') characters.updateCharacterSelects();
+    if (typeof characters.displayCharacters === 'function') characters.displayCharacters();
     console.log('App reset');
 }
 
@@ -50,24 +50,24 @@ function handleClick(event) {
     } else if (className.includes('reset-app')) {
         resetApp();
     } else if (className.includes('randomize-everything')) {
-        utils.randomizeAllFields();
+        if (typeof utils.randomizeAllFields === 'function') utils.randomizeAllFields();
     } else if (className.includes('generate-bio')) {
         const char = {
-            name: document.querySelector('#name').value || 'Unknown',
-            age: document.querySelector('#age').value || 'Unknown',
-            gender: document.querySelector('#gender').value || 'Unknown',
-            locale: document.querySelector('#locale').value || 'Unknown',
-            occupation: document.querySelector('#occupation').value || 'Unknown',
-            traits: document.querySelector('#traits').value || 'Unknown'
+            name: document.querySelector('#name')?.value || 'Unknown',
+            age: document.querySelector('#age')?.value || 'Unknown',
+            gender: document.querySelector('#gender')?.value || 'Unknown',
+            locale: document.querySelector('#locale')?.value || 'Unknown',
+            occupation: document.querySelector('#occupation')?.value || 'Unknown',
+            traits: document.querySelector('#traits')?.value || 'Unknown'
         };
         document.querySelector('#shortBioOutput').innerHTML = `${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, is characterized by ${char.traits}.`;
         document.querySelector('#exportBioButton').disabled = false;
         console.log('Bio generated:', char);
     } else if (className.includes('save-character')) {
-        characters.saveCharacter();
+        if (typeof characters.saveCharacter === 'function') characters.saveCharacter();
         switchTab('saved');
     } else if (className.includes('export-bio')) {
-        const bio = document.querySelector('#shortBioOutput').innerText || 'No bio available';
+        const bio = document.querySelector('#shortBioOutput')?.innerText || 'No bio available';
         const blob = new Blob([bio], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -76,8 +76,8 @@ function handleClick(event) {
         a.click();
         URL.revokeObjectURL(url);
     } else if (className.includes('compare-characters')) {
-        const char1Id = document.querySelector('#character1').value;
-        const char2Id = document.querySelector('#character2').value;
+        const char1Id = document.querySelector('#character1')?.value;
+        const char2Id = document.querySelector('#character2')?.value;
         const chars = JSON.parse(localStorage.getItem('characters') || '[]');
         const char1 = chars.find(c => c.id == char1Id) || {};
         const char2 = chars.find(c => c.id == char2Id) || {};
@@ -89,7 +89,7 @@ function handleClick(event) {
         document.querySelector('#context1').value = 'Context A';
         document.querySelector('#context2').value = 'Context B';
     } else if (className.includes('export-comparison')) {
-        const comparison = document.querySelector('#comparisonOutput').innerText || 'No comparison available';
+        const comparison = document.querySelector('#comparisonOutput')?.innerText || 'No comparison available';
         const blob = new Blob([comparison], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -98,9 +98,9 @@ function handleClick(event) {
         a.click();
         URL.revokeObjectURL(url);
     } else if (className.includes('update-character')) {
-        characters.updateCharacter();
+        if (typeof characters.updateCharacter === 'function') characters.updateCharacter();
     } else if (className.includes('export-report')) {
-        const report = document.querySelector('#characterReportContent').innerText || 'No report available';
+        const report = document.querySelector('#characterReportContent')?.innerText || 'No report available';
         const blob = new Blob([report], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -111,17 +111,17 @@ function handleClick(event) {
     } else if (className.includes('close-modal')) {
         document.querySelector('#characterReportModal').classList.add('hidden');
     } else if (className.includes('randomize-name')) {
-        utils.randomizeName();
+        if (typeof utils.randomizeName === 'function') utils.randomizeName();
     } else if (className.includes('randomize-age')) {
-        utils.randomizeAge();
+        if (typeof utils.randomizeAge === 'function') utils.randomizeAge();
     } else if (className.includes('randomize-gender')) {
-        utils.randomizeGender();
+        if (typeof utils.randomizeGender === 'function') utils.randomizeGender();
     } else if (className.includes('randomize-locale')) {
-        utils.randomizeLocale();
+        if (typeof utils.randomizeLocale === 'function') utils.randomizeLocale();
     } else if (className.includes('randomize-occupation')) {
-        utils.randomizeOccupation();
+        if (typeof utils.randomizeOccupation === 'function') utils.randomizeOccupation();
     } else if (className.includes('randomize-traits')) {
-        traits.randomizeTraits();
+        if (typeof traits.randomizeTraits === 'function') traits.randomizeTraits();
     } else if (className.includes('randomize-context1')) {
         document.querySelector('#context1').value = 'Context A';
     } else if (className.includes('randomize-context2')) {
@@ -136,10 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTheme();
     document.addEventListener('click', handleClick);
     themeToggle.addEventListener('change', toggleTheme);
-    characters.updateCharacterSelects();
-    characters.displayCharacters();
-    traits.displayTraits();
-    traits.displayTraitBubbles();
+    if (typeof characters.updateCharacterSelects === 'function') characters.updateCharacterSelects();
+    if (typeof characters.displayCharacters === 'function') characters.displayCharacters();
+    if (typeof traits.displayTraits === 'function') traits.displayTraits();
+    if (typeof traits.displayTraitBubbles === 'function') traits.displayTraitBubbles();
     console.log('Event listeners bound for: click');
     console.log('Page loaded, initialized create tab and event listeners');
 });
