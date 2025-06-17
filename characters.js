@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedChars = JSON.parse(localStorage.getItem('characters') || '[]');
     if (savedChars.length > 0) {
         characters.data = savedChars;
-        characters.updateCharacterSelects();
-        characters.displayCharacters();
     }
+    characters.updateCharacterSelects();
+    characters.displayCharacters();
     console.log('Characters initialized on page load');
 });

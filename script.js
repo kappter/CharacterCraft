@@ -20,8 +20,14 @@ function resetApp() {
     document.querySelectorAll('input').forEach(input => input.value = '');
     document.querySelector('#shortBioOutput').innerHTML = '';
     document.querySelector('#comparisonOutput').innerHTML = '';
-    if (typeof characters.updateCharacterSelects === 'function') characters.updateCharacterSelects();
-    if (typeof characters.displayCharacters === 'function') characters.displayCharacters();
+    if (typeof characters.updateCharacterSelects === 'function') {
+        characters.updateCharacterSelects();
+        console.log('Character selects reset');
+    }
+    if (typeof characters.displayCharacters === 'function') {
+        characters.displayCharacters();
+        console.log('Characters display reset');
+    }
     console.log('App reset');
 }
 
