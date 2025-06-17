@@ -7,23 +7,26 @@ const characters = {
             document.querySelector('#character1'),
             document.querySelector('#character2')
         ];
-        selects.forEach(select => {
-            if (!select) {
-                console.error('Character select element not found');
-                return;
-            }
-            const initialLength = select.options.length;
-            select.innerHTML = '<option value="">Select a character</option>';
-            this.data.forEach(char => {
-                if (char.id && char.name) { // Ensure valid data
-                    const option = document.createElement('option');
-                    option.value = char.id;
-                    option.textContent = char.name || `Character ${char.id}`;
-                    select.appendChild(option);
+        // Ensure DOM is ready with a small delay
+        setTimeout(() => {
+            selects.forEach(select => {
+                if (!select) {
+                    console.error('Character select element not found');
+                    return;
                 }
+                const initialLength = select.options.length;
+                select.innerHTML = '<option value="">Select a character</option>';
+                this.data.forEach(char => {
+                    if (char.id && char.name) { // Ensure valid data
+                        const option = document.createElement('option');
+                        option.value = char.id;
+                        option.textContent = char.name || `Character ${char.id}`;
+                        select.appendChild(option);
+                    }
+                });
+                console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
             });
-            console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
-        });
+        }, 100); // Small delay to ensure DOM update
     },
 
     saveCharacter() {
