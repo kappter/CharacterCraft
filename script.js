@@ -1,34 +1,39 @@
 const tabs = document.querySelectorAll('.tab-button');
 const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#theme-toggle');
+let isRandomizing = false;
 
 function switchTab(tabId) {
-    tabs.forEach(tab => tab.classList.remove('active'));
-    tabContents.forEach(content => content.classList.add('hidden'));
-    const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
-    const activeContent = document.querySelector(`#${tabId}-tab`);
-    if (activeTab && activeContent) {
-        activeTab.classList.add('active');
-        activeContent.classList.remove('hidden');
+    if (!isRandomizing) {
+        tabs.forEach(tab => tab.classList.remove('active'));
+        tabContents.forEach(content => content.classList.add('hidden'));
+        const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+        const activeContent = document.querySelector(`#${tabId}-tab`);
+        if (activeTab && activeContent) {
+            activeTab.classList.add('active');
+            activeContent.classList.remove('hidden');
+        }
+        console.log(`Switched to tab: ${tabId}`);
     }
-    console.log(`Switched to tab: ${tabId}`);
 }
 
 function resetApp() {
-    localStorage.clear();
-    switchTab('create');
-    document.querySelectorAll('input').forEach(input => input.value = '');
-    document.querySelector('#shortBioOutput').innerHTML = '';
-    document.querySelector('#comparisonOutput').innerHTML = '';
-    if (typeof characters.updateCharacterSelects === 'function') {
-        characters.updateCharacterSelects();
-        console.log('Character selects reset');
+    if (!isRandomizing) {
+        localStorage.clear();
+        switchTab('create');
+        document.querySelectorAll('input').forEach(input => input.value = '');
+        document.querySelector('#shortBioOutput').innerHTML = '';
+        document.querySelector('#comparisonOutput').innerHTML = '';
+        if (typeof characters.updateCharacterSelects === 'function') {
+            characters.updateCharacterSelects();
+            console.log('Character selects reset');
+        }
+        if (typeof characters.displayCharacters === 'function') {
+            characters.displayCharacters();
+            console.log('Characters display reset');
+        }
+        console.log('App reset');
     }
-    if (typeof characters.displayCharacters === 'function') {
-        characters.displayCharacters();
-        console.log('Characters display reset');
-    }
-    console.log('App reset');
 }
 
 function toggleTheme() {
@@ -56,12 +61,14 @@ function handleClick(event) {
     } else if (className.includes('reset-app')) {
         resetApp();
     } else if (className.includes('randomize-everything')) {
-        if (typeof utils.randomizeAllFields === 'function') {
+        if (typeof utils.randomizeAllFields === 'function' && !isRandomizing) {
             console.log('Attempting to randomize all fields');
+            isRandomizing = true;
             utils.randomizeAllFields();
             console.log('Randomize all fields completed');
+            setTimeout(() => { isRandomizing = false; }, 500); // Allow 500ms for updates to settle
         } else {
-            console.error('utils.randomizeAllFields is not a function');
+            console.error('utils.randomizeAllFields is not a function or already randomizing');
         }
     } else if (className.includes('generate-bio')) {
         const char = {
@@ -123,52 +130,64 @@ function handleClick(event) {
     } else if (className.includes('close-modal')) {
         document.querySelector('#characterReportModal').classList.add('hidden');
     } else if (className.includes('randomize-name')) {
-        if (typeof utils.randomizeName === 'function') {
+        if (typeof utils.randomizeName === 'function' && !isRandomizing) {
             console.log('Attempting to randomize name');
+            isRandomizing = true;
             utils.randomizeName();
             console.log('Randomize name completed');
+            setTimeout(() => { isRandomizing = false; }, 500);
         } else {
-            console.error('utils.randomizeName is not a function');
+            console.error('utils.randomizeName is not a function or already randomizing');
         }
     } else if (className.includes('randomize-age')) {
-        if (typeof utils.randomizeAge === 'function') {
+        if (typeof utils.randomizeAge === 'function' && !isRandomizing) {
             console.log('Attempting to randomize age');
+            isRandomizing = true;
             utils.randomizeAge();
             console.log('Randomize age completed');
+            setTimeout(() => { isRandomizing = false; }, 500);
         } else {
-            console.error('utils.randomizeAge is not a function');
+            console.error('utils.randomizeAge is not a function or already randomizing');
         }
     } else if (className.includes('randomize-gender')) {
-        if (typeof utils.randomizeGender === 'function') {
+        if (typeof utils.randomizeGender === 'function' && !isRandomizing) {
             console.log('Attempting to randomize gender');
+            isRandomizing = true;
             utils.randomizeGender();
             console.log('Randomize gender completed');
+            setTimeout(() => { isRandomizing = false; }, 500);
         } else {
-            console.error('utils.randomizeGender is not a function');
+            console.error('utils.randomizeGender is not a function or already randomizing');
         }
     } else if (className.includes('randomize-locale')) {
-        if (typeof utils.randomizeLocale === 'function') {
+        if (typeof utils.randomizeLocale === 'function' && !isRandomizing) {
             console.log('Attempting to randomize locale');
+            isRandomizing = true;
             utils.randomizeLocale();
             console.log('Randomize locale completed');
+            setTimeout(() => { isRandomizing = false; }, 500);
         } else {
-            console.error('utils.randomizeLocale is not a function');
+            console.error('utils.randomizeLocale is not a function or already randomizing');
         }
     } else if (className.includes('randomize-occupation')) {
-        if (typeof utils.randomizeOccupation === 'function') {
+        if (typeof utils.randomizeOccupation === 'function' && !isRandomizing) {
             console.log('Attempting to randomize occupation');
+            isRandomizing = true;
             utils.randomizeOccupation();
             console.log('Randomize occupation completed');
+            setTimeout(() => { isRandomizing = false; }, 500);
         } else {
-            console.error('utils.randomizeOccupation is not a function');
+            console.error('utils.randomizeOccupation is not a function or already randomizing');
         }
     } else if (className.includes('randomize-traits')) {
-        if (typeof traits.randomizeTraits === 'function') {
+        if (typeof traits.randomizeTraits === 'function' && !isRandomizing) {
             console.log('Attempting to randomize traits');
+            isRandomizing = true;
             traits.randomizeTraits();
             console.log('Randomize traits completed');
+            setTimeout(() => { isRandomizing = false; }, 500);
         } else {
-            console.error('traits.randomizeTraits is not a function');
+            console.error('traits.randomizeTraits is not a function or already randomizing');
         }
     } else if (className.includes('randomize-context1')) {
         document.querySelector('#context1').value = 'Context A';
