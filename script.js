@@ -12,6 +12,10 @@ function switchTab(tabId) {
         if (activeTab && activeContent) {
             activeTab.classList.add('active');
             activeContent.classList.remove('hidden');
+            if (tabId === 'saved' && typeof characters.updateCharacterSelects === 'function') {
+                characters.updateCharacterSelects();
+                console.log('Character selects updated on Saved tab');
+            }
         }
         console.log(`Switched to tab: ${tabId}`);
     }
