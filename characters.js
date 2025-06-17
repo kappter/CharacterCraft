@@ -1,5 +1,17 @@
 const characters = {
-    data: [],
+    updateCharacterSelects() {
+        const select = document.querySelector('#characterSelect');
+        if (!select) return console.error('Character select element not found');
+        const chars = JSON.parse(localStorage.getItem('characters') || '[]');
+        select.innerHTML = '<option value="">Select a character</option>'; // Default option
+        chars.forEach(char => {
+            const option = document.createElement('option');
+            option.value = char.id;
+            option.textContent = char.name || `Character ${char.id}`;
+            select.appendChild(option);
+        });
+        console.log(`Character selects updated: ${chars.length} characters`);
+    },
 
     saveCharacter() {
         const char = {
