@@ -3,6 +3,14 @@ const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#theme-toggle');
 let isRandomizing = false;
 
+// Fallback CSV data (use if files fail to load)
+const fallbackData = {
+    physicalTraits: [{ characteristic: 'Strong Build', description: 'Robust physique', category: 'Physical' }],
+    psychologicalTraits: [{ characteristic: 'Calm Demeanor', description: 'Steady under pressure', category: 'Psychological' }],
+    backgrounds: [{ characteristic: 'City Life', description: 'Raised in an urban setting', category: 'Background' }],
+    motivations: [{ characteristic: 'Seek Knowledge', description: 'Driven by curiosity', category: 'Motivations' }]
+};
+
 function switchTab(tabId) {
     if (!isRandomizing) {
         tabs.forEach(tab => tab.classList.remove('active'));
@@ -85,10 +93,10 @@ function generateDetailedBio(char) {
     const backgroundData = parseCSV(loadFileData('background_details.csv') || '', 'background_details.csv');
     const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '', 'psychological_traits.csv');
 
-    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical');
-    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological');
-    const backgrounds = backgroundData.filter(t => t.category === 'Background');
-    const motivations = motivationsData.filter(t => t.category === 'Motivations');
+    const physicalTraits = physicalTraitsData.length ? physicalTraitsData.filter(t => t.category === 'Physical') : fallbackData.physicalTraits;
+    const psychologicalTraits = psychologicalData.length ? psychologicalData.filter(t => t.category === 'Psychological') : fallbackData.psychologicalTraits;
+    const backgrounds = backgroundData.length ? backgroundData.filter(t => t.category === 'Background') : fallbackData.backgrounds;
+    const motivations = motivationsData.length ? motivationsData.filter(t => t.category === 'Motivations') : fallbackData.motivations;
 
     console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations }); // Debug log
 
