@@ -56,7 +56,13 @@ function handleClick(event) {
     } else if (className.includes('reset-app')) {
         resetApp();
     } else if (className.includes('randomize-everything')) {
-        if (typeof utils.randomizeAllFields === 'function') utils.randomizeAllFields();
+        if (typeof utils.randomizeAllFields === 'function') {
+            console.log('Attempting to randomize all fields');
+            utils.randomizeAllFields();
+            console.log('Randomize all fields completed');
+        } else {
+            console.error('utils.randomizeAllFields is not a function');
+        }
     } else if (className.includes('generate-bio')) {
         const char = {
             name: document.querySelector('#name')?.value || 'Unknown',
@@ -117,17 +123,53 @@ function handleClick(event) {
     } else if (className.includes('close-modal')) {
         document.querySelector('#characterReportModal').classList.add('hidden');
     } else if (className.includes('randomize-name')) {
-        if (typeof utils.randomizeName === 'function') utils.randomizeName();
+        if (typeof utils.randomizeName === 'function') {
+            console.log('Attempting to randomize name');
+            utils.randomizeName();
+            console.log('Randomize name completed');
+        } else {
+            console.error('utils.randomizeName is not a function');
+        }
     } else if (className.includes('randomize-age')) {
-        if (typeof utils.randomizeAge === 'function') utils.randomizeAge();
+        if (typeof utils.randomizeAge === 'function') {
+            console.log('Attempting to randomize age');
+            utils.randomizeAge();
+            console.log('Randomize age completed');
+        } else {
+            console.error('utils.randomizeAge is not a function');
+        }
     } else if (className.includes('randomize-gender')) {
-        if (typeof utils.randomizeGender === 'function') utils.randomizeGender();
+        if (typeof utils.randomizeGender === 'function') {
+            console.log('Attempting to randomize gender');
+            utils.randomizeGender();
+            console.log('Randomize gender completed');
+        } else {
+            console.error('utils.randomizeGender is not a function');
+        }
     } else if (className.includes('randomize-locale')) {
-        if (typeof utils.randomizeLocale === 'function') utils.randomizeLocale();
+        if (typeof utils.randomizeLocale === 'function') {
+            console.log('Attempting to randomize locale');
+            utils.randomizeLocale();
+            console.log('Randomize locale completed');
+        } else {
+            console.error('utils.randomizeLocale is not a function');
+        }
     } else if (className.includes('randomize-occupation')) {
-        if (typeof utils.randomizeOccupation === 'function') utils.randomizeOccupation();
+        if (typeof utils.randomizeOccupation === 'function') {
+            console.log('Attempting to randomize occupation');
+            utils.randomizeOccupation();
+            console.log('Randomize occupation completed');
+        } else {
+            console.error('utils.randomizeOccupation is not a function');
+        }
     } else if (className.includes('randomize-traits')) {
-        if (typeof traits.randomizeTraits === 'function') traits.randomizeTraits();
+        if (typeof traits.randomizeTraits === 'function') {
+            console.log('Attempting to randomize traits');
+            traits.randomizeTraits();
+            console.log('Randomize traits completed');
+        } else {
+            console.error('traits.randomizeTraits is not a function');
+        }
     } else if (className.includes('randomize-context1')) {
         document.querySelector('#context1').value = 'Context A';
     } else if (className.includes('randomize-context2')) {

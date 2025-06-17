@@ -69,6 +69,7 @@ const utils = {
     }
 };
 
+window.utils = utils; // Expose utils to global scope for testing
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Randomization data loaded:', utils.randomizationData);
 });
