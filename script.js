@@ -81,10 +81,12 @@ function generateDetailedBio(char) {
     const backgroundData = parseCSV(loadFileData('background_details.csv') || '');
     const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '');
 
-    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical');
-    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological');
-    const backgrounds = backgroundData.filter(t => t.category === 'Background');
-    const motivations = motivationsData.filter(t => t.category === 'Motivations');
+    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical' && t.characteristic);
+    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological' && t.characteristic);
+    const backgrounds = backgroundData.filter(t => t.category === 'Background' && t.characteristic);
+    const motivations = motivationsData.filter(t => t.category === 'Motivations' && t.characteristic);
+
+    console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations }); // Debug log
 
     const randomPhysical = getRandomItem(physicalTraits);
     const randomPsychological = getRandomItem(psychologicalTraits);
@@ -92,8 +94,8 @@ function generateDetailedBio(char) {
     const randomMotivation = getRandomItem(motivations);
 
     return `
-        ${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.character} (${randomBackground.description}) and is driven by a ${randomMotivation.character} (${randomMotivation.description}). 
-        Their ${randomPhysical.character} (${randomPhysical.description}) and ${randomPsychological.character} (${randomPsychological.description}) shape their presence, complemented by traits like ${char.traits || 'Unknown'}.
+        ${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.characteristic || 'Unknown Background'} (${randomBackground.description || ''}) and is driven by a ${randomMotivation.characteristic || 'Unknown Motivation'} (${randomMotivation.description || ''}). 
+        Their ${randomPhysical.characteristic || 'Unknown Trait'} (${randomPhysical.description || ''}) and ${randomPsychological.characteristic || 'Unknown Trait'} (${randomPsychological.description || ''}) shape their presence, complemented by traits like ${char.traits || 'Unknown'}.
     `;
 }
 
@@ -130,9 +132,10 @@ function handleClick(event) {
             occupation: document.querySelector('#occupation')?.value || 'Unknown',
             traits: document.querySelector('#traits')?.value || 'Unknown'
         };
-        document.querySelector('#shortBioOutput').innerHTML = generateDetailedBio(char);
+        const bio = generateDetailedBio(char);
+        document.querySelector('#shortBioOutput').innerHTML = bio;
         document.querySelector('#exportBioButton').disabled = false;
-        console.log('Bio generated:', char);
+        console.log('Bio generated:', { char, bio });
     } else if (className.includes('save-character')) {
         if (typeof characters.saveCharacter === 'function') {
             console.log('Attempting to save character');
