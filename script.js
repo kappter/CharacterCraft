@@ -66,7 +66,11 @@ function handleClick(event) {
             console.log('Attempting to randomize all fields');
             isRandomizing = true;
             utils.randomizeAllFields();
-            if (typeof traits.randomizeTraits === 'function') traits.randomizeTraits();
+            if (typeof traits.randomizeTraits === 'function') {
+                traits.randomizeTraits();
+                const traitsInput = document.querySelector('#traits');
+                if (traitsInput) traitsInput.value = traits.randomizedTraits.join(', ');
+            }
             console.log('Randomize all fields completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
@@ -203,6 +207,23 @@ function handleClick(event) {
         document.querySelector('#context2').value = 'Context B';
     } else if (className.includes('trait-bubble')) {
         document.querySelector('#selectedTraits').innerHTML = `Trait: ${event.target.textContent}`;
+    } else if (className.includes('generate-report')) {
+        const charId = document.querySelector('#characterSelect')?.value;
+        const chars = JSON.parse(localStorage.getItem('characters') || '[]');
+        const char = chars.find(c => c.id == charId) || {};
+        const reportContent = document.querySelector('#characterReportContent');
+        if (reportContent) {
+            reportContent.innerHTML = `
+                <p><strong>Name:</strong> ${char.name}</p>
+                <p><strong>Age:</strong> ${char.age}</p>
+                <p><strong>Gender:</strong> ${char.gender}</p>
+                <p><strong>Locale:</strong> ${char.locale}</p>
+                <p><strong>Occupation:</strong> ${char.occupation}</p>
+                <p><strong>Traits:</strong> ${char.traits}</p>
+            `;
+            document.querySelector('#characterReportModal').classList.remove('hidden');
+            console.log('Report generated:', char);
+        }
     }
 }
 
