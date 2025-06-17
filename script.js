@@ -56,7 +56,7 @@ function initializeTheme() {
     console.log(`Initialized theme: ${savedTheme}`);
 }
 
-function parseCSV(csvString) {
+function parseCSV(csvString, fileName) {
     if (typeof Papa !== 'undefined' && Papa.parse) {
         const result = Papa.parse(csvString, {
             header: true,
@@ -65,9 +65,9 @@ function parseCSV(csvString) {
             transform: (value) => value.trim()
         });
         if (result.errors.length) {
-            console.error('CSV Parsing Errors:', result.errors);
+            console.error(`CSV Parsing Errors for ${fileName}:`, result.errors);
         }
-        return result.data || [];
+        return result.data.filter(row => row.characteristic && row.description && row.category) || [];
     } else {
         console.error('Papa Parse is not loaded or defined');
         return [];
@@ -79,16 +79,16 @@ function getRandomItem(array) {
 }
 
 function generateDetailedBio(char) {
-    const traitsData = parseCSV(loadFileData('traits.csv') || '');
-    const motivationsData = parseCSV(loadFileData('motivations_beliefs.csv') || '');
-    const physicalTraitsData = parseCSV(loadFileData('physical_traits.csv') || '');
-    const backgroundData = parseCSV(loadFileData('background_details.csv') || '');
-    const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '');
+    const traitsData = parseCSV(loadFileData('traits.csv') || '', 'traits.csv');
+    const motivationsData = parseCSV(loadFileData('motivations_beliefs.csv') || '', 'motivations_beliefs.csv');
+    const physicalTraitsData = parseCSV(loadFileData('physical_traits.csv') || '', 'physical_traits.csv');
+    const backgroundData = parseCSV(loadFileData('background_details.csv') || '', 'background_details.csv');
+    const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '', 'psychological_traits.csv');
 
-    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical' && t.characteristic && t.description);
-    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological' && t.characteristic && t.description);
-    const backgrounds = backgroundData.filter(t => t.category === 'Background' && t.characteristic && t.description);
-    const motivations = motivationsData.filter(t => t.category === 'Motivations' && t.characteristic && t.description);
+    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical');
+    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological');
+    const backgrounds = backgroundData.filter(t => t.category === 'Background');
+    const motivations = motivationsData.filter(t => t.category === 'Motivations');
 
     console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations }); // Debug log
 
@@ -276,7 +276,7 @@ function handleClick(event) {
             document.querySelector('#characterReportModal').classList.remove('hidden');
             console.log('Report generated:', char);
         } else {
-            console.error('No character selected or invalid data');
+            console.error('No character selected or invalid data:', { charId, chars });
         }
     }
 }
