@@ -52,6 +52,42 @@ function initializeTheme() {
     console.log(`Initialized theme: ${savedTheme}`);
 }
 
+function parseCSV(csvString) {
+    return Papa.parse(csvString, {
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: (header) => header.trim(),
+        transform: (value) => value.trim()
+    }).data;
+}
+
+function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function generateDetailedBio(char) {
+    const traitsData = parseCSV(loadFileData('traits.csv'));
+    const motivationsData = parseCSV(loadFileData('motivations_beliefs.csv'));
+    const physicalTraitsData = parseCSV(loadFileData('physical_traits.csv'));
+    const backgroundData = parseCSV(loadFileData('background_details.csv'));
+    const psychologicalData = parseCSV(loadFileData('psychological_traits.csv'));
+
+    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical');
+    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological');
+    const backgrounds = backgroundData.filter(t => t.category === 'Background');
+    const motivations = motivationsData.filter(t => t.category === 'Motivations');
+
+    const randomPhysical = getRandomItem(physicalTraits);
+    const randomPsychological = getRandomItem(psychologicalTraits);
+    const randomBackground = getRandomItem(backgrounds);
+    const randomMotivation = getRandomItem(motivations);
+
+    return `
+        ${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, carries the weight of a ${randomBackground.character} and is driven by a ${randomMotivation.character} (${randomMotivation.description}). 
+        Their ${randomPhysical.character} (${randomPhysical.description}) and ${randomPsychological.character} (${randomPsychological.description}) shape their presence, complemented by traits like ${char.traits}.
+    `;
+}
+
 function handleClick(event) {
     event.preventDefault(); // Prevent default form submission or reload
     const { tagName, className, dataset } = event.target;
@@ -85,7 +121,7 @@ function handleClick(event) {
             occupation: document.querySelector('#occupation')?.value || 'Unknown',
             traits: document.querySelector('#traits')?.value || 'Unknown'
         };
-        document.querySelector('#shortBioOutput').innerHTML = `${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, is characterized by ${char.traits}.`;
+        document.querySelector('#shortBioOutput').innerHTML = generateDetailedBio(char);
         document.querySelector('#exportBioButton').disabled = false;
         console.log('Bio generated:', char);
     } else if (className.includes('save-character')) {
@@ -212,17 +248,19 @@ function handleClick(event) {
         const chars = JSON.parse(localStorage.getItem('characters') || '[]');
         const char = chars.find(c => c.id == charId) || {};
         const reportContent = document.querySelector('#characterReportContent');
-        if (reportContent) {
+        if (reportContent && char.id) {
             reportContent.innerHTML = `
-                <p><strong>Name:</strong> ${char.name}</p>
-                <p><strong>Age:</strong> ${char.age}</p>
-                <p><strong>Gender:</strong> ${char.gender}</p>
-                <p><strong>Locale:</strong> ${char.locale}</p>
-                <p><strong>Occupation:</strong> ${char.occupation}</p>
-                <p><strong>Traits:</strong> ${char.traits}</p>
+                <p><strong>Name:</strong> ${char.name || 'Unknown'}</p>
+                <p><strong>Age:</strong> ${char.age || 'Unknown'}</p>
+                <p><strong>Gender:</strong> ${char.gender || 'Unknown'}</p>
+                <p><strong>Locale:</strong> ${char.locale || 'Unknown'}</p>
+                <p><strong>Occupation:</strong> ${char.occupation || 'Unknown'}</p>
+                <p><strong>Traits:</strong> ${char.traits || 'Unknown'}</p>
             `;
             document.querySelector('#characterReportModal').classList.remove('hidden');
             console.log('Report generated:', char);
+        } else {
+            console.error('No character selected or invalid data');
         }
     }
 }
