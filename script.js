@@ -53,12 +53,17 @@ function initializeTheme() {
 }
 
 function parseCSV(csvString) {
-    return Papa.parse(csvString, {
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: (header) => header.trim(),
-        transform: (value) => value.trim()
-    }).data;
+    if (typeof Papa !== 'undefined' && Papa.parse) {
+        return Papa.parse(csvString, {
+            header: true,
+            skipEmptyLines: true,
+            transformHeader: (header) => header.trim(),
+            transform: (value) => value.trim()
+        }).data;
+    } else {
+        console.error('Papa Parse is not loaded');
+        return [];
+    }
 }
 
 function getRandomItem(array) {
@@ -66,25 +71,25 @@ function getRandomItem(array) {
 }
 
 function generateDetailedBio(char) {
-    const traitsData = parseCSV(loadFileData('traits.csv'));
-    const motivationsData = parseCSV(loadFileData('motivations_beliefs.csv'));
-    const physicalTraitsData = parseCSV(loadFileData('physical_traits.csv'));
-    const backgroundData = parseCSV(loadFileData('background_details.csv'));
-    const psychologicalData = parseCSV(loadFileData('psychological_traits.csv'));
+    const traitsData = parseCSV(loadFileData('traits.csv') || '');
+    const motivationsData = parseCSV(loadFileData('motivations_beliefs.csv') || '');
+    const physicalTraitsData = parseCSV(loadFileData('physical_traits.csv') || '');
+    const backgroundData = parseCSV(loadFileData('background_details.csv') || '');
+    const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '');
 
     const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical');
     const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological');
     const backgrounds = backgroundData.filter(t => t.category === 'Background');
     const motivations = motivationsData.filter(t => t.category === 'Motivations');
 
-    const randomPhysical = getRandomItem(physicalTraits);
-    const randomPsychological = getRandomItem(psychologicalTraits);
-    const randomBackground = getRandomItem(backgrounds);
-    const randomMotivation = getRandomItem(motivations);
+    const randomPhysical = physicalTraits.length ? getRandomItem(physicalTraits) : { characteristic: 'Unknown Trait', description: '' };
+    const randomPsychological = psychologicalTraits.length ? getRandomItem(psychologicalTraits) : { characteristic: 'Unknown Trait', description: '' };
+    const randomBackground = backgrounds.length ? getRandomItem(backgrounds) : { characteristic: 'Unknown Background', description: '' };
+    const randomMotivation = motivations.length ? getRandomItem(motivations) : { characteristic: 'Unknown Motivation', description: '' };
 
     return `
-        ${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, carries the weight of a ${randomBackground.character} and is driven by a ${randomMotivation.character} (${randomMotivation.description}). 
-        Their ${randomPhysical.character} (${randomPhysical.description}) and ${randomPsychological.character} (${randomPsychological.description}) shape their presence, complemented by traits like ${char.traits}.
+        ${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, carries the weight of a ${randomBackground.character} (${randomBackground.description}) and is driven by a ${randomMotivation.character} (${randomMotivation.description}). 
+        Their ${randomPhysical.character} (${randomPhysical.description}) and ${randomPsychological.character} (${randomPsychological.description}) shape their presence, complemented by traits like ${char.traits || 'Unknown'}.
     `;
 }
 
@@ -105,7 +110,7 @@ function handleClick(event) {
             if (typeof traits.randomizeTraits === 'function') {
                 traits.randomizeTraits();
                 const traitsInput = document.querySelector('#traits');
-                if (traitsInput) traitsInput.value = traits.randomizedTraits.join(', ');
+                if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
             }
             console.log('Randomize all fields completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
@@ -231,7 +236,7 @@ function handleClick(event) {
             isRandomizing = true;
             traits.randomizeTraits();
             const traitsInput = document.querySelector('#traits');
-            if (traitsInput) traitsInput.value = traits.randomizedTraits.join(', ');
+            if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
             console.log('Randomize traits completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
