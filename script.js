@@ -58,12 +58,16 @@ function initializeTheme() {
 
 function parseCSV(csvString) {
     if (typeof Papa !== 'undefined' && Papa.parse) {
-        return Papa.parse(csvString, {
+        const result = Papa.parse(csvString, {
             header: true,
             skipEmptyLines: true,
             transformHeader: (header) => header.trim(),
             transform: (value) => value.trim()
-        }).data;
+        });
+        if (result.errors.length) {
+            console.error('CSV Parsing Errors:', result.errors);
+        }
+        return result.data || [];
     } else {
         console.error('Papa Parse is not loaded or defined');
         return [];
@@ -81,10 +85,10 @@ function generateDetailedBio(char) {
     const backgroundData = parseCSV(loadFileData('background_details.csv') || '');
     const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '');
 
-    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical' && t.characteristic);
-    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological' && t.characteristic);
-    const backgrounds = backgroundData.filter(t => t.category === 'Background' && t.characteristic);
-    const motivations = motivationsData.filter(t => t.category === 'Motivations' && t.characteristic);
+    const physicalTraits = physicalTraitsData.filter(t => t.category === 'Physical' && t.characteristic && t.description);
+    const psychologicalTraits = psychologicalData.filter(t => t.category === 'Psychological' && t.characteristic && t.description);
+    const backgrounds = backgroundData.filter(t => t.category === 'Background' && t.characteristic && t.description);
+    const motivations = motivationsData.filter(t => t.category === 'Motivations' && t.characteristic && t.description);
 
     console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations }); // Debug log
 
