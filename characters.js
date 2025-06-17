@@ -15,10 +15,12 @@ const characters = {
             const initialLength = select.options.length;
             select.innerHTML = '<option value="">Select a character</option>';
             this.data.forEach(char => {
-                const option = document.createElement('option');
-                option.value = char.id;
-                option.textContent = char.name || `Character ${char.id}`;
-                select.appendChild(option);
+                if (char.id && char.name) { // Ensure valid data
+                    const option = document.createElement('option');
+                    option.value = char.id;
+                    option.textContent = char.name || `Character ${char.id}`;
+                    select.appendChild(option);
+                }
             });
             console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
         });
@@ -82,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedChars = JSON.parse(localStorage.getItem('characters') || '[]');
     if (savedChars.length > 0) {
         characters.data = savedChars;
+    } else {
+        characters.data = []; // Explicitly initialize if no saved data
     }
     characters.updateCharacterSelects();
     characters.displayCharacters();
