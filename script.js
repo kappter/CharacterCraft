@@ -61,13 +61,13 @@ function parseCSV(csvString) {
             transform: (value) => value.trim()
         }).data;
     } else {
-        console.error('Papa Parse is not loaded');
+        console.error('Papa Parse is not loaded or defined');
         return [];
     }
 }
 
 function getRandomItem(array) {
-    return array[Math.floor(Math.random() * array.length)];
+    return array.length ? array[Math.floor(Math.random() * array.length)] : { characteristic: 'Unknown', description: '' };
 }
 
 function generateDetailedBio(char) {
@@ -82,13 +82,13 @@ function generateDetailedBio(char) {
     const backgrounds = backgroundData.filter(t => t.category === 'Background');
     const motivations = motivationsData.filter(t => t.category === 'Motivations');
 
-    const randomPhysical = physicalTraits.length ? getRandomItem(physicalTraits) : { characteristic: 'Unknown Trait', description: '' };
-    const randomPsychological = psychologicalTraits.length ? getRandomItem(psychologicalTraits) : { characteristic: 'Unknown Trait', description: '' };
-    const randomBackground = backgrounds.length ? getRandomItem(backgrounds) : { characteristic: 'Unknown Background', description: '' };
-    const randomMotivation = motivations.length ? getRandomItem(motivations) : { characteristic: 'Unknown Motivation', description: '' };
+    const randomPhysical = getRandomItem(physicalTraits);
+    const randomPsychological = getRandomItem(psychologicalTraits);
+    const randomBackground = getRandomItem(backgrounds);
+    const randomMotivation = getRandomItem(motivations);
 
     return `
-        ${char.name}, a ${char.age}-year-old ${char.gender} ${char.occupation} from ${char.locale}, carries the weight of a ${randomBackground.character} (${randomBackground.description}) and is driven by a ${randomMotivation.character} (${randomMotivation.description}). 
+        ${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.character} (${randomBackground.description}) and is driven by a ${randomMotivation.character} (${randomMotivation.description}). 
         Their ${randomPhysical.character} (${randomPhysical.description}) and ${randomPsychological.character} (${randomPsychological.description}) shape their presence, complemented by traits like ${char.traits || 'Unknown'}.
     `;
 }
