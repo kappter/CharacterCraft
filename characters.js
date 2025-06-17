@@ -1,16 +1,27 @@
 const characters = {
+    data: [],
+
     updateCharacterSelects() {
-        const select = document.querySelector('#characterSelect');
-        if (!select) return console.error('Character select element not found');
-        const chars = JSON.parse(localStorage.getItem('characters') || '[]');
-        select.innerHTML = '<option value="">Select a character</option>'; // Default option
-        chars.forEach(char => {
-            const option = document.createElement('option');
-            option.value = char.id;
-            option.textContent = char.name || `Character ${char.id}`;
-            select.appendChild(option);
+        const selects = [
+            document.querySelector('#characterSelect'),
+            document.querySelector('#character1'),
+            document.querySelector('#character2')
+        ];
+        selects.forEach(select => {
+            if (!select) {
+                console.error('Character select element not found');
+                return;
+            }
+            const initialLength = select.options.length;
+            select.innerHTML = '<option value="">Select a character</option>';
+            this.data.forEach(char => {
+                const option = document.createElement('option');
+                option.value = char.id;
+                option.textContent = char.name || `Character ${char.id}`;
+                select.appendChild(option);
+            });
+            console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
         });
-        console.log(`Character selects updated: ${chars.length} characters`);
     },
 
     saveCharacter() {
@@ -34,40 +45,23 @@ const characters = {
         const select = document.querySelector('#characterSelect');
         const id = select?.value;
         if (id) {
-            const char = this.data.find(c => c.id == id);
-            if (char) {
-                char.name = document.querySelector('#name')?.value || char.name;
-                char.age = document.querySelector('#age')?.value || char.age;
-                char.gender = document.querySelector('#gender')?.value || char.gender;
-                char.locale = document.querySelector('#locale')?.value || char.locale;
-                char.occupation = document.querySelector('#occupation')?.value || char.occupation;
-                char.traits = document.querySelector('#traits')?.value || char.traits;
+            const charIndex = this.data.findIndex(c => c.id == id);
+            if (charIndex !== -1) {
+                this.data[charIndex] = {
+                    ...this.data[charIndex],
+                    name: document.querySelector('#name')?.value || this.data[charIndex].name,
+                    age: document.querySelector('#age')?.value || this.data[charIndex].age,
+                    gender: document.querySelector('#gender')?.value || this.data[charIndex].gender,
+                    locale: document.querySelector('#locale')?.value || this.data[charIndex].locale,
+                    occupation: document.querySelector('#occupation')?.value || this.data[charIndex].occupation,
+                    traits: document.querySelector('#traits')?.value || this.data[charIndex].traits
+                };
                 localStorage.setItem('characters', JSON.stringify(this.data));
                 this.displayCharacters();
-                console.log('Character updated:', char);
+                this.updateCharacterSelects();
+                console.log('Character updated:', this.data[charIndex]);
             }
         }
-    },
-
-    updateCharacterSelects() {
-        const chars = JSON.parse(localStorage.getItem('characters') || '[]');
-        this.data = chars;
-        const select1 = document.querySelector('#character1');
-        const select2 = document.querySelector('#character2');
-        const select3 = document.querySelector('#characterSelect');
-        [select1, select2, select3].forEach(select => {
-            if (select) {
-                const initialLength = select.options.length;
-                select.innerHTML = '<option value="">Select a character</option>';
-                chars.forEach(char => {
-                    const option = document.createElement('option');
-                    option.value = char.id;
-                    option.textContent = char.name;
-                    select.appendChild(option);
-                });
-                console.log(`Character selects updated: ${select.options.length - initialLength}`);
-            }
-        });
     },
 
     displayCharacters() {
