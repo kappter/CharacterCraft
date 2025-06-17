@@ -71,7 +71,7 @@ nav {
     z-index: 999;
     display: flex;
     align-items: center;
-    margin-top: 0 !important;
+    margin-top: 0 !important; /* Ensure no overlap */
 }
 
 nav button {
@@ -98,7 +98,7 @@ nav button:hover {
 }
 
 main {
-    padding-top: calc(var(--header-height) + var(--nav-height) + 2rem);
+    padding-top: calc(var(--header-height) + var(--nav-height) + 2rem); /* Increased padding */
     padding-bottom: calc(var(--footer-height) + 1rem);
     min-height: calc(100vh - var(--header-height) - var(--nav-height) - var(--footer-height));
 }
@@ -284,12 +284,12 @@ footer {
     background-color: var(--accent-green-hover);
 }
 
-.export-bio, .export-report, .export-comparison {
+.export-bio, .export-report, .export-comparison, .generate-report {
     background-color: var(--accent-purple);
     color: var(--button-text);
 }
 
-.export-bio:hover, .export-report:hover, .export-comparison:hover {
+.export-bio:hover, .export-report:hover, .export-comparison:hover, .generate-report:hover {
     background-color: var(--accent-purple-hover);
 }
 
