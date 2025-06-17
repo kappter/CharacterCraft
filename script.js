@@ -53,6 +53,7 @@ function initializeTheme() {
 }
 
 function handleClick(event) {
+    event.preventDefault(); // Prevent default form submission or reload
     const { tagName, className, dataset } = event.target;
     console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${event.target.id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
 
@@ -66,7 +67,7 @@ function handleClick(event) {
             isRandomizing = true;
             utils.randomizeAllFields();
             console.log('Randomize all fields completed');
-            setTimeout(() => { isRandomizing = false; }, 500); // Allow 500ms for updates to settle
+            setTimeout(() => { isRandomizing = false; }, 1000); // Increased to 1s to ensure persistence
         } else {
             console.error('utils.randomizeAllFields is not a function or already randomizing');
         }
@@ -135,7 +136,7 @@ function handleClick(event) {
             isRandomizing = true;
             utils.randomizeName();
             console.log('Randomize name completed');
-            setTimeout(() => { isRandomizing = false; }, 500);
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeName is not a function or already randomizing');
         }
@@ -145,7 +146,7 @@ function handleClick(event) {
             isRandomizing = true;
             utils.randomizeAge();
             console.log('Randomize age completed');
-            setTimeout(() => { isRandomizing = false; }, 500);
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeAge is not a function or already randomizing');
         }
@@ -155,7 +156,7 @@ function handleClick(event) {
             isRandomizing = true;
             utils.randomizeGender();
             console.log('Randomize gender completed');
-            setTimeout(() => { isRandomizing = false; }, 500);
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeGender is not a function or already randomizing');
         }
@@ -165,7 +166,7 @@ function handleClick(event) {
             isRandomizing = true;
             utils.randomizeLocale();
             console.log('Randomize locale completed');
-            setTimeout(() => { isRandomizing = false; }, 500);
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeLocale is not a function or already randomizing');
         }
@@ -175,7 +176,7 @@ function handleClick(event) {
             isRandomizing = true;
             utils.randomizeOccupation();
             console.log('Randomize occupation completed');
-            setTimeout(() => { isRandomizing = false; }, 500);
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeOccupation is not a function or already randomizing');
         }
@@ -185,7 +186,7 @@ function handleClick(event) {
             isRandomizing = true;
             traits.randomizeTraits();
             console.log('Randomize traits completed');
-            setTimeout(() => { isRandomizing = false; }, 500);
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('traits.randomizeTraits is not a function or already randomizing');
         }
