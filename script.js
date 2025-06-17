@@ -66,8 +66,9 @@ function handleClick(event) {
             console.log('Attempting to randomize all fields');
             isRandomizing = true;
             utils.randomizeAllFields();
+            if (typeof traits.randomizeTraits === 'function') traits.randomizeTraits();
             console.log('Randomize all fields completed');
-            setTimeout(() => { isRandomizing = false; }, 1000); // Increased to 1s to ensure persistence
+            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeAllFields is not a function or already randomizing');
         }
@@ -84,8 +85,12 @@ function handleClick(event) {
         document.querySelector('#exportBioButton').disabled = false;
         console.log('Bio generated:', char);
     } else if (className.includes('save-character')) {
-        if (typeof characters.saveCharacter === 'function') characters.saveCharacter();
-        switchTab('saved');
+        if (typeof characters.saveCharacter === 'function') {
+            console.log('Attempting to save character');
+            characters.saveCharacter();
+            console.log('Character save completed');
+            switchTab('saved');
+        }
     } else if (className.includes('export-bio')) {
         const bio = document.querySelector('#shortBioOutput')?.innerText || 'No bio available';
         const blob = new Blob([bio], { type: 'text/plain' });
@@ -185,6 +190,8 @@ function handleClick(event) {
             console.log('Attempting to randomize traits');
             isRandomizing = true;
             traits.randomizeTraits();
+            const traitsInput = document.querySelector('#traits');
+            if (traitsInput) traitsInput.value = traits.randomizedTraits.join(', ');
             console.log('Randomize traits completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
