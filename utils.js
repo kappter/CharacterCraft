@@ -48,4 +48,5 @@ const utils = {
     }
 };
 
-export default utils;
+// Expose utils globally
+window.utils = utils;

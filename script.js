@@ -3,7 +3,7 @@ const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#theme-toggle');
 let isRandomizing = false;
 
-// Fallback CSV data (use if files fail to load)
+// Fallback CSV data
 const fallbackData = {
     physicalTraits: [{ characteristic: 'Strong Build', description: 'Robust physique', category: 'Physical' }],
     psychologicalTraits: [{ characteristic: 'Calm Demeanor', description: 'Steady under pressure', category: 'Psychological' }],
@@ -21,8 +21,11 @@ function switchTab(tabId) {
             activeTab.classList.add('active');
             activeContent.classList.remove('hidden');
             if (tabId === 'saved' && typeof characters.updateCharacterSelects === 'function') {
-                characters.updateCharacterSelects();
-                console.log('Character selects updated on Saved tab');
+                // Add delay to ensure DOM is ready
+                setTimeout(() => {
+                    characters.updateCharacterSelects();
+                    console.log('Character selects updated on Saved tab');
+                }, 200);
             }
         }
         console.log(`Switched to tab: ${tabId}`);
@@ -98,7 +101,7 @@ function generateDetailedBio(char) {
     const backgrounds = backgroundData.length ? backgroundData.filter(t => t.category === 'Background') : fallbackData.backgrounds;
     const motivations = motivationsData.length ? motivationsData.filter(t => t.category === 'Motivations') : fallbackData.motivations;
 
-    console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations }); // Debug log
+    console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations });
 
     const randomPhysical = getRandomItem(physicalTraits);
     const randomPsychological = getRandomItem(psychologicalTraits);
@@ -112,7 +115,7 @@ function generateDetailedBio(char) {
 }
 
 function handleClick(event) {
-    event.preventDefault(); // Prevent default form submission or reload
+    event.preventDefault();
     const { tagName, className, dataset } = event.target;
     console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${event.target.id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
 
@@ -121,10 +124,10 @@ function handleClick(event) {
     } else if (className.includes('reset-app')) {
         resetApp();
     } else if (className.includes('randomize-everything')) {
-        if (typeof utils.randomizeAllFields === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeAllFields === 'function' && !isRandomizing) {
             console.log('Attempting to randomize all fields');
             isRandomizing = true;
-            utils.randomizeAllFields();
+            window.utils.randomizeAllFields();
             if (typeof traits.randomizeTraits === 'function') {
                 traits.randomizeTraits();
                 const traitsInput = document.querySelector('#traits');
@@ -200,50 +203,50 @@ function handleClick(event) {
     } else if (className.includes('close-modal')) {
         document.querySelector('#characterReportModal').classList.add('hidden');
     } else if (className.includes('randomize-name')) {
-        if (typeof utils.randomizeName === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeName === 'function' && !isRandomizing) {
             console.log('Attempting to randomize name');
             isRandomizing = true;
-            utils.randomizeName();
+            window.utils.randomizeName();
             console.log('Randomize name completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeName is not a function or already randomizing');
         }
     } else if (className.includes('randomize-age')) {
-        if (typeof utils.randomizeAge === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeAge === 'function' && !isRandomizing) {
             console.log('Attempting to randomize age');
             isRandomizing = true;
-            utils.randomizeAge();
+            window.utils.randomizeAge();
             console.log('Randomize age completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeAge is not a function or already randomizing');
         }
     } else if (className.includes('randomize-gender')) {
-        if (typeof utils.randomizeGender === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeGender === 'function' && !isRandomizing) {
             console.log('Attempting to randomize gender');
             isRandomizing = true;
-            utils.randomizeGender();
+            window.utils.randomizeGender();
             console.log('Randomize gender completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeGender is not a function or already randomizing');
         }
     } else if (className.includes('randomize-locale')) {
-        if (typeof utils.randomizeLocale === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeLocale === 'function' && !isRandomizing) {
             console.log('Attempting to randomize locale');
             isRandomizing = true;
-            utils.randomizeLocale();
+            window.utils.randomizeLocale();
             console.log('Randomize locale completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeLocale is not a function or already randomizing');
         }
     } else if (className.includes('randomize-occupation')) {
-        if (typeof utils.randomizeOccupation === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeOccupation === 'function' && !isRandomizing) {
             console.log('Attempting to randomize occupation');
             isRandomizing = true;
-            utils.randomizeOccupation();
+            window.utils.randomizeOccupation();
             console.log('Randomize occupation completed');
             setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
