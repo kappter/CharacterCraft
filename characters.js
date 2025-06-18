@@ -7,7 +7,7 @@ const characters = {
             document.querySelector('#character1'),
             document.querySelector('#character2')
         ];
-        // Ensure DOM is ready with a small delay
+        // Ensure DOM is ready with a delay
         setTimeout(() => {
             selects.forEach(select => {
                 if (!select) {
@@ -17,7 +17,7 @@ const characters = {
                 const initialLength = select.options.length;
                 select.innerHTML = '<option value="">Select a character</option>';
                 this.data.forEach(char => {
-                    if (char.id && char.name) { // Ensure valid data
+                    if (char.id && char.name) {
                         const option = document.createElement('option');
                         option.value = char.id;
                         option.textContent = char.name || `Character ${char.id}`;
@@ -26,7 +26,7 @@ const characters = {
                 });
                 console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
             });
-        }, 100); // Small delay to ensure DOM update
+        }, 200); // Increased delay to ensure tab switch
     },
 
     saveCharacter() {
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedChars.length > 0) {
         characters.data = savedChars;
     } else {
-        characters.data = []; // Explicitly initialize if no saved data
+        characters.data = [];
     }
     characters.updateCharacterSelects();
     characters.displayCharacters();
