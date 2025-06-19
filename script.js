@@ -3,7 +3,7 @@ const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#theme-toggle');
 let isRandomizing = false;
 
-// Fallback CSV data
+// Fallback CSV data (used if CSV fails to load)
 const fallbackData = {
     physicalTraits: [{ characteristic: 'Strong Build', description: 'Robust physique', category: 'Physical' }],
     psychologicalTraits: [{ characteristic: 'Calm Demeanor', description: 'Steady under pressure', category: 'Psychological' }],
@@ -184,7 +184,7 @@ function handleClick(event) {
             } catch (error) {
                 console.error('Randomization failed:', error);
             } finally {
-                setTimeout(() => { isRandomizing = false; }, 1200);
+                setTimeout(() => { isRandomizing = false; }, 1500); // Increased timeout to 1500ms
             }
         } else {
             console.error('utils.randomizeAllFields is not a function or already randomizing');
@@ -268,9 +268,16 @@ function handleClick(event) {
         if (typeof window.utils?.randomizeName === 'function' && !isRandomizing) {
             console.log('Attempting to randomize name');
             isRandomizing = true;
-            window.utils.randomizeName();
-            console.log('Randomize name completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
+            try {
+                const name = window.utils.randomizeName();
+                const input = document.querySelector('#name');
+                if (input) input.value = name;
+                console.log('Randomize name completed:', name);
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 500); // Reduced timeout for individual clicks
+            }
         } else {
             console.error('utils.randomizeName is not a function or already randomizing');
         }
@@ -278,9 +285,16 @@ function handleClick(event) {
         if (typeof window.utils?.randomizeAge === 'function' && !isRandomizing) {
             console.log('Attempting to randomize age');
             isRandomizing = true;
-            window.utils.randomizeAge();
-            console.log('Randomize age completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
+            try {
+                const age = window.utils.randomizeAge();
+                const input = document.querySelector('#age');
+                if (input) input.value = age;
+                console.log('Randomize age completed:', age);
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 500);
+            }
         } else {
             console.error('utils.randomizeAge is not a function or already randomizing');
         }
@@ -288,9 +302,16 @@ function handleClick(event) {
         if (typeof window.utils?.randomizeGender === 'function' && !isRandomizing) {
             console.log('Attempting to randomize gender');
             isRandomizing = true;
-            window.utils.randomizeGender();
-            console.log('Randomize gender completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
+            try {
+                const gender = window.utils.randomizeGender();
+                const input = document.querySelector('#gender');
+                if (input) input.value = gender;
+                console.log('Randomize gender completed:', gender);
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 500);
+            }
         } else {
             console.error('utils.randomizeGender is not a function or already randomizing');
         }
@@ -298,9 +319,16 @@ function handleClick(event) {
         if (typeof window.utils?.randomizeLocale === 'function' && !isRandomizing) {
             console.log('Attempting to randomize locale');
             isRandomizing = true;
-            window.utils.randomizeLocale();
-            console.log('Randomize locale completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
+            try {
+                const locale = window.utils.randomizeLocale();
+                const input = document.querySelector('#locale');
+                if (input) input.value = locale;
+                console.log('Randomize locale completed:', locale);
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 500);
+            }
         } else {
             console.error('utils.randomizeLocale is not a function or already randomizing');
         }
@@ -308,23 +336,35 @@ function handleClick(event) {
         if (typeof window.utils?.randomizeOccupation === 'function' && !isRandomizing) {
             console.log('Attempting to randomize occupation');
             isRandomizing = true;
-            window.utils.randomizeOccupation();
-            console.log('Randomize occupation completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
+            try {
+                const occupation = window.utils.randomizeOccupation();
+                const input = document.querySelector('#occupation');
+                if (input) input.value = occupation;
+                console.log('Randomize occupation completed:', occupation);
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 500);
+            }
         } else {
             console.error('utils.randomizeOccupation is not a function or already randomizing');
         }
     } else if (className.includes('randomize-traits')) {
-        if (typeof traits.randomizeTraits === 'function' && !isRandomizing) {
+        if (typeof window.utils?.randomizeTraits === 'function' && !isRandomizing) {
             console.log('Attempting to randomize traits');
             isRandomizing = true;
-            traits.randomizeTraits();
-            const traitsInput = document.querySelector('#traits');
-            if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
-            console.log('Randomize traits completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
+            try {
+                const traits = window.utils.randomizeTraits();
+                const traitsInput = document.querySelector('#traits');
+                if (traitsInput) traitsInput.value = traits.join(', ');
+                console.log('Randomize traits completed:', traits);
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 500);
+            }
         } else {
-            console.error('traits.randomizeTraits is not a function or already randomizing');
+            console.error('utils.randomizeTraits is not a function or already randomizing');
         }
     } else if (className.includes('randomize-context1')) {
         document.querySelector('#context1').value = 'a neutral setting';
