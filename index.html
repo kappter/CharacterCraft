@@ -113,9 +113,18 @@
 
             <div id="trait-bubbles-tab" class="tab-content hidden">
                 <h2 class="section-title">Trait Bubbles</h2>
-                <div id="traitBubbles">
-                    <p>Trait bubbles will display here.</p>
+                <div class="trait-bubbles-controls">
+                    <label for="traitCategory">Select Category:</label>
+                    <select id="traitCategory">
+                        <option value="all">All</option>
+                        <option value="Physical">Physical</option>
+                        <option value="Psychological">Psychological</option>
+                        <option value="Background">Background</option>
+                        <option value="Motivations">Motivations</option>
+                    </select>
+                    <button id="applyTraits">Apply to Profile</button>
                 </div>
+                <div id="traitBubbleContainer"></div>
             </div>
         </div>
     </main>
