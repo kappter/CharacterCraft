@@ -22,8 +22,6 @@ const fallbackData = {
 };
 
 function loadFileData(fileName) {
-    // Simulate loading from a file or fallback to hardcoded data
-    // In a real app, this would fetch from a server or local file
     console.warn(`loadFileData called for ${fileName}, using fallback data as no file loading implemented`);
     return ''; // Return empty string to trigger fallback in parseCSV
 }
@@ -93,6 +91,7 @@ function parseCSV(csvString, fileName) {
         });
         if (result.errors.length) {
             console.error(`CSV Parsing Errors for ${fileName}:`, result.errors);
+            return []; // Return empty array on error to use fallback
         }
         return result.data.filter(row => row.characteristic && row.description && row.category) || [];
     } else {
@@ -196,7 +195,8 @@ function handleClick(event) {
         };
         const bio = generateDetailedBio(char);
         document.querySelector('#shortBioOutput').innerHTML = bio;
-        document.querySelector('#exportBioButton').disabled = false;
+        const exportButton = document.querySelector('.export-bio'); // Use class instead of ID
+        if (exportButton) exportButton.disabled = false;
         console.log('Bio generated:', { char, bio });
     } else if (className.includes('save-character')) {
         if (typeof characters.saveCharacter === 'function') {
@@ -222,7 +222,7 @@ function handleClick(event) {
         const char2 = chars.find(c => c.id == char2Id) || {};
         const scenario = generateIntersectionScenario(char1, char2);
         document.querySelector('#comparisonOutput').innerHTML = scenario;
-        document.querySelector('#exportComparisonButton').disabled = false;
+        document.querySelector('#exportComparisonButton').disabled = false; // Fix this ID in index.html too
         console.log('Comparison scenario generated:', { char1, char2, scenario });
     } else if (className.includes('randomize-comparison')) {
         document.querySelector('#context1').value = 'a neutral setting';
