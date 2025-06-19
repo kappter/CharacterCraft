@@ -7,26 +7,29 @@ const characters = {
             document.querySelector('#character1'),
             document.querySelector('#character2')
         ];
-        // Ensure DOM is ready with a delay
         setTimeout(() => {
             selects.forEach(select => {
                 if (!select) {
                     console.error('Character select element not found');
                     return;
                 }
-                const initialLength = select.options.length;
-                select.innerHTML = '<option value="">Select a character</option>';
-                this.data.forEach(char => {
-                    if (char.id && char.name) {
-                        const option = document.createElement('option');
-                        option.value = char.id;
-                        option.textContent = char.name || `Character ${char.id}`;
-                        select.appendChild(option);
-                    }
-                });
-                console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
+                try {
+                    const initialLength = select.options.length;
+                    select.innerHTML = '<option value="">Select a character</option>';
+                    this.data.forEach(char => {
+                        if (char.id && char.name) {
+                            const option = document.createElement('option');
+                            option.value = char.id;
+                            option.textContent = char.name || `Character ${char.id}`;
+                            select.appendChild(option);
+                        }
+                    });
+                    console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
+                } catch (error) {
+                    console.error('Error updating character selects:', error);
+                }
             });
-        }, 200); // Increased delay to ensure tab switch
+        }, 300); // Increased delay for stability
     },
 
     saveCharacter() {

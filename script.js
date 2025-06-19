@@ -21,7 +21,6 @@ function switchTab(tabId) {
             activeTab.classList.add('active');
             activeContent.classList.remove('hidden');
             if (tabId === 'saved' && typeof characters.updateCharacterSelects === 'function') {
-                // Add delay to ensure DOM is ready
                 setTimeout(() => {
                     characters.updateCharacterSelects();
                     console.log('Character selects updated on Saved tab');
@@ -108,10 +107,17 @@ function generateDetailedBio(char) {
     const randomBackground = getRandomItem(backgrounds);
     const randomMotivation = getRandomItem(motivations);
 
-    return `
-        ${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.characteristic || 'Unknown Background'} (${randomBackground.description || ''}) and is driven by a ${randomMotivation.characteristic || 'Unknown Motivation'} (${randomMotivation.description || ''}). 
-        Their ${randomPhysical.characteristic || 'Unknown Trait'} (${randomPhysical.description || ''}) and ${randomPsychological.characteristic || 'Unknown Trait'} (${randomPsychological.description || ''}) shape their presence, complemented by traits like ${char.traits || 'Unknown'}.
+    // Restore detailed multi-paragraph bio
+    let bio = `
+        <p>${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.characteristic} (${randomBackground.description}). This background has shaped their early life, instilling a deep connection to their roots and influencing their worldview with a blend of resilience and adaptability.</p>
+        
+        <p>Driven by a ${randomMotivation.characteristic} (${randomMotivation.description}), they pursue their goals with unwavering determination. This motivation often leads them to seek out new challenges, whether in their professional life as a ${char.occupation || 'Unknown'} or in personal endeavors, reflecting a complex inner drive that defines their character.</p>
+        
+        <p>Their physical presence is marked by a ${randomPhysical.characteristic} (${randomPhysical.description}), which complements their ${randomPsychological.characteristic} (${randomPsychological.description}). This combination of traits allows them to navigate social and professional landscapes with a unique grace, often leaving a lasting impression on those they encounter.</p>
+        
+        <p>Complemented by additional traits like ${char.traits || 'Unknown'}, their personality is a rich tapestry of experiences and qualities. Whether collaborating with others or pursuing solitary projects, they bring a distinctive flair that sets them apart in their community.</p>
     `;
+    return bio;
 }
 
 function handleClick(event) {
