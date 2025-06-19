@@ -1,52 +1,93 @@
-const utils = {
-    randomizationData: {
-        firstNames: ['John', 'Jane', 'Alex', 'Sam', 'Emily'],
-        lastNames: ['Doe', 'Smith', 'Wilson', 'Brown', 'Taylor'],
-        genders: ['Male', 'Female', 'Non-binary'],
-        locales: ['New York', 'Tokyo', 'London', 'Sydney', 'Paris'],
-        occupations: ['Engineer', 'Doctor', 'Artist', 'Teacher', 'Writer']
-    },
+function loadRandomData() {
+    Papa.parse('random_data.csv', {
+        download: true,
+        header: true,
+        complete: function(results) {
+            const data = results.data;
+            window.utils = {
+                firstNames: [...new Set(data.map(row => row.firstNames))],
+                lastNames: [...new Set(data.map(row => row.lastNames))],
+                genders: [...new Set(data.map(row => row.genders))],
+                locales: [...new Set(data.map(row => row.locales))],
+                occupations: [...new Set(data.map(row => row.occupations))],
+                traits: [...new Set(data.flatMap(row => row.traits.split(',').map(t => t.trim())))].filter(t => t)
+            };
+            console.log('Randomization data loaded:', window.utils);
+        },
+        error: function(error) {
+            console.error('Failed to load random_data.csv:', error);
+            window.utils = {
+                firstNames: ['John', 'Sam', 'Emily', 'Alex', 'Jane'],
+                lastNames: ['Smith', 'Doe', 'Wilson', 'Taylor', 'Davis'],
+                genders: ['Male', 'Female', 'Non-binary'],
+                locales: ['New York', 'Los Angeles', 'Chicago', 'Sydney', 'London'],
+                occupations: ['Engineer', 'Teacher', 'Writer', 'Artist', 'Doctor'],
+                traits: ['Loyal', 'Brave', 'Wise', 'Cunning', 'Calm']
+            };
+            console.warn('Using fallback data due to CSV load failure');
+        }
+    });
+}
 
-    randomizeAllFields() {
-        this.randomizeName();
-        this.randomizeAge();
-        this.randomizeGender();
-        this.randomizeLocale();
-        this.randomizeOccupation();
-        console.log('Randomization data loaded:', this.randomizationData);
-    },
+function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
 
-    randomizeName() {
-        const first = this.randomizationData.firstNames[Math.floor(Math.random() * this.randomizationData.firstNames.length)];
-        const last = this.randomizationData.lastNames[Math.floor(Math.random() * this.randomizationData.lastNames.length)];
-        document.querySelector('#name').value = `${first} ${last}`;
-        console.log(`Randomized name: ${first} ${last}`);
-    },
+function randomizeName() {
+    if (!window.utils || !window.utils.firstNames || !window.utils.lastNames) return;
+    return `${getRandomItem(window.utils.firstNames)} ${getRandomItem(window.utils.lastNames)}`;
+}
 
-    randomizeAge() {
-        const age = Math.floor(Math.random() * 80) + 18; // 18 to 97
-        document.querySelector('#age').value = age;
-        console.log(`Randomized age: ${age}`);
-    },
+function randomizeAge() {
+    return Math.floor(Math.random() * 100) + 1;
+}
 
-    randomizeGender() {
-        const gender = this.randomizationData.genders[Math.floor(Math.random() * this.randomizationData.genders.length)];
-        document.querySelector('#gender').value = gender;
-        console.log(`Randomized gender: ${gender}`);
-    },
+function randomizeGender() {
+    if (!window.utils || !window.utils.genders) return 'Unknown';
+    return getRandomItem(window.utils.genders);
+}
 
-    randomizeLocale() {
-        const locale = this.randomizationData.locales[Math.floor(Math.random() * this.randomizationData.locales.length)];
-        document.querySelector('#locale').value = locale;
-        console.log(`Randomized locale: ${locale}`);
-    },
+function randomizeLocale() {
+    if (!window.utils || !window.utils.locales) return 'Unknown';
+    return getRandomItem(window.utils.locales);
+}
 
-    randomizeOccupation() {
-        const occupation = this.randomizationData.occupations[Math.floor(Math.random() * this.randomizationData.occupations.length)];
-        document.querySelector('#occupation').value = occupation;
-        console.log(`Randomized occupation: ${occupation}`);
-    }
-};
+function randomizeOccupation() {
+    if (!window.utils || !window.utils.occupations) return 'Unknown';
+    return getRandomItem(window.utils.occupations);
+}
 
-// Expose utils globally
-window.utils = utils;
+function randomizeTraits() {
+    if (!window.utils || !window.utils.traits) return [];
+    const count = Math.floor(Math.random() * 8) + 3; // 3 to 10 traits
+    const shuffled = [...window.utils.traits].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+function randomizeAllFields() {
+    if (!window.utils) return;
+    const name = randomizeName();
+    const age = randomizeAge();
+    const gender = randomizeGender();
+    const locale = randomizeLocale();
+    const occupation = randomizeOccupation();
+    const traits = randomizeTraits().join(', ');
+
+    const inputs = {
+        '#name': name,
+        '#age': age,
+        '#gender': gender,
+        '#locale': locale,
+        '#occupation': occupation,
+        '#traits': traits
+    };
+
+    Object.entries(inputs).forEach(([id, value]) => {
+        const input = document.querySelector(id);
+        if (input) input.value = value;
+    });
+
+    console.log('Randomized all fields:', { name, age, gender, locale, occupation, traits });
+}
+
+document.addEventListener('DOMContentLoaded', loadRandomData);
