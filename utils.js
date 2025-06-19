@@ -1,5 +1,60 @@
 (function() {
-    window.utils = null; // Predefine utils to avoid undefined issues
+    window.utils = {
+        data: null, // Placeholder for data
+        getRandomItem: function(array) {
+            return array.length ? array[Math.floor(Math.random() * array.length)] : 'Unknown';
+        },
+        randomizeName: function() {
+            if (!this.data || !this.data.firstNames || !this.data.lastNames) return 'Unknown Name';
+            return `${this.getRandomItem(this.data.firstNames)} ${this.getRandomItem(this.data.lastNames)}`;
+        },
+        randomizeAge: function() {
+            return Math.floor(Math.random() * 100) + 1;
+        },
+        randomizeGender: function() {
+            if (!this.data || !this.data.genders) return 'Unknown';
+            return this.getRandomItem(this.data.genders);
+        },
+        randomizeLocale: function() {
+            if (!this.data || !this.data.locales) return 'Unknown';
+            return this.getRandomItem(this.data.locales);
+        },
+        randomizeOccupation: function() {
+            if (!this.data || !this.data.occupations) return 'Unknown';
+            return this.getRandomItem(this.data.occupations);
+        },
+        randomizeTraits: function() {
+            if (!this.data || !this.data.traits) return [];
+            const count = Math.floor(Math.random() * 8) + 3; // 3 to 10 traits
+            const shuffled = [...this.data.traits].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        },
+        randomizeAllFields: function() {
+            if (!this.data) return;
+            const name = this.randomizeName();
+            const age = this.randomizeAge();
+            const gender = this.randomizeGender();
+            const locale = this.randomizeLocale();
+            const occupation = this.randomizeOccupation();
+            const traits = this.randomizeTraits().join(', ');
+
+            const inputs = {
+                '#name': name,
+                '#age': age,
+                '#gender': gender,
+                '#locale': locale,
+                '#occupation': occupation,
+                '#traits': traits
+            };
+
+            Object.entries(inputs).forEach(([id, value]) => {
+                const input = document.querySelector(id);
+                if (input) input.value = value;
+            });
+
+            console.log('Randomized all fields:', { name, age, gender, locale, occupation, traits });
+        }
+    };
 
     function loadRandomData() {
         Papa.parse('random_data.csv', {
@@ -10,14 +65,14 @@
                 console.log('Raw CSV data structure:', results);
                 console.log('Parsed CSV data:', results.data);
                 console.log('CSV headers:', results.meta.fields); // Log headers to verify mapping
-                const data = results.data.filter(row => row && typeof row === 'object');
+                const data = results.data.filter(row => row && typeof row === 'object' && row.firstNames);
                 if (data.length === 0) {
                     console.error('No valid data found in random_data.csv');
                     initializeFallbackData();
                     return;
                 }
                 data.forEach(row => console.log('Row data:', row)); // Log each row
-                window.utils = {
+                window.utils.data = {
                     firstNames: [...new Set(data.map(row => row.firstNames).filter(n => n && typeof n === 'string'))],
                     lastNames: [...new Set(data.map(row => row.lastNames).filter(n => n && typeof n === 'string'))],
                     genders: [...new Set(data.map(row => row.genders).filter(g => g && typeof g === 'string'))],
@@ -32,18 +87,18 @@
                     }))]
                 };
                 console.log('Loaded data per column:', {
-                    firstNames: window.utils.firstNames.length,
-                    lastNames: window.utils.lastNames.length,
-                    genders: window.utils.genders.length,
-                    locales: window.utils.locales.length,
-                    occupations: window.utils.occupations.length,
-                    traits: window.utils.traits.length
+                    firstNames: window.utils.data.firstNames.length,
+                    lastNames: window.utils.data.lastNames.length,
+                    genders: window.utils.data.genders.length,
+                    locales: window.utils.data.locales.length,
+                    occupations: window.utils.data.occupations.length,
+                    traits: window.utils.data.traits.length
                 });
-                if (!window.utils.firstNames.length || !window.utils.traits.length) {
+                if (!window.utils.data.firstNames.length || !window.utils.data.traits.length) {
                     console.warn('Insufficient data from CSV, using fallback');
                     initializeFallbackData();
                 } else {
-                    console.log('Randomization data loaded:', window.utils);
+                    console.log('Randomization data loaded:', window.utils.data);
                 }
             },
             error: function(error) {
@@ -54,7 +109,7 @@
     }
 
     function initializeFallbackData() {
-        window.utils = {
+        window.utils.data = {
             firstNames: ['John', 'Sam', 'Emily', 'Alex', 'Jane'],
             lastNames: ['Smith', 'Doe', 'Wilson', 'Taylor', 'Davis'],
             genders: ['Male', 'Female', 'Non-binary'],
@@ -65,73 +120,12 @@
         console.warn('Using fallback data due to CSV load or data issue');
     }
 
-    function getRandomItem(array) {
-        return array.length ? array[Math.floor(Math.random() * array.length)] : 'Unknown';
-    }
-
-    function randomizeName() {
-        if (!window.utils || !window.utils.firstNames || !window.utils.lastNames) return 'Unknown Name';
-        return `${getRandomItem(window.utils.firstNames)} ${getRandomItem(window.utils.lastNames)}`;
-    }
-
-    function randomizeAge() {
-        return Math.floor(Math.random() * 100) + 1;
-    }
-
-    function randomizeGender() {
-        if (!window.utils || !window.utils.genders) return 'Unknown';
-        return getRandomItem(window.utils.genders);
-    }
-
-    function randomizeLocale() {
-        if (!window.utils || !window.utils.locales) return 'Unknown';
-        return getRandomItem(window.utils.locales);
-    }
-
-    function randomizeOccupation() {
-        if (!window.utils || !window.utils.occupations) return 'Unknown';
-        return getRandomItem(window.utils.occupations);
-    }
-
-    function randomizeTraits() {
-        if (!window.utils || !window.utils.traits) return [];
-        const count = Math.floor(Math.random() * 8) + 3; // 3 to 10 traits
-        const shuffled = [...window.utils.traits].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
-    }
-
-    function randomizeAllFields() {
-        if (!window.utils) return;
-        const name = randomizeName();
-        const age = randomizeAge();
-        const gender = randomizeGender();
-        const locale = randomizeLocale();
-        const occupation = randomizeOccupation();
-        const traits = randomizeTraits().join(', ');
-
-        const inputs = {
-            '#name': name,
-            '#age': age,
-            '#gender': gender,
-            '#locale': locale,
-            '#occupation': occupation,
-            '#traits': traits
-        };
-
-        Object.entries(inputs).forEach(([id, value]) => {
-            const input = document.querySelector(id);
-            if (input) input.value = value;
-        });
-
-        console.log('Randomized all fields:', { name, age, gender, locale, occupation, traits });
-    }
-
     // Ensure utils is loaded before other scripts
     document.addEventListener('DOMContentLoaded', function() {
         loadRandomData();
         setTimeout(() => {
-            if (!window.utils) {
-                console.error('Utils not initialized, forcing fallback');
+            if (!window.utils.data) {
+                console.error('Utils data not initialized, forcing fallback');
                 initializeFallbackData();
             }
         }, 1000);
