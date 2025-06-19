@@ -18,39 +18,27 @@
                 }
                 data.forEach(row => console.log('Row data:', row)); // Log each row
                 window.utils = {
-                    firstNames: [...new Set(data.map(row => {
-                        if (row.firstNames && typeof row.firstNames === 'string') return row.firstNames;
-                        console.warn('Invalid firstNames:', row.firstNames, 'Row:', row);
-                        return null;
-                    }).filter(n => n))],
-                    lastNames: [...new Set(data.map(row => {
-                        if (row.lastNames && typeof row.lastNames === 'string') return row.lastNames;
-                        console.warn('Invalid lastNames:', row.lastNames, 'Row:', row);
-                        return null;
-                    }).filter(n => n))],
-                    genders: [...new Set(data.map(row => {
-                        if (row.genders && typeof row.genders === 'string') return row.genders;
-                        console.warn('Invalid genders:', row.genders, 'Row:', row);
-                        return null;
-                    }).filter(g => g))],
-                    locales: [...new Set(data.map(row => {
-                        if (row.locales && typeof row.locales === 'string') return row.locales;
-                        console.warn('Invalid locales:', row.locales, 'Row:', row);
-                        return null;
-                    }).filter(l => l))],
-                    occupations: [...new Set(data.map(row => {
-                        if (row.occupations && typeof row.occupations === 'string') return row.occupations;
-                        console.warn('Invalid occupations:', row.occupations, 'Row:', row);
-                        return null;
-                    }).filter(o => o))],
+                    firstNames: [...new Set(data.map(row => row.firstNames).filter(n => n && typeof n === 'string'))],
+                    lastNames: [...new Set(data.map(row => row.lastNames).filter(n => n && typeof n === 'string'))],
+                    genders: [...new Set(data.map(row => row.genders).filter(g => g && typeof g === 'string'))],
+                    locales: [...new Set(data.map(row => row.locales).filter(l => l && typeof l === 'string'))],
+                    occupations: [...new Set(data.map(row => row.occupations).filter(o => o && typeof o === 'string'))],
                     traits: [...new Set(data.flatMap(row => {
                         if (row.traits && typeof row.traits === 'string') {
                             return row.traits.split(',').map(t => t.trim()).filter(t => t && typeof t === 'string');
                         }
-                        console.warn('Invalid traits or missing column:', row.traits, 'Row:', row);
+                        console.warn('Invalid traits:', row.traits, 'Row:', row);
                         return [];
                     }))]
                 };
+                console.log('Loaded data per column:', {
+                    firstNames: window.utils.firstNames.length,
+                    lastNames: window.utils.lastNames.length,
+                    genders: window.utils.genders.length,
+                    locales: window.utils.locales.length,
+                    occupations: window.utils.occupations.length,
+                    traits: window.utils.traits.length
+                });
                 if (!window.utils.firstNames.length || !window.utils.traits.length) {
                     console.warn('Insufficient data from CSV, using fallback');
                     initializeFallbackData();
@@ -78,7 +66,7 @@
     }
 
     function getRandomItem(array) {
-        return array.length ? array[Math.floor(Math.random() * array.length)] : { characteristic: 'Unknown', description: '' };
+        return array.length ? array[Math.floor(Math.random() * array.length)] : 'Unknown';
     }
 
     function randomizeName() {
@@ -141,7 +129,6 @@
     // Ensure utils is loaded before other scripts
     document.addEventListener('DOMContentLoaded', function() {
         loadRandomData();
-        // Add a small delay to ensure utils is set
         setTimeout(() => {
             if (!window.utils) {
                 console.error('Utils not initialized, forcing fallback');
