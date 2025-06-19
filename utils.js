@@ -2,15 +2,17 @@ function loadRandomData() {
     Papa.parse('random_data.csv', {
         download: true,
         header: true,
-        delimiter: '\t', // Explicitly set tab as delimiter
+        delimiter: ',', // Explicitly set comma as delimiter
         complete: function(results) {
-            console.log('Raw CSV data:', results.data); // Log raw data for debugging
+            console.log('Raw CSV data structure:', results); // Log full results for debugging
+            console.log('Parsed CSV data:', results.data); // Log parsed rows
             const data = results.data.filter(row => row && typeof row === 'object'); // Filter out invalid rows
             if (data.length === 0) {
                 console.error('No valid data found in random_data.csv');
                 initializeFallbackData();
                 return;
             }
+            data.forEach(row => console.log('Row data:', row)); // Log each row
             window.utils = {
                 firstNames: [...new Set(data.map(row => {
                     if (row.firstNames && typeof row.firstNames === 'string') return row.firstNames;
@@ -39,9 +41,9 @@ function loadRandomData() {
                 }).filter(o => o))],
                 traits: [...new Set(data.flatMap(row => {
                     if (row.traits && typeof row.traits === 'string') {
-                        return row.traits.split(',').map(t => t.trim()).filter(t => t && typeof t === 'string'); // Split by comma for multiple traits
+                        return row.traits.split(',').map(t => t.trim()).filter(t => t && typeof t === 'string');
                     }
-                    console.warn('Invalid traits:', row.traits);
+                    console.warn('Invalid traits or missing column:', row.traits, 'Row:', row);
                     return [];
                 }))]
             };
