@@ -98,7 +98,7 @@ nav button:hover {
 }
 
 main {
-    padding-top: calc(var(--header-height) + var(--nav-height) + 1.5rem);
+    padding-top: calc(var(--header-height) + var(--nav-height) + 2rem);
     padding-bottom: calc(var(--footer-height) + 1rem);
     min-height: calc(100vh - var(--header-height) - var(--nav-height) - var(--footer-height));
 }
@@ -145,6 +145,22 @@ input {
 }
 
 input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+select:focus {
     outline: none;
     border-color: var(--accent-blue);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
@@ -199,6 +215,12 @@ button:disabled {
     background-color: var(--bg-secondary);
     margin-bottom: 0.5rem;
     border-radius: 0.375rem;
+    position: relative;
+    z-index: 1;
+}
+
+.character-item:first-child {
+    margin-top: 1rem;
 }
 
 .character-item span {
@@ -215,6 +237,26 @@ button:disabled {
 
 .character-item .generate-report:hover {
     background-color: var(--accent-purple-hover);
+}
+
+.compare-section {
+    margin-top: 1rem;
+}
+
+.compare-section select,
+.compare-section input {
+    width: 100%;
+    margin-bottom: 0.75rem;
+}
+
+#comparisonOutput {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    background-color: var(--bg-secondary);
+    margin-top: 1rem;
+    min-height: 100px;
+    color: var(--text-primary);
 }
 
 footer {
@@ -311,21 +353,41 @@ footer {
     background-color: var(--accent-green-hover);
 }
 
-.export-bio, .export-report, .export-comparison {
+.export-bio,
+.export-report,
+.export-comparison {
     background-color: var(--accent-purple);
     color: var(--button-text);
 }
 
-.export-bio:hover, .export-report:hover, .export-comparison:hover {
+.export-bio:hover,
+.export-report:hover,
+.export-comparison:hover {
     background-color: var(--accent-purple-hover);
 }
 
-.randomize-everything, .randomize-name, .randomize-age, .randomize-gender, .randomize-locale, .randomize-occupation, .randomize-traits, .randomize-context1, .randomize-context2 {
+.randomize-everything,
+.randomize-name,
+.randomize-age,
+.randomize-gender,
+.randomize-locale,
+.randomize-occupation,
+.randomize-traits,
+.randomize-context1,
+.randomize-context2 {
     background-color: var(--button-bg);
     color: var(--button-text);
 }
 
-.randomize-everything:hover, .randomize-name:hover, .randomize-age:hover, .randomize-gender:hover, .randomize-locale:hover, .randomize-occupation:hover, .randomize-traits:hover, .randomize-context1:hover, .randomize-context2:hover {
+.randomize-everything:hover,
+.randomize-name:hover,
+.randomize-age:hover,
+.randomize-gender:hover,
+.randomize-locale:hover,
+.randomize-occupation:hover,
+.randomize-traits:hover,
+.randomize-context1:hover,
+.randomize-context2:hover {
     background-color: var(--button-bg-hover);
 }
 
@@ -357,4 +419,13 @@ footer {
 
 .toggle:checked::before {
     transform: translateX(18px);
+}
+
+.compare-characters {
+    background-color: var(--accent-blue);
+    color: var(--button-text);
+}
+
+.compare-characters:hover {
+    background-color: var(--accent-blue-hover);
 }
