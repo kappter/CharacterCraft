@@ -3,38 +3,57 @@ function loadRandomData() {
         download: true,
         header: true,
         complete: function(results) {
-            const data = results.data;
+            const data = results.data.filter(row => row && typeof row === 'object'); // Filter out invalid rows
+            if (data.length === 0) {
+                console.error('No valid data found in random_data.csv');
+                initializeFallbackData();
+                return;
+            }
             window.utils = {
-                firstNames: [...new Set(data.map(row => row.firstNames))],
-                lastNames: [...new Set(data.map(row => row.lastNames))],
-                genders: [...new Set(data.map(row => row.genders))],
-                locales: [...new Set(data.map(row => row.locales))],
-                occupations: [...new Set(data.map(row => row.occupations))],
-                traits: [...new Set(data.flatMap(row => row.traits.split(',').map(t => t.trim())))].filter(t => t)
+                firstNames: [...new Set(data.map(row => row.firstNames).filter(n => n && typeof n === 'string'))],
+                lastNames: [...new Set(data.map(row => row.lastNames).filter(n => n && typeof n === 'string'))],
+                genders: [...new Set(data.map(row => row.genders).filter(g => g && typeof g === 'string'))],
+                locales: [...new Set(data.map(row => row.locales).filter(l => l && typeof l === 'string'))],
+                occupations: [...new Set(data.map(row => row.occupations).filter(o => o && typeof o === 'string'))],
+                traits: [...new Set(data.flatMap(row => {
+                    if (row.traits && typeof row.traits === 'string') {
+                        return row.traits.split(',').map(t => t.trim()).filter(t => t);
+                    }
+                    return [];
+                }))]
             };
-            console.log('Randomization data loaded:', window.utils);
+            if (!window.utils.firstNames.length || !window.utils.traits.length) {
+                console.warn('Insufficient data from CSV, using fallback');
+                initializeFallbackData();
+            } else {
+                console.log('Randomization data loaded:', window.utils);
+            }
         },
         error: function(error) {
             console.error('Failed to load random_data.csv:', error);
-            window.utils = {
-                firstNames: ['John', 'Sam', 'Emily', 'Alex', 'Jane'],
-                lastNames: ['Smith', 'Doe', 'Wilson', 'Taylor', 'Davis'],
-                genders: ['Male', 'Female', 'Non-binary'],
-                locales: ['New York', 'Los Angeles', 'Chicago', 'Sydney', 'London'],
-                occupations: ['Engineer', 'Teacher', 'Writer', 'Artist', 'Doctor'],
-                traits: ['Loyal', 'Brave', 'Wise', 'Cunning', 'Calm']
-            };
-            console.warn('Using fallback data due to CSV load failure');
+            initializeFallbackData();
         }
     });
 }
 
+function initializeFallbackData() {
+    window.utils = {
+        firstNames: ['John', 'Sam', 'Emily', 'Alex', 'Jane'],
+        lastNames: ['Smith', 'Doe', 'Wilson', 'Taylor', 'Davis'],
+        genders: ['Male', 'Female', 'Non-binary'],
+        locales: ['New York', 'Los Angeles', 'Chicago', 'Sydney', 'London'],
+        occupations: ['Engineer', 'Teacher', 'Writer', 'Artist', 'Doctor'],
+        traits: ['Loyal', 'Brave', 'Wise', 'Cunning', 'Calm']
+    };
+    console.warn('Using fallback data due to CSV load or data issue');
+}
+
 function getRandomItem(array) {
-    return array[Math.floor(Math.random() * array.length)];
+    return array.length ? array[Math.floor(Math.random() * array.length)] : { characteristic: 'Unknown', description: '' };
 }
 
 function randomizeName() {
-    if (!window.utils || !window.utils.firstNames || !window.utils.lastNames) return;
+    if (!window.utils || !window.utils.firstNames || !window.utils.lastNames) return 'Unknown Name';
     return `${getRandomItem(window.utils.firstNames)} ${getRandomItem(window.utils.lastNames)}`;
 }
 
