@@ -12,12 +12,12 @@ const characters = {
 
         const updateSelects = () => {
             if (attempts >= maxAttempts) {
-                console.error('Failed to update character selects after max attempts');
+                console.warn('Max attempts reached, skipping character select update');
                 return;
             }
             selects.forEach(select => {
                 if (!select) {
-                    console.error('Character select element not found');
+                    console.warn('Character select element not found, skipping this select');
                     return;
                 }
                 try {

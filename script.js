@@ -21,6 +21,13 @@ const fallbackData = {
     ]
 };
 
+function loadFileData(fileName) {
+    // Simulate loading from a file or fallback to hardcoded data
+    // In a real app, this would fetch from a server or local file
+    console.warn(`loadFileData called for ${fileName}, using fallback data as no file loading implemented`);
+    return ''; // Return empty string to trigger fallback in parseCSV
+}
+
 function switchTab(tabId) {
     if (!isRandomizing) {
         tabs.forEach(tab => tab.classList.remove('active'));
