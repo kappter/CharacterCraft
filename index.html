@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CharacterCraft</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Add a favicon (create a simple one or use a placeholder) -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -78,7 +77,7 @@
                         <button class="randomize-everything">Randomize All</button>
                         <button class="generate-bio">Generate Bio</button>
                         <button class="save-character">Save</button>
-                        <button class="export-bio" disabled>Export Bio</button>
+                        <button id="exportBioButton" class="export-bio" disabled>Export Bio</button>
                     </div>
                 </div>
                 <div class="bio-preview">
@@ -96,7 +95,7 @@
                 <button class="compare-characters">Compare</button>
                 <button class="randomize-comparison">Randomize Context</button>
                 <div id="comparisonOutput" class="preview-box"></div>
-                <button class="export-comparison" disabled>Export Comparison</button>
+                <button id="exportComparisonButton" class="export-comparison" disabled>Export Comparison</button>
             </div>
 
             <div id="traits-tab" class="tab-content hidden">
