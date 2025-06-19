@@ -2,7 +2,9 @@ function loadRandomData() {
     Papa.parse('random_data.csv', {
         download: true,
         header: true,
+        delimiter: '\t', // Explicitly set tab as delimiter
         complete: function(results) {
+            console.log('Raw CSV data:', results.data); // Log raw data for debugging
             const data = results.data.filter(row => row && typeof row === 'object'); // Filter out invalid rows
             if (data.length === 0) {
                 console.error('No valid data found in random_data.csv');
@@ -10,15 +12,36 @@ function loadRandomData() {
                 return;
             }
             window.utils = {
-                firstNames: [...new Set(data.map(row => row.firstNames).filter(n => n && typeof n === 'string'))],
-                lastNames: [...new Set(data.map(row => row.lastNames).filter(n => n && typeof n === 'string'))],
-                genders: [...new Set(data.map(row => row.genders).filter(g => g && typeof g === 'string'))],
-                locales: [...new Set(data.map(row => row.locales).filter(l => l && typeof l === 'string'))],
-                occupations: [...new Set(data.map(row => row.occupations).filter(o => o && typeof o === 'string'))],
+                firstNames: [...new Set(data.map(row => {
+                    if (row.firstNames && typeof row.firstNames === 'string') return row.firstNames;
+                    console.warn('Invalid firstNames:', row.firstNames);
+                    return null;
+                }).filter(n => n))],
+                lastNames: [...new Set(data.map(row => {
+                    if (row.lastNames && typeof row.lastNames === 'string') return row.lastNames;
+                    console.warn('Invalid lastNames:', row.lastNames);
+                    return null;
+                }).filter(n => n))],
+                genders: [...new Set(data.map(row => {
+                    if (row.genders && typeof row.genders === 'string') return row.genders;
+                    console.warn('Invalid genders:', row.genders);
+                    return null;
+                }).filter(g => g))],
+                locales: [...new Set(data.map(row => {
+                    if (row.locales && typeof row.locales === 'string') return row.locales;
+                    console.warn('Invalid locales:', row.locales);
+                    return null;
+                }).filter(l => l))],
+                occupations: [...new Set(data.map(row => {
+                    if (row.occupations && typeof row.occupations === 'string') return row.occupations;
+                    console.warn('Invalid occupations:', row.occupations);
+                    return null;
+                }).filter(o => o))],
                 traits: [...new Set(data.flatMap(row => {
                     if (row.traits && typeof row.traits === 'string') {
-                        return row.traits.split(',').map(t => t.trim()).filter(t => t);
+                        return row.traits.split(',').map(t => t.trim()).filter(t => t && typeof t === 'string'); // Split by comma for multiple traits
                     }
+                    console.warn('Invalid traits:', row.traits);
                     return [];
                 }))]
             };
