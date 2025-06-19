@@ -24,7 +24,7 @@ function switchTab(tabId) {
                 setTimeout(() => {
                     characters.updateCharacterSelects();
                     console.log('Character selects updated on Saved tab');
-                }, 200);
+                }, 300);
             }
         }
         console.log(`Switched to tab: ${tabId}`);
@@ -107,7 +107,6 @@ function generateDetailedBio(char) {
     const randomBackground = getRandomItem(backgrounds);
     const randomMotivation = getRandomItem(motivations);
 
-    // Restore detailed multi-paragraph bio
     let bio = `
         <p>${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.characteristic} (${randomBackground.description}). This background has shaped their early life, instilling a deep connection to their roots and influencing their worldview with a blend of resilience and adaptability.</p>
         
@@ -133,14 +132,19 @@ function handleClick(event) {
         if (typeof window.utils?.randomizeAllFields === 'function' && !isRandomizing) {
             console.log('Attempting to randomize all fields');
             isRandomizing = true;
-            window.utils.randomizeAllFields();
-            if (typeof traits.randomizeTraits === 'function') {
-                traits.randomizeTraits();
-                const traitsInput = document.querySelector('#traits');
-                if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
+            try {
+                window.utils.randomizeAllFields();
+                if (typeof traits.randomizeTraits === 'function') {
+                    traits.randomizeTraits();
+                    const traitsInput = document.querySelector('#traits');
+                    if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
+                }
+                console.log('Randomize all fields completed');
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 1200); // Increased timeout
             }
-            console.log('Randomize all fields completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
         } else {
             console.error('utils.randomizeAllFields is not a function or already randomizing');
         }
