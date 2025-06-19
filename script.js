@@ -90,7 +90,12 @@ function parseCSV(csvString, fileName) {
             transform: (value) => value.trim()
         });
         if (result.errors.length) {
-            console.error(`CSV Parsing Errors for ${fileName}:`, result.errors);
+            console.error(`CSV Parsing Errors for ${fileName}:`, result.errors.map(e => ({
+                type: e.type,
+                code: e.code,
+                message: e.message,
+                row: e.row
+            })));
             return []; // Return empty array on error to use fallback
         }
         return result.data.filter(row => row.characteristic && row.description && row.category) || [];
@@ -195,7 +200,7 @@ function handleClick(event) {
         };
         const bio = generateDetailedBio(char);
         document.querySelector('#shortBioOutput').innerHTML = bio;
-        const exportButton = document.querySelector('.export-bio'); // Use class instead of ID
+        const exportButton = document.querySelector('#exportBioButton');
         if (exportButton) exportButton.disabled = false;
         console.log('Bio generated:', { char, bio });
     } else if (className.includes('save-character')) {
@@ -222,7 +227,8 @@ function handleClick(event) {
         const char2 = chars.find(c => c.id == char2Id) || {};
         const scenario = generateIntersectionScenario(char1, char2);
         document.querySelector('#comparisonOutput').innerHTML = scenario;
-        document.querySelector('#exportComparisonButton').disabled = false; // Fix this ID in index.html too
+        const exportCompButton = document.querySelector('#exportComparisonButton');
+        if (exportCompButton) exportCompButton.disabled = false;
         console.log('Comparison scenario generated:', { char1, char2, scenario });
     } else if (className.includes('randomize-comparison')) {
         document.querySelector('#context1').value = 'a neutral setting';
@@ -327,7 +333,7 @@ function handleClick(event) {
     } else if (className.includes('trait-bubble')) {
         document.querySelector('#selectedTraits').innerHTML = `Trait: ${event.target.textContent}`;
     } else if (className.includes('generate-report')) {
-        const charId = dataset.charId || document.querySelector('#characterSelect')?.value;
+        const charId = dataset.charId || document.querySelector('#character1')?.value || document.querySelector('#character2')?.value;
         const chars = JSON.parse(localStorage.getItem('characters') || '[]');
         const char = chars.find(c => c.id == charId) || {};
         const reportContent = document.querySelector('#characterReportContent');
