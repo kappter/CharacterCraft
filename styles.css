@@ -49,6 +49,53 @@ header h1 {
     margin: 0;
 }
 
+/* styles.css */
+.trait-bubble {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    border: 2px solid #4a90e2;
+    border-radius: 20px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.trait-bubble:hover {
+    background-color: #e6f0fa;
+}
+
+.trait-bubble.selected {
+    background-color: #4a90e2;
+    color: #fff;
+    border-color: #357abd;
+}
+
+.trait-bubbles-controls {
+    margin-bottom: 20px;
+}
+
+#traitBubbleContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+[data-theme="dark"] .trait-bubble {
+    background-color: #333;
+    border-color: #66b3ff;
+    color: #fff;
+}
+
+[data-theme="dark"] .trait-bubble:hover {
+    background-color: #444;
+}
+
+[data-theme="dark"] .trait-bubble.selected {
+    background-color: #66b3ff;
+    border-color: #3399ff;
+}
+
 .theme-toggle {
     display: flex;
     align-items: center;
