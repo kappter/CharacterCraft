@@ -202,8 +202,17 @@ function handleClick(event) {
     } else if (className.includes('update-character')) {
         if (typeof characters.updateCharacter === 'function') characters.updateCharacter();
     } else if (className.includes('export-report')) {
-        const report = document.querySelector('#characterReportContent')?.innerText || 'No report available';
-        const blob = new Blob([report], { type: 'text/plain' });
+        const reportContent = document.querySelector('#characterReportContent');
+        const bio = document.querySelector('#shortBioOutput')?.innerText || generateDetailedBio({
+            name: reportContent?.querySelector('p:nth-child(1)')?.textContent.replace('Name: ', '') || 'Unknown',
+            age: reportContent?.querySelector('p:nth-child(2)')?.textContent.replace('Age: ', '') || 'Unknown',
+            gender: reportContent?.querySelector('p:nth-child(3)')?.textContent.replace('Gender: ', '') || 'Unknown',
+            locale: reportContent?.querySelector('p:nth-child(4)')?.textContent.replace('Locale: ', '') || 'Unknown',
+            occupation: reportContent?.querySelector('p:nth-child(5)')?.textContent.replace('Occupation: ', '') || 'Unknown',
+            traits: reportContent?.querySelector('p:nth-child(6)')?.textContent.replace('Traits: ', '') || 'Unknown'
+        });
+        const fullReport = (reportContent?.innerText || '') + '\n\nDetailed Bio:\n' + bio;
+        const blob = new Blob([fullReport], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
