@@ -1,6 +1,6 @@
 firstNames,lastNames,genders,locales,occupations,traits
-Emma,Johnson,Female,Los Angeles,Teacher,Creative,Resilient,Introspective,Kind,Optimistic
-Liam,Smith,Male,Chicago,Engineer,Determined,Adaptable,Curious,Logical,Focused
-Olivia,Brown,Female,Houston,Writer,Charismatic,Thoughtful,Inventive,Passionate,Reflective
-Noah,Davis,Male,Philadelphia,Doctor,Calm,Perceptive,Supportive,Empathetic,Disciplined
-Ava,Wilson,Female,Seattle,Artist,Adaptable,Imaginative,Enthusiastic,Resourceful,Inspired
+Emma,Johnson,Female,Los Angeles,Teacher,"Creative,Resilient,Introspective,Kind,Optimistic"
+Liam,Smith,Male,Chicago,Engineer,"Determined,Adaptable,Curious,Logical,Focused"
+Olivia,Brown,Female,Houston,Writer,"Charismatic,Thoughtful,Inventive,Passionate,Reflective"
+Noah,Davis,Male,Philadelphia,Doctor,"Calm,Perceptive,Supportive,Empathetic,Disciplined"
+Ava,Wilson,Female,Seattle,Artist,"Adaptable,Imaginative,Enthusiastic,Resourceful,Inspired"
