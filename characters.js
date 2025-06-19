@@ -7,7 +7,14 @@ const characters = {
             document.querySelector('#character1'),
             document.querySelector('#character2')
         ];
-        setTimeout(() => {
+        let attempts = 0;
+        const maxAttempts = 3;
+
+        const updateSelects = () => {
+            if (attempts >= maxAttempts) {
+                console.error('Failed to update character selects after max attempts');
+                return;
+            }
             selects.forEach(select => {
                 if (!select) {
                     console.error('Character select element not found');
@@ -27,9 +34,12 @@ const characters = {
                     console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
                 } catch (error) {
                     console.error('Error updating character selects:', error);
+                    attempts++;
+                    setTimeout(updateSelects, 300 * attempts); // Retry with increasing delay
                 }
             });
-        }, 300); // Increased delay for stability
+        };
+        setTimeout(updateSelects, 300);
     },
 
     saveCharacter() {
