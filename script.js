@@ -143,7 +143,7 @@ function handleClick(event) {
             } catch (error) {
                 console.error('Randomization failed:', error);
             } finally {
-                setTimeout(() => { isRandomizing = false; }, 1200); // Increased timeout
+                setTimeout(() => { isRandomizing = false; }, 1200);
             }
         } else {
             console.error('utils.randomizeAllFields is not a function or already randomizing');
@@ -281,7 +281,7 @@ function handleClick(event) {
     } else if (className.includes('trait-bubble')) {
         document.querySelector('#selectedTraits').innerHTML = `Trait: ${event.target.textContent}`;
     } else if (className.includes('generate-report')) {
-        const charId = document.querySelector('#characterSelect')?.value;
+        const charId = dataset.charId || document.querySelector('#characterSelect')?.value;
         const chars = JSON.parse(localStorage.getItem('characters') || '[]');
         const char = chars.find(c => c.id == charId) || {};
         const reportContent = document.querySelector('#characterReportContent');

@@ -35,7 +35,7 @@ const characters = {
                 } catch (error) {
                     console.error('Error updating character selects:', error);
                     attempts++;
-                    setTimeout(updateSelects, 300 * attempts); // Retry with increasing delay
+                    setTimeout(updateSelects, 300 * attempts);
                 }
             });
         };
@@ -88,7 +88,11 @@ const characters = {
             list.innerHTML = '';
             this.data.forEach(char => {
                 const div = document.createElement('div');
-                div.textContent = `${char.name} (${char.age}, ${char.gender}) - ${char.traits}`;
+                div.className = 'character-item';
+                div.innerHTML = `
+                    <span>${char.name} (${char.age}, ${char.gender}) - ${char.traits}</span>
+                    <button class="generate-report" data-char-id="${char.id}">Generate Report</button>
+                `;
                 list.appendChild(div);
             });
             console.log(`Characters displayed: ${this.data.length}`);
