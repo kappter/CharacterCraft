@@ -8,7 +8,17 @@ const fallbackData = {
     physicalTraits: [{ characteristic: 'Strong Build', description: 'Robust physique', category: 'Physical' }],
     psychologicalTraits: [{ characteristic: 'Calm Demeanor', description: 'Steady under pressure', category: 'Psychological' }],
     backgrounds: [{ characteristic: 'City Life', description: 'Raised in an urban setting', category: 'Background' }],
-    motivations: [{ characteristic: 'Seek Knowledge', description: 'Driven by curiosity', category: 'Motivations' }]
+    motivations: [{ characteristic: 'Seek Knowledge', description: 'Driven by curiosity', category: 'Motivations' }],
+    scenarios: [
+        { type: 'Meeting', context: 'met unexpectedly at a bustling market' },
+        { type: 'Collaboration', context: 'teamed up on a critical project' },
+        { type: 'Conflict', context: 'clashed over a disputed resource' }
+    ],
+    outcomes: [
+        { result: 'formed a lasting alliance', condition: 'complementary traits' },
+        { result: 'parted ways amicably', condition: 'neutral traits' },
+        { result: 'ended in a heated rivalry', condition: 'conflicting traits' }
+    ]
 };
 
 function switchTab(tabId) {
@@ -119,6 +129,26 @@ function generateDetailedBio(char) {
     return bio;
 }
 
+function generateIntersectionScenario(char1, char2) {
+    const scenario = getRandomItem(fallbackData.scenarios);
+    const outcome = getRandomItem(fallbackData.outcomes);
+    const context1 = document.querySelector('#context1')?.value || 'a neutral setting';
+    const context2 = document.querySelector('#context2')?.value || 'a different perspective';
+    const psychTraits1 = parseCSV(loadFileData('psychological_traits.csv') || '', 'psychological_traits.csv');
+    const psychTraits2 = psychTraits1; // Using same data for simplicity
+    const trait1 = getRandomItem(psychTraits1).characteristic;
+    const trait2 = getRandomItem(psychTraits2).characteristic;
+    const interaction = trait1.includes('Calm') && trait2.includes('Aggressive') ? 'initial tension' : 
+                       trait1.includes('Optimistic') && trait2.includes('Pessimistic') ? 'surprising synergy' : 
+                       'natural harmony';
+
+    let narrative = `
+        <p>In a twist of fate, ${char1.name || 'Unknown'} and ${char2.name || 'Unknown'} ${scenario.context}. ${char1.name}, a ${char1.age || 'Unknown'}-year-old ${char1.gender || 'Unknown'} ${char1.occupation || 'Unknown'} from ${char1.locale || 'Unknown'} with traits like ${char1.traits || 'Unknown'}, crossed paths with ${char2.name}, a ${char2.age || 'Unknown'}-year-old ${char2.gender || 'Unknown'} ${char2.occupation || 'Unknown'} from ${char2.locale || 'Unknown'} with traits like ${char2.traits || 'Unknown'}.</p>
+        <p>Their ${scenario.type.toLowerCase()} unfolded in ${context1}, marked by ${interaction} due to ${char1.name}'s ${trait1} clashing or complementing ${char2.name}'s ${trait2}. This led to ${context2}, where they ${outcome.result}.</p>
+    `;
+    return narrative;
+}
+
 function handleClick(event) {
     event.preventDefault();
     const { tagName, className, dataset } = event.target;
@@ -183,20 +213,20 @@ function handleClick(event) {
         const chars = JSON.parse(localStorage.getItem('characters') || '[]');
         const char1 = chars.find(c => c.id == char1Id) || {};
         const char2 = chars.find(c => c.id == char2Id) || {};
-        document.querySelector('#comparisonOutput').innerHTML = `
-            <p><strong>${char1.name || 'None'}</strong>: ${char1.traits || ''}</p>
-            <p><strong>${char2.name || 'None'}</strong>: ${char2.traits || ''}</p>
-        `;
+        const scenario = generateIntersectionScenario(char1, char2);
+        document.querySelector('#comparisonOutput').innerHTML = scenario;
+        document.querySelector('#exportComparisonButton').disabled = false;
+        console.log('Comparison scenario generated:', { char1, char2, scenario });
     } else if (className.includes('randomize-comparison')) {
-        document.querySelector('#context1').value = 'Context A';
-        document.querySelector('#context2').value = 'Context B';
+        document.querySelector('#context1').value = 'a neutral setting';
+        document.querySelector('#context2').value = 'a different perspective';
     } else if (className.includes('export-comparison')) {
         const comparison = document.querySelector('#comparisonOutput')?.innerText || 'No comparison available';
         const blob = new Blob([comparison], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'comparison_report.txt';
+        a.download = 'comparison_scenario.txt';
         a.click();
         URL.revokeObjectURL(url);
     } else if (className.includes('update-character')) {
@@ -284,9 +314,9 @@ function handleClick(event) {
             console.error('traits.randomizeTraits is not a function or already randomizing');
         }
     } else if (className.includes('randomize-context1')) {
-        document.querySelector('#context1').value = 'Context A';
+        document.querySelector('#context1').value = 'a neutral setting';
     } else if (className.includes('randomize-context2')) {
-        document.querySelector('#context2').value = 'Context B';
+        document.querySelector('#context2').value = 'a different perspective';
     } else if (className.includes('trait-bubble')) {
         document.querySelector('#selectedTraits').innerHTML = `Trait: ${event.target.textContent}`;
     } else if (className.includes('generate-report')) {
