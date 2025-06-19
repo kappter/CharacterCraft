@@ -1,170 +1,136 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
-<html lang="en" data-theme="light">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval';">
     <title>CharacterCraft</title>
-    <link rel="icon" href="/CharacterCraft/favicon.ico" type="image/x-icon" onerror="this.onerror=null; this.href='https://via.placeholder.com/32';">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/CharacterCraft/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js" onerror="this.onerror=null; this.src='/CharacterCraft/papaparse.min.js';"></script>
-    <script src="/CharacterCraft/utils.js" defer></script>
-    <script src="/CharacterCraft/traits.js" defer></script>
-    <script src="/CharacterCraft/characters.js" defer></script>
-    <script src="/CharacterCraft/script.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="script.js" defer></script>
+    <script src="characters.js" defer></script>
+    <script src="traits.js" defer></script>
+    <script src="utils.js" defer></script>
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <img src="/CharacterCraft/cclogo.png" alt="CharacterCraft Logo" class="logo" onerror="this.src='https://via.placeholder.com/32';">
-            <h1>CharacterCraft</h1>
-        </div>
+        <div class="logo"></div>
+        <h1>CharacterCraft</h1>
         <div class="theme-toggle">
-            <label class="text-sm">Dark Mode</label>
+            <label for="theme-toggle">Dark Mode</label>
             <input type="checkbox" id="theme-toggle" class="toggle">
         </div>
     </header>
+
     <nav>
         <button class="tab-button" data-tab="create">Create</button>
         <button class="tab-button" data-tab="compare">Compare</button>
         <button class="tab-button" data-tab="traits">Traits</button>
         <button class="tab-button" data-tab="saved">Saved</button>
-        <button class="tab-button" data-tab="trait_bubbles">Trait Bubbles</button>
+        <button class="tab-button" data-tab="trait-bubbles">Trait Bubbles</button>
         <button class="reset-app">Reset</button>
     </nav>
-    <main class="container">
-        <div id="create-tab" class="tab-content">
-            <h2 class="section-title">Create Character</h2>
-            <form class="character-form">
-                <div class="form-group">
-                    <label for="name" class="form-label">Name</label>
-                    <div class="input-group">
-                        <input type="text" id="name">
-                        <button class="randomize-name">Random</button>
+
+    <main>
+        <div class="container">
+            <div id="create-tab" class="tab-content">
+                <h2 class="section-title">Create Character</h2>
+                <div class="character-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name</label>
+                        <div class="input-group">
+                            <input type="text" id="name">
+                            <button class="randomize-name">Random</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" class="form-label">Age</label>
+                        <div class="input-group">
+                            <input type="number" id="age" min="1" max="120">
+                            <button class="randomize-age">Random</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender" class="form-label">Gender</label>
+                        <div class="input-group">
+                            <input type="text" id="gender">
+                            <button class="randomize-gender">Random</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="locale" class="form-label">Locale</label>
+                        <div class="input-group">
+                            <input type="text" id="locale">
+                            <button class="randomize-locale">Random</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="occupation" class="form-label">Occupation</label>
+                        <div class="input-group">
+                            <input type="text" id="occupation">
+                            <button class="randomize-occupation">Random</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="traits" class="form-label">Traits</label>
+                        <div class="input-group">
+                            <input type="text" id="traits">
+                            <button class="randomize-traits">Random</button>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="randomize-everything">Randomize All</button>
+                        <button class="generate-bio">Generate Bio</button>
+                        <button class="save-character">Save</button>
+                        <button class="export-bio" disabled>Export Bio</button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="age" class="form-label">Age</label>
-                    <div class="input-group">
-                        <input type="number" id="age">
-                        <button class="randomize-age">Random</button>
-                    </div>
+                <div class="bio-preview">
+                    <h3 class="section-subtitle">Bio Preview</h3>
+                    <div id="shortBioOutput" class="preview-box"></div>
                 </div>
-                <div class="form-group">
-                    <label for="gender" class="form-label">Gender</label>
-                    <div class="input-group">
-                        <input type="text" id="gender">
-                        <button class="randomize-gender">Random</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="locale" class="form-label">Locale</label>
-                    <div class="input-group">
-                        <input type="text" id="locale">
-                        <button class="randomize-locale">Random</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="occupation" class="form-label">Occupation</label>
-                    <div class="input-group">
-                        <input type="text" id="occupation">
-                        <button class="randomize-occupation">Random</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="traits" class="form-label">Traits</label>
-                    <div class="input-group">
-                        <input type="text" id="traits">
-                        <button class="randomize-traits">Random</button>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="randomize-everything">Randomize All</button>
-                    <button class="generate-bio">Generate Bio</button>
-                    <button class="save-character">Save</button>
-                    <button class="export-bio" id="exportBioButton" disabled>Export Bio</button>
-                </div>
-            </form>
-            <div class="bio-preview">
-                <h3 class="section-subtitle">Bio Preview</h3>
-                <div id="shortBioOutput" class="preview-box"></div>
             </div>
-        </div>
-        <div id="compare-tab" class="tab-content hidden">
-            <h2 class="section-title">Compare Characters</h2>
-            <select id="character1"></select>
-            <select id="character2"></select>
-            <button class="compare-characters">Compare</button>
-            <button class="randomize-comparison">Randomize Context</button>
-            <div id="comparisonOutput" class="preview-box"></div>
-            <button class="export-comparison" disabled>Export Comparison</button>
-        </div>
-        <div id="traits-tab" class="tab-content hidden">
-            <h2 class="section-title">Traits</h2>
-            <div id="traitDetails">
-                <p>Traits list will display here.</p>
+
+            <div id="compare-tab" class="tab-content hidden">
+                <h2 class="section-title">Compare Characters</h2>
+                <select id="character1"></select>
+                <select id="character2"></select>
+                <input id="context1" placeholder="Context 1 (e.g., a bustling market)">
+                <input id="context2" placeholder="Context 2 (e.g., a surprising resolution)">
+                <button class="compare-characters">Compare</button>
+                <button class="randomize-comparison">Randomize Context</button>
+                <div id="comparisonOutput" class="preview-box"></div>
+                <button class="export-comparison" disabled>Export Comparison</button>
             </div>
-        </div>
-        <div id="saved-tab" class="tab-content hidden">
-            <h2 class="section-title">Saved Characters</h2>
-            <select id="characterSelect"></select>
-            <button class="update-character">Update</button>
-            <div id="characterList"></div>
-            <button class="generate-report" id="generateReportButton">Generate Report</button>
-        </div>
-        <div id="trait_bubbles-tab" class="tab-content hidden">
-            <h2 class="section-title">Trait Bubbles</h2>
-            <div id="selectedTraits">
-                <p>Trait bubbles will display here.</p>
+
+            <div id="traits-tab" class="tab-content hidden">
+                <h2 class="section-title">Traits</h2>
+                <div id="traitsList">
+                    <p>Traits list will display here.</p>
+                </div>
+            </div>
+
+            <div id="saved-tab" class="tab-content hidden">
+                <h2 class="section-title">Saved Characters</h2>
+                <div id="characterList"></div>
+                <button class="update-character">Update</button>
+            </div>
+
+            <div id="trait-bubbles-tab" class="tab-content hidden">
+                <h2 class="section-title">Trait Bubbles</h2>
+                <div id="traitBubbles">
+                    <p>Trait bubbles will display here.</p>
+                </div>
             </div>
         </div>
     </main>
+
     <footer>
         <p>© 2025 CharacterCraft. All rights reserved.</p>
     </footer>
+
     <div id="characterReportModal" class="modal hidden">
         <div class="modal-content">
-            <h3 class="section-subtitle">Character Report</h3>
+            <h2 class="section-title">Character Report</h2>
             <div id="characterReportContent"></div>
             <div class="modal-buttons">
                 <button class="export-report">Export</button>
