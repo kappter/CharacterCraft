@@ -5,6 +5,16 @@ import { traits } from './traits.js';
 const tabs = document.querySelectorAll('nav a');
 const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#themeToggle');
+
+const bindEventListeners = () => {
+    const buttons = document.querySelectorAll('button');
+    if (buttons.length === 0) console.error('No buttons found for event listeners');
+    buttons.forEach(button => {
+        button.addEventListener('click', handleClick);
+    });
+    console.log('Event listeners bound for: click');
+};
+
 let isRandomizing = false;
 const handleClick = (e) => {
     e.preventDefault();
