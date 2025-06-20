@@ -5,6 +5,7 @@ import { traits } from './traits.js';
 const tabs = document.querySelectorAll('nav a');
 const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#themeToggle');
+let isRandomizing = false;
 
 const bindEventListeners = () => {
     const buttons = document.querySelectorAll('button');
@@ -15,126 +16,68 @@ const bindEventListeners = () => {
     console.log('Event listeners bound for: click');
 };
 
-let isRandomizing = false;
 const handleClick = (e) => {
     e.preventDefault();
     const { tagName, className, id, dataset } = e.target;
     console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
-    // Existing logic...
+
+    if (tagName === 'BUTTON' && dataset.tab) {
+        switchTab(dataset.tab);
+    } else if (className.includes('randomize-everything')) {
+        if (typeof utils.randomizeAllFields === 'function' && !isRandomizing) {
+            console.log('Attempting to randomize all fields');
+            isRandomizing = true;
+            try {
+                utils.randomizeAllFields();
+                const inputs = document.querySelectorAll('#create input[readonly]');
+                inputs.forEach(input => {
+                    if (input.id === 'traits' && typeof traits.randomizeTraits === 'function') {
+                        traits.randomizeTraits();
+                    }
+                });
+                console.log('Randomize all fields completed');
+            } catch (error) {
+                console.error('Randomization failed:', error);
+            } finally {
+                setTimeout(() => { isRandomizing = false; }, 1500);
+            }
+        } else {
+            console.error('utils.randomizeAllFields not available or already randomizing');
+        }
+    } else if (className.includes('generate-bio')) {
+        const char = {
+            name: document.querySelector('#name')?.value || 'Unknown',
+            age: document.querySelector('#age')?.value || 'Unknown',
+            gender: document.querySelector('#gender')?.value || 'Unknown',
+            locale: document.querySelector('#locale')?.value || 'Unknown',
+            occupation: document.querySelector('#occupation')?.value || 'Unknown',
+            traits: document.querySelector('#traits')?.value || 'Unknown'
+        };
+        const bio = generateDetailedBio(char);
+        document.querySelector('#bioPreview').innerHTML = bio;
+        console.log('Bio generated:', { char, bio });
+    } else if (className.includes('save-character')) {
+        if (typeof characters.saveCharacter === 'function') {
+            characters.saveCharacter();
+            console.log('Character save completed');
+            switchTab('saved');
+        }
+    }
+};
+
+const switchTab = (tabId) => {
+    tabContents.forEach(content => {
+        content.style.display = content.id === tabId ? 'block' : 'none';
+    });
+    console.log(`Switched to tab: ${tabId}`);
 };
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded, initialized create tab and event listeners');
-
-    const bindEventListeners = () => {
-        const buttons = document.querySelectorAll('button');
-        if (buttons.length === 0) console.error('No buttons found for event listeners');
-        buttons.forEach(button => {
-            button.addEventListener('click', handleClick);
-        });
-        console.log('Event listeners bound for: click');
-    };
-
-    // Initial binding
     bindEventListeners();
-
-    // Fallback if DOM updates later
-    setTimeout(bindEventListeners, 500);
-
-    const handleClick = (e) => {
-        e.preventDefault();
-        const { tagName, className, id, dataset } = e.target;
-        console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
-        // Existing logic...
-    };
-
-    const switchTab = (tabId) => {
-        tabContents.forEach(content => {
-            content.style.display = content.id === tabId ? 'block' : 'none';
-        });
-        console.log(`Switched to tab: ${tabId}`);
-    };
-
+    setTimeout(bindEventListeners, 500); // Fallback binding
     tabs.forEach(tab => tab.addEventListener('click', (e) => { e.preventDefault(); switchTab(tab.dataset.tab); }));
     switchTab('create');
-
-    themeToggle.addEventListener('change', function() {
-        document.body.classList.toggle('dark-mode', this.checked);
-        console.log(`Initialized theme: ${this.checked ? 'dark' : 'light'}`);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Page loaded, initialized create tab and event listeners');
-
-    const bindEventListeners = () => {
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(button => {
-            button.addEventListener('click', handleClick);
-        });
-        console.log('Event listeners bound for: click');
-    };
-
-    const handleClick = (e) => {
-        e.preventDefault();
-        const { tagName, className, id, dataset } = e.target;
-        console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
-
-        if (tagName === 'BUTTON' && dataset.tab) {
-            switchTab(dataset.tab);
-        } else if (className.includes('randomize-everything')) {
-            if (typeof utils.randomizeAllFields === 'function' && !isRandomizing) {
-                console.log('Attempting to randomize all fields');
-                isRandomizing = true;
-                try {
-                    utils.randomizeAllFields();
-                    const inputs = document.querySelectorAll('#create input[readonly]');
-                    inputs.forEach(input => {
-                        if (input.id === 'traits' && typeof traits.randomizeTraits === 'function') {
-                            traits.randomizeTraits();
-                        }
-                    });
-                    console.log('Randomize all fields completed');
-                } catch (error) {
-                    console.error('Randomization failed:', error);
-                } finally {
-                    setTimeout(() => { isRandomizing = false; }, 1500);
-                }
-            } else {
-                console.error('utils.randomizeAllFields not available or already randomizing');
-            }
-        } else if (className.includes('generate-bio')) {
-            const char = {
-                name: document.querySelector('#name')?.value || 'Unknown',
-                age: document.querySelector('#age')?.value || 'Unknown',
-                gender: document.querySelector('#gender')?.value || 'Unknown',
-                locale: document.querySelector('#locale')?.value || 'Unknown',
-                occupation: document.querySelector('#occupation')?.value || 'Unknown',
-                traits: document.querySelector('#traits')?.value || 'Unknown'
-            };
-            const bio = generateDetailedBio(char);
-            document.querySelector('#bioPreview').innerHTML = bio;
-            console.log('Bio generated:', { char, bio });
-        } else if (className.includes('save-character')) {
-            if (typeof characters.saveCharacter === 'function') {
-                characters.saveCharacter();
-                console.log('Character save completed');
-                switchTab('saved');
-            }
-        }
-    };
-
-    const switchTab = (tabId) => {
-        tabContents.forEach(content => {
-            content.style.display = content.id === tabId ? 'block' : 'none';
-        });
-        console.log(`Switched to tab: ${tabId}`);
-    };
-
-    bindEventListeners();
-    tabs.forEach(tab => tab.addEventListener('click', (e) => { e.preventDefault(); switchTab(tab.dataset.tab); }));
-    switchTab('create');
-
     themeToggle.addEventListener('change', function() {
         document.body.classList.toggle('dark-mode', this.checked);
         console.log(`Initialized theme: ${this.checked ? 'dark' : 'light'}`);
