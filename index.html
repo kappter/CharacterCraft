@@ -38,170 +38,187 @@
         return gk_fileData[filename] || "";
         }
         </script><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharacterCraft</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="utils.js" defer></script>
-    <script src="script.js" defer></script>
-    <script src="characters.js" defer></script>
-    <script src="traits.js" defer></script>
-</head>
-<body>
-    <header>
-        <h1>CharacterCraft</h1>
-        <label class="switch">
-            <input type="checkbox" id="themeToggle">
-            <span class="slider"></span>
-            <span>Dark Mode</span>
-        </label>
-    </header>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>CharacterCraft</title>
+         <link rel="stylesheet" href="styles.css">
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+         <script src="utils.js" defer></script>
+         <script src="script.js" defer></script>
+         <script src="characters.js" defer></script>
+         <script src="traits.js" defer></script>
+     </head>
+     <body>
+         <header>
+             <h1>CharacterCraft</h1>
+             <label class="theme-toggle">
+                 <input type="checkbox" id="themeToggle" class="toggle">
+                 <span>Dark Mode</span>
+             </label>
+         </header>
 
-    <nav>
-        <ul>
-            <li><a href="#" data-tab="create">Create</a></li>
-            <li><a href="#" data-tab="compare">Compare</a></li>
-            <li><a href="#" data-tab="traits">Traits</a></li>
-            <li><a href="#" data-tab="saved">Saved</a></li>
-            <li><a href="#" data-tab="bubbles">Trait Bubbles</a></li>
-            <li><a href="#" data-tab="reset">Reset</a></li>
-        </ul>
-    </nav>
+         <nav>
+             <ul>
+                 <li><a href="#" data-tab="create">Create</a></li>
+                 <li><a href="#" data-tab="compare">Compare</a></li>
+                 <li><a href="#" data-tab="traits">Traits</a></li>
+                 <li><a href="#" data-tab="saved">Saved</a></li>
+                 <li><a href="#" data-tab="bubbles">Trait Bubbles</a></li>
+                 <li><a href="#" data-tab="reset">Reset</a></li>
+             </ul>
+         </nav>
 
-    <main>
-        <section id="create" class="tab-content">
-            <h2>Create Character</h2>
-            <div class="character-form">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" readonly>
-                    <button class="randomize-name" data-field="name">Random</button>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="text" id="age" readonly>
-                    <button class="randomize-age" data-field="age">Random</button>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <input type="text" id="gender" readonly>
-                    <button class="randomize-gender" data-field="gender">Random</button>
-                </div>
-                <div class="form-group">
-                    <label for="locale">Locale</label>
-                    <input type="text" id="locale" readonly>
-                    <button class="randomize-locale" data-field="locale">Random</button>
-                </div>
-                <div class="form-group">
-                    <label for="occupation">Occupation</label>
-                    <input type="text" id="occupation" readonly>
-                    <button class="randomize-occupation" data-field="occupation">Random</button>
-                </div>
-                <div class="form-group">
-                    <label for="traits">Traits</label>
-                    <input type="text" id="traits" readonly>
-                    <button class="randomize-traits" data-field="traits">Random</button>
-                </div>
-                <button class="randomize-everything" data-tab="none">Randomize All</button>
-                <button id="generateBio">Generate Bio</button>
-                <button id="saveCharacter">Save</button>
-                <button id="exportBio">Export Bio</button>
-                <button id="generateAutobiography">Autobiography</button>
-            </div>
-            <div class="bio-preview">
-                <label for="bioPreview">Bio Preview</label>
-                <textarea id="bioPreview" readonly></textarea>
-            </div>
-            <div class="autobiography-preview">
-                <label for="autobiography">Autobiography</label>
-                <textarea id="autobiography" readonly></textarea>
-                <label for="autobiographyPreview">Autobiography Preview</label>
-                <textarea id="autobiographyPreview" readonly></textarea>
-            </div>
-        </section>
+         <main>
+             <section id="create" class="tab-content">
+                 <h2>Create Character</h2>
+                 <div class="character-form">
+                     <div class="form-group">
+                         <label class="form-label" for="name">Name</label>
+                         <div class="input-group">
+                             <input type="text" id="name" readonly>
+                             <button class="randomize-name" data-field="name">Random</button>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label class="form-label" for="age">Age</label>
+                         <div class="input-group">
+                             <input type="text" id="age" readonly>
+                             <button class="randomize-age" data-field="age">Random</button>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label class="form-label" for="gender">Gender</label>
+                         <div class="input-group">
+                             <input type="text" id="gender" readonly>
+                             <button class="randomize-gender" data-field="gender">Random</button>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label class="form-label" for="locale">Locale</label>
+                         <div class="input-group">
+                             <input type="text" id="locale" readonly>
+                             <button class="randomize-locale" data-field="locale">Random</button>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label class="form-label" for="occupation">Occupation</label>
+                         <div class="input-group">
+                             <input type="text" id="occupation" readonly>
+                             <button class="randomize-occupation" data-field="occupation">Random</button>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label class="form-label" for="traits">Traits</label>
+                         <div class="input-group">
+                             <input type="text" id="traits" readonly>
+                             <button class="randomize-traits" data-field="traits">Random</button>
+                         </div>
+                     </div>
+                     <div class="action-buttons">
+                         <button class="randomize-everything" data-tab="none">Randomize All</button>
+                         <button id="generateBio" class="generate-bio">Generate Bio</button>
+                         <button id="saveCharacter" class="save-character">Save</button>
+                         <button id="exportBio" class="export-bio">Export Bio</button>
+                         <button id="generateAutobiography">Autobiography</button>
+                     </div>
+                 </div>
+                 <div class="bio-preview">
+                     <label class="form-label" for="bioPreview">Bio Preview</label>
+                     <div class="preview-box" id="bioPreview"></div>
+                 </div>
+                 <div class="autobiography-preview">
+                     <label class="form-label" for="autobiography">Autobiography</label>
+                     <div class="preview-box" id="autobiography"></div>
+                     <label class="form-label" for="autobiographyPreview">Autobiography Preview</label>
+                     <div class="preview-box" id="autobiographyPreview"></div>
+                 </div>
+             </section>
 
-        <section id="compare" class="tab-content">
-            <h2>Compare Characters</h2>
-            <div class="compare-form">
-                <select id="characterSelect1"></select>
-                <select id="characterSelect2"></select>
-                <button id="compareButton">Compare</button>
-                <button id="randomizeContext">Randomize Context</button>
-                <button id="exportComparison">Export Comparison</button>
-            </div>
-            <div id="comparisonResult"></div>
-        </section>
+             <section id="compare" class="tab-content">
+                 <h2>Compare Characters</h2>
+                 <div class="compare-section">
+                     <select id="characterSelect1"></select>
+                     <select id="characterSelect2"></select>
+                     <div class="action-buttons">
+                         <button id="compareButton" class="compare-characters">Compare</button>
+                         <button id="randomizeContext">Randomize Context</button>
+                         <button id="exportComparison" class="export-comparison">Export Comparison</button>
+                     </div>
+                     <div id="comparisonOutput" class="preview-box"></div>
+                 </div>
+             </section>
 
-        <section id="traits" class="tab-content">
-            <h2>Traits</h2>
-            <div id="traitsList">Traits list will display here.</div>
-        </section>
+             <section id="traits" class="tab-content">
+                 <h2>Traits</h2>
+                 <div id="traitsList">Traits list will display here.</div>
+             </section>
 
-        <section id="saved" class="tab-content">
-            <h2>Saved Characters</h2>
-            <div id="savedCharacters"></div>
-            <button id="updateSaved">Update</button>
-        </section>
+             <section id="saved" class="tab-content">
+                 <h2>Saved Characters</h2>
+                 <div id="savedCharacters"></div>
+                 <button id="updateSaved" class="update-character">Update</button>
+             </section>
 
-        <section id="bubbles" class="tab-content">
-            <h2>Trait Bubbles</h2>
-            <div class="bubble-controls">
-                <label for="categorySelect">Select Category:</label>
-                <select id="categorySelect">
-                    <option value="all">All</option>
-                    <option value="physical">Physical</option>
-                    <option value="psychological">Psychological</option>
-                    <option value="background">Background</option>
-                    <option value="motivations">Motivations</option>
-                </select>
-                <button id="applyToProfile">Apply to Profile</button>
-            </div>
-            <div id="bubbleDisplay"></div>
-        </section>
-    </main>
+             <section id="bubbles" class="tab-content">
+                 <h2>Trait Bubbles</h2>
+                 <div class="trait-bubbles-controls">
+                     <label for="categorySelect">Select Category:</label>
+                     <select id="categorySelect">
+                         <option value="all">All</option>
+                         <option value="physical">Physical</option>
+                         <option value="psychological">Psychological</option>
+                         <option value="background">Background</option>
+                         <option value="motivations">Motivations</option>
+                     </select>
+                     <button id="applyToProfile">Apply to Profile</button>
+                 </div>
+                 <div id="traitBubbleContainer"></div>
+             </section>
+         </main>
 
-    <footer>
-        <p>© 2025 CharacterCraft. All rights reserved.</p>
-    </footer>
+         <footer>
+             <p>© 2025 CharacterCraft. All rights reserved.</p>
+         </footer>
 
-    <div id="characterReport" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Character Report</h2>
-            <div id="reportContent"></div>
-            <button id="exportReport">Export</button>
-            <button id="closeReport">Close</button>
-        </div>
-    </div>
+         <div id="characterReportModal" class="modal hidden">
+             <div class="modal-content">
+                 <span class="close">×</span>
+                 <h2>Character Report</h2>
+                 <div id="characterReportContent"></div>
+                 <div class="modal-buttons">
+                     <button id="exportReport" class="export-report">Export</button>
+                     <button id="closeReport" class="close-modal">Close</button>
+                 </div>
+             </div>
+         </div>
 
-    <script>
-        // Ensure event listeners are bound after DOM content is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('nav a');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const tabId = this.getAttribute('data-tab');
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.style.display = content.id === tabId ? 'block' : 'none';
-                    });
-                    console.log(`Switched to tab: ${tabId}`);
-                });
-            });
+         <script>
+             // Ensure event listeners are bound after DOM content is loaded
+             document.addEventListener('DOMContentLoaded', function() {
+                 const tabs = document.querySelectorAll('nav a');
+                 tabs.forEach(tab => {
+                     tab.addEventListener('click', function(e) {
+                         e.preventDefault();
+                         const tabId = this.getAttribute('data-tab');
+                         document.querySelectorAll('.tab-content').forEach(content => {
+                             content.style.display = content.id === tabId ? 'block' : 'none';
+                         });
+                         console.log(`Switched to tab: ${tabId}`);
+                     });
+                 });
 
-            // Initial tab activation
-            tabs[0].click();
+                 // Initial tab activation
+                 tabs[0].click();
 
-            // Theme toggle
-            const themeToggle = document.getElementById('themeToggle');
-            themeToggle.addEventListener('change', function() {
-                document.body.classList.toggle('dark-mode', this.checked);
-                console.log(`Initialized theme: ${this.checked ? 'dark' : 'light'}`);
-            });
-        });
-    </script>
-</body>
-</html>
+                 // Theme toggle
+                 const themeToggle = document.getElementById('themeToggle');
+                 themeToggle.addEventListener('change', function() {
+                     document.body.classList.toggle('dark-mode', this.checked);
+                     console.log(`Initialized theme: ${this.checked ? 'dark' : 'light'}`);
+                 });
+             });
+         </script>
+     </body>
+     </html>
