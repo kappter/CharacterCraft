@@ -22,6 +22,48 @@ const handleClick = (e) => {
     console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
     // Existing logic...
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, initialized create tab and event listeners');
+
+    const bindEventListeners = () => {
+        const buttons = document.querySelectorAll('button');
+        if (buttons.length === 0) console.error('No buttons found for event listeners');
+        buttons.forEach(button => {
+            button.addEventListener('click', handleClick);
+        });
+        console.log('Event listeners bound for: click');
+    };
+
+    // Initial binding
+    bindEventListeners();
+
+    // Fallback if DOM updates later
+    setTimeout(bindEventListeners, 500);
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        const { tagName, className, id, dataset } = e.target;
+        console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
+        // Existing logic...
+    };
+
+    const switchTab = (tabId) => {
+        tabContents.forEach(content => {
+            content.style.display = content.id === tabId ? 'block' : 'none';
+        });
+        console.log(`Switched to tab: ${tabId}`);
+    };
+
+    tabs.forEach(tab => tab.addEventListener('click', (e) => { e.preventDefault(); switchTab(tab.dataset.tab); }));
+    switchTab('create');
+
+    themeToggle.addEventListener('change', function() {
+        document.body.classList.toggle('dark-mode', this.checked);
+        console.log(`Initialized theme: ${this.checked ? 'dark' : 'light'}`);
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded, initialized create tab and event listeners');
 
