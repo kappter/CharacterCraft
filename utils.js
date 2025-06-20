@@ -16,11 +16,23 @@ const utils = (function() {
     function randomizeLocale() { return data.locales[Math.floor(Math.random() * data.locales.length)]; }
     function randomizeOccupation() { return data.occupations[Math.floor(Math.random() * data.occupations.length)]; }
     function randomizeAllFields() {
-        document.querySelector('#name').value = randomizeName();
-        document.querySelector('#age').value = randomizeAge();
-        document.querySelector('#gender').value = randomizeGender();
-        document.querySelector('#locale').value = randomizeLocale();
-        document.querySelector('#occupation').value = randomizeOccupation();
+        console.log('Randomizing all fields...');
+        const nameInput = document.querySelector('#name');
+        const ageInput = document.querySelector('#age');
+        const genderInput = document.querySelector('#gender');
+        const localeInput = document.querySelector('#locale');
+        const occupationInput = document.querySelector('#occupation');
+        if (nameInput) nameInput.value = randomizeName();
+        else console.error('Name input not found');
+        if (ageInput) ageInput.value = randomizeAge();
+        else console.error('Age input not found');
+        if (genderInput) genderInput.value = randomizeGender();
+        else console.error('Gender input not found');
+        if (localeInput) localeInput.value = randomizeLocale();
+        else console.error('Locale input not found');
+        if (occupationInput) occupationInput.value = randomizeOccupation();
+        else console.error('Occupation input not found');
+        console.log('Randomization completed');
     }
 
     return {
