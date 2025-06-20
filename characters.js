@@ -3,9 +3,8 @@ const characters = {
 
     updateCharacterSelects() {
         const selects = [
-            document.querySelector('#characterSelect'),
-            document.querySelector('#character1'),
-            document.querySelector('#character2')
+            document.querySelector('#characterSelect1'),
+            document.querySelector('#characterSelect2')
         ];
         let attempts = 0;
         const maxAttempts = 3;
@@ -31,7 +30,7 @@ const characters = {
                             select.appendChild(option);
                         }
                     });
-                    console.log(`Character selects updated: ${select.options.length - initialLength} characters`);
+                    console.log(`Character selects updated: ${select.options.length - initialLength} characters added to ${select.id}`);
                 } catch (error) {
                     console.error('Error updating character selects:', error);
                     attempts++;
@@ -60,7 +59,7 @@ const characters = {
     },
 
     updateCharacter() {
-        const select = document.querySelector('#characterSelect');
+        const select = document.querySelector('#characterSelect1'); // Using first select for update context
         const id = select?.value;
         if (id) {
             const charIndex = this.data.findIndex(c => c.id == id);
@@ -83,7 +82,7 @@ const characters = {
     },
 
     displayCharacters() {
-        const list = document.querySelector('#characterList');
+        const list = document.querySelector('#savedCharacters'); // Updated to match index.html ID
         if (list) {
             list.innerHTML = '';
             this.data.forEach(char => {
