@@ -1,3 +1,20 @@
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cssLink = document.querySelector('link[href*="styles.css"]');
+        if (cssLink) {
+            const cssLoaded = setInterval(() => {
+                if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)') {
+                    console.warn('CSS not loading, attempting reload');
+                    cssLink.href = `styles.css?v=${new Date().getTime()}`;
+                } else {
+                    clearInterval(cssLoaded);
+                    console.log('CSS loaded successfully');
+                }
+            }, 1000);
+        }
+    });
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
