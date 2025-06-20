@@ -9,9 +9,14 @@ let isRandomizing = false;
 
 function bindEventListeners() {
     const buttons = document.querySelectorAll('button');
-    if (buttons.length === 0) console.error('No buttons found for event listeners');
-    buttons.forEach(button => {
+    console.log('Attempting to bind listeners to', buttons.length, 'buttons');
+    if (buttons.length === 0) {
+        console.error('No buttons found in DOM for event listeners');
+        return;
+    }
+    buttons.forEach((button, index) => {
         button.addEventListener('click', handleClick);
+        console.log(`Bound listener to button ${index}:`, button.className, button.id);
     });
     console.log('Event listeners bound for: click');
 }
@@ -58,13 +63,20 @@ function switchTab(tabId) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded, initialized create tab and event listeners');
     bindEventListeners();
-    setTimeout(bindEventListeners, 500);
+    setTimeout(() => {
+        console.log('Retrying event listener binding...');
+        bindEventListeners();
+    }, 500);
     tabs.forEach(tab => tab.addEventListener('click', (e) => { e.preventDefault(); switchTab(tab.dataset.tab); }));
     switchTab('create');
-    themeToggle.addEventListener('change', function() {
-        document.body.classList.toggle('dark-mode', this.checked);
-        console.log(`Theme toggled to: ${this.checked ? 'dark' : 'light'}`);
-    });
+    if (themeToggle) {
+        themeToggle.addEventListener('change', function() {
+            document.body.classList.toggle('dark-mode', this.checked);
+            console.log(`Theme toggled to: ${this.checked ? 'dark' : 'light'}`);
+        });
+    } else {
+        console.warn('Theme toggle element not found');
+    }
 });
 
 function generateDetailedBio(char) {
