@@ -43,7 +43,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CharacterCraft</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles.css" id="cssLink">
+        <script>
+            // Fallback to check if CSS loads
+            document.addEventListener('DOMContentLoaded', () => {
+                const cssLink = document.getElementById('cssLink');
+                const cssLoaded = setInterval(() => {
+                    if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)') {
+                        console.warn('CSS not loading, attempting to reload');
+                        cssLink.href = 'styles.css?v=' + new Date().getTime(); // Force reload
+                    } else {
+                        clearInterval(cssLoaded);
+                    }
+                }, 1000);
+            });
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
         <script src="utils.js" defer></script>
         <script src="script.js" defer></script>
