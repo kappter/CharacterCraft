@@ -1,24 +1,54 @@
-const utils = {
-    data: {
-        firstNames: ['Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'Ethan', 'Sophia', 'Mason', 'Isabella', 'Logan',
-                     'Mia', 'Lucas', 'Harper', 'Elijah', 'Amelia', 'James', 'Charlotte', 'Benjamin', 'Evelyn', 'Alexander'],
-        lastNames: ['Johnson', 'Smith', 'Brown', 'Davis', 'Wilson', 'Anderson', 'Taylor', 'Thomas', 'Moore', 'Jackson',
-                    'White', 'Martin', 'Lee', 'Harris', 'Clark', 'Lewis', 'Walker', 'Hall', 'Allen', 'Young'],
-        genders: ['Male', 'Female'],
-        locales: ['Los Angeles', 'Chicago', 'Houston', 'Philadelphia', 'Seattle', 'Denver', 'Portland', 'San Diego', 'Austin', 'Boston'],
-        occupations: ['Teacher', 'Engineer', 'Writer', 'Doctor', 'Artist', 'Programmer', 'Chef', 'Musician', 'Nurse', 'Scientist'],
-        ages: Array.from({length: 80}, (_, i) => i + 18)
+import { utils } from './utils.js';
+
+const characters = {
+    data: JSON.parse(localStorage.getItem('characters') || '[]'),
+    saveCharacter() {
+        const char = {
+            id: Date.now(),
+            name: document.querySelector('#name')?.value || 'Unknown',
+            age: document.querySelector('#age')?.value || 'Unknown',
+            gender: document.querySelector('#gender')?.value || 'Unknown',
+            locale: document.querySelector('#locale')?.value || 'Unknown',
+            occupation: document.querySelector('#occupation')?.value || 'Unknown',
+            traits: document.querySelector('#traits')?.value || 'Unknown'
+        };
+        console.log('Saving character:', char);
+        this.data.push(char);
+        localStorage.setItem('characters', JSON.stringify(this.data));
+        this.updateCharacterSelects();
+        this.displayCharacters();
+        console.log('Character saved:', char);
     },
-    randomizeName() { return `${this.data.firstNames[Math.floor(Math.random() * this.data.firstNames.length)]} ${this.data.lastNames[Math.floor(Math.random() * this.data.lastNames.length)]}`; },
-    randomizeAge() { return this.data.ages[Math.floor(Math.random() * this.data.ages.length)]; },
-    randomizeGender() { return this.data.genders[Math.floor(Math.random() * this.data.genders.length)]; },
-    randomizeLocale() { return this.data.locales[Math.floor(Math.random() * this.data.locales.length)]; },
-    randomizeOccupation() { return this.data.occupations[Math.floor(Math.random() * this.data.occupations.length)]; },
-    randomizeAllFields() {
-        document.querySelector('#name').value = this.randomizeName();
-        document.querySelector('#age').value = this.randomizeAge();
-        document.querySelector('#gender').value = this.randomizeGender();
-        document.querySelector('#locale').value = this.randomizeLocale();
-        document.querySelector('#occupation').value = this.randomizeOccupation();
+    updateCharacterSelects() {
+        const select1 = document.querySelector('#characterSelect1');
+        const select2 = document.querySelector('#characterSelect2');
+        if (select1 && select2) {
+            [select1, select2].forEach(select => {
+                select.innerHTML = '<option value="">Select a character</option>';
+                this.data.forEach(char => {
+                    const option = document.createElement('option');
+                    option.value = char.id;
+                    option.textContent = `${char.name} (${char.age})`;
+                    select.appendChild(option);
+                });
+                console.log(`Character selects updated: ${this.data.length} characters added to ${select.id}`);
+            });
+        }
+    },
+    displayCharacters() {
+        const savedDiv = document.querySelector('#savedCharacters');
+        if (savedDiv) {
+            savedDiv.innerHTML = this.data.map(char => `<p>${char.name}, ${char.age}, ${char.gender}</p>`).join('');
+            console.log(`Characters displayed: ${this.data.length}`);
+        }
     }
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (characters.data.length > 0) {
+        characters.updateCharacterSelects();
+    }
+    console.log('Characters initialized on page load');
+});
+
+export { characters };
