@@ -196,7 +196,6 @@
         </div>
 
         <script>
-            // Ensure event listeners are bound after DOM content is loaded
             document.addEventListener('DOMContentLoaded', function() {
                 const tabs = document.querySelectorAll('nav a');
                 tabs.forEach(tab => {
@@ -209,11 +208,8 @@
                         console.log(`Switched to tab: ${tabId}`);
                     });
                 });
-
-                // Initial tab activation
                 tabs[0].click();
 
-                // Theme toggle
                 const themeToggle = document.getElementById('themeToggle');
                 themeToggle.addEventListener('change', function() {
                     document.body.classList.toggle('dark-mode', this.checked);
