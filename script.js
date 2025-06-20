@@ -6,7 +6,12 @@ const tabs = document.querySelectorAll('nav a');
 const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#themeToggle');
 let isRandomizing = false;
-
+const handleClick = (e) => {
+    e.preventDefault();
+    const { tagName, className, id, dataset } = e.target;
+    console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
+    // Existing logic...
+};
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded, initialized create tab and event listeners');
 
