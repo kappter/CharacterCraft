@@ -26,7 +26,7 @@ function handleClick(e) {
     const { tagName, className, id, dataset } = e.target;
     console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
 
-    if (tagName === 'BUTTON' && dataset.tab) {
+    if (tagName === 'BUTTON' && dataset.tab && dataset.tab !== 'none') {
         switchTab(dataset.tab);
     } else if (className.includes('randomize-everything')) {
         if (typeof utils.randomizeAllFields === 'function' && !isRandomizing) {
@@ -39,11 +39,11 @@ function handleClick(e) {
                     if (input.id === 'traits' && typeof traits.randomizeTraits === 'function') {
                         traits.randomizeTraits();
                         input.value = traits.randomizedTraits?.join(', ') || 'No traits';
-                    } else if (input.id) {
-                        input.value = document.querySelector(`#${input.id}`).value || 'Not set';
+                    } else if (input.id && document.querySelector(`#${input.id}`)) {
+                        input.value = document.querySelector(`#${input.id}`).value || utils[`randomize${input.id.charAt(0).toUpperCase() + input.id.slice(1)}`]?.() || 'Not set';
                     }
                 });
-                console.log('Randomization completed, inputs updated');
+                console.log('Randomization completed, inputs updated:', Array.from(inputs).map(i => `${i.id}: ${i.value}`));
             } catch (error) {
                 console.error('Randomization failed:', error);
             } finally {
