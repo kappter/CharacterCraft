@@ -34,11 +34,16 @@ function handleClick(e) {
             isRandomizing = true;
             try {
                 utils.randomizeAllFields();
-                if (typeof traits.randomizeTraits === 'function') {
-                    traits.randomizeTraits();
-                    document.querySelector('#traits').value = traits.randomizedTraits?.join(', ') || '';
-                }
-                console.log('Randomization completed');
+                const inputs = document.querySelectorAll('#create input[readonly]');
+                inputs.forEach(input => {
+                    if (input.id === 'traits' && typeof traits.randomizeTraits === 'function') {
+                        traits.randomizeTraits();
+                        input.value = traits.randomizedTraits?.join(', ') || 'No traits';
+                    } else if (input.id) {
+                        input.value = document.querySelector(`#${input.id}`).value || 'Not set';
+                    }
+                });
+                console.log('Randomization completed, inputs updated');
             } catch (error) {
                 console.error('Randomization failed:', error);
             } finally {
