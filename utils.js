@@ -17,21 +17,22 @@ const utils = (function() {
     function randomizeOccupation() { return data.occupations[Math.floor(Math.random() * data.occupations.length)]; }
     function randomizeAllFields() {
         console.log('Randomizing all fields...');
-        const nameInput = document.querySelector('#name');
-        const ageInput = document.querySelector('#age');
-        const genderInput = document.querySelector('#gender');
-        const localeInput = document.querySelector('#locale');
-        const occupationInput = document.querySelector('#occupation');
-        if (nameInput) nameInput.value = randomizeName();
-        else console.error('Name input not found');
-        if (ageInput) ageInput.value = randomizeAge();
-        else console.error('Age input not found');
-        if (genderInput) genderInput.value = randomizeGender();
-        else console.error('Gender input not found');
-        if (localeInput) localeInput.value = randomizeLocale();
-        else console.error('Locale input not found');
-        if (occupationInput) occupationInput.value = randomizeOccupation();
-        else console.error('Occupation input not found');
+        const inputs = {
+            name: document.querySelector('#name'),
+            age: document.querySelector('#age'),
+            gender: document.querySelector('#gender'),
+            locale: document.querySelector('#locale'),
+            occupation: document.querySelector('#occupation'),
+            traits: document.querySelector('#traits')
+        };
+        for (let [id, input] of Object.entries(inputs)) {
+            if (input) {
+                input.value = utils[`randomize${id.charAt(0).toUpperCase() + id.slice(1)}`]();
+                console.log(`Updated ${id} to: ${input.value}`);
+            } else {
+                console.error(`${id} input not found`);
+            }
+        }
         console.log('Randomization completed');
     }
 
