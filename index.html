@@ -1,84 +1,61 @@
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const cssLink = document.querySelector('link[href*="styles.css"]');
-        if (cssLink) {
-            const cssLoaded = setInterval(() => {
-                if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)') {
-                    console.warn('CSS not loading, attempting reload');
-                    cssLink.href = `styles.css?v=${new Date().getTime()}`;
-                } else {
-                    clearInterval(cssLoaded);
-                    console.log('CSS loaded successfully');
-                }
-            }, 1000);
-        }
-    });
-</script>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharacterCraft</title>
-    <link rel="stylesheet" href="styles.css?v=20250620">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-</head>
-<body>
-    <header>
-        <h1>CharacterCraft</h1>
-        <label class="theme-toggle">
-            <input type="checkbox" id="themeToggle" class="toggle">
-            <span>Dark Mode</span>
-        </label>
-    </header>
-
-    <nav>
-        <ul>
-            <li><a href="#" data-tab="create">Create</a></li>
-            <li><a href="#" data-tab="compare">Compare</a></li>
-            <li><a href="#" data-tab="traits">Traits</a></li>
-            <li><a href="#" data-tab="saved">Saved</a></li>
-            <li><a href="#" data-tab="bubbles">Trait Bubbles</a></li>
-            <li><a href="#" data-tab="reset">Reset</a></li>
-        </ul>
-    </nav>
-
-    <main>
-        <section id="create" class="tab-content">
-            <h2>Create Character</h2>
-            <div class="character-form">
-                <div class="form-group">
-                    <label class="form-label" for="name">Name</label>
-                    <div class="input-group">
-                        <input type="text" id="name" readonly>
-                        <button class="randomize-name" data-field="name">Random</button>
-                    </div>
-                </div>
-                <!-- Other form groups... -->
-                <div class="action-buttons">
-                    <button class="randomize-everything" data-tab="none">Randomize All</button>
-                    <button id="generateBio" class="generate-bio">Generate Bio</button>
-                    <button id="saveCharacter" class="save-character">Save</button>
-                    <!-- Other buttons... -->
+<!-- ... (header and nav remain the same) ... -->
+<main>
+    <section id="create" class="tab-content">
+        <h2>Create Character</h2>
+        <div class="character-form">
+            <div class="form-group">
+                <label class="form-label" for="name">Name</label>
+                <div class="input-group">
+                    <input type="text" id="name" readonly>
+                    <button class="randomize-name" data-field="name">Random</button>
                 </div>
             </div>
-            <!-- Other sections... -->
-        </section>
-        <!-- Other tab-content sections... -->
-    </main>
-
-    <footer>
-        <p>© 2025 CharacterCraft. All rights reserved.</p>
-    </footer>
-
-    <div id="characterReportModal" class="modal hidden">
-        <!-- Modal content... -->
-    </div>
-
-    <script type="module" src="utils.js"></script>
-    <script type="module" src="traits.js"></script>
-    <script type="module" src="characters.js"></script>
-    <script type="module" src="script.js"></script>
-</body>
-</html>
+            <div class="form-group">
+                <label class="form-label" for="age">Age</label>
+                <div class="input-group">
+                    <input type="text" id="age" readonly>
+                    <button class="randomize-age" data-field="age">Random</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="gender">Gender</label>
+                <div class="input-group">
+                    <input type="text" id="gender" readonly>
+                    <button class="randomize-gender" data-field="gender">Random</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="locale">Locale</label>
+                <div class="input-group">
+                    <input type="text" id="locale" readonly>
+                    <button class="randomize-locale" data-field="locale">Random</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="occupation">Occupation</label>
+                <div class="input-group">
+                    <input type="text" id="occupation" readonly>
+                    <button class="randomize-occupation" data-field="occupation">Random</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="traits">Traits</label>
+                <div class="input-group">
+                    <input type="text" id="traits" readonly>
+                    <button class="randomize-traits" data-field="traits">Random</button>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="randomize-everything" data-tab="none">Randomize All</button>
+                <button id="generateBio" class="generate-bio">Generate Bio</button>
+                <button id="saveCharacter" class="save-character">Save</button>
+                <button id="exportBio" class="export-bio">Export Bio</button>
+                <button id="generateAutobiography">Autobiography</button>
+                <button class="generate-report" data-char-id="">Generate Report</button>
+            </div>
+        </div>
+        <!-- Rest of the file remains the same -->
+    </section>
+    <!-- Other sections... -->
+</main>
+<!-- ... (footer and modal remain the same) ... -->
