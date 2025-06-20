@@ -39,8 +39,6 @@ function handleClick(e) {
                     if (input.id === 'traits' && typeof traits.randomizeTraits === 'function') {
                         traits.randomizeTraits();
                         input.value = traits.randomizedTraits?.join(', ') || 'No traits';
-                    } else if (input.id && document.querySelector(`#${input.id}`)) {
-                        input.value = document.querySelector(`#${input.id}`).value || utils[`randomize${input.id.charAt(0).toUpperCase() + input.id.slice(1)}`]?.() || 'Not set';
                     }
                 });
                 console.log('Randomization completed, inputs updated:', Array.from(inputs).map(i => `${i.id}: ${i.value}`));
