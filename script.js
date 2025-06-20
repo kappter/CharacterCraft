@@ -3,6 +3,62 @@ const tabContents = document.querySelectorAll('.tab-content');
 const themeToggle = document.querySelector('#theme-toggle');
 let isRandomizing = false;
 
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, initialized create tab and event listeners');
+
+    const bindEventListeners = () => {
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', handleClick);
+        });
+        console.log('Event listeners bound for: click');
+    };
+
+    const handleClick = (e) => {
+        const { tag, className, id, dataset } = e.target;
+        console.log(`Click detected: event=click, tag=${tag}, class=${className}, id=${id}, data-tab=${dataset.tab}`);
+        
+        if (id === 'generateAutobiography' && window.utils && window.utils.generateAutobiography) {
+            window.utils.generateAutobiography();
+        } else if (className.includes('randomize-') && window.utils) {
+            const field = dataset.field;
+            const value = window.utils[`randomize${field.charAt(0).toUpperCase() + field.slice(1)}`]();
+            const input = document.querySelector(`#${field}`);
+            if (input && value !== undefined) {
+                input.value = Array.isArray(value) ? value.join(', ') : value;
+            }
+        } else if (id === 'randomize-everything' && window.utils && window.utils.randomizeAllFields) {
+            window.utils.randomizeAllFields();
+        } else if (id === 'generateBio' || id === 'saveCharacter' || id === 'exportBio') {
+            console.log(`Action ${id} triggered, implement logic if needed`);
+        } else {
+            console.log('utils.randomizeAllFields is not a function or already randomizing');
+        }
+    };
+
+    bindEventListeners();
+
+    // Initial tab and theme setup (from your original)
+    const tabs = document.querySelectorAll('nav a');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tabId = this.getAttribute('data-tab');
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = content.id === tabId ? 'block' : 'none';
+            });
+            console.log(`Switched to tab: ${tabId}`);
+        });
+    });
+    tabs[0].click();
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('change', function() {
+        document.body.classList.toggle('dark-mode', this.checked);
+        console.log(`Initialized theme: ${this.checked ? 'dark' : 'light'}`);
+    });
+});
+
 // Fallback CSV data (used if CSV fails to load)
 const fallbackData = {
     physicalTraits: [{ characteristic: 'Strong Build', description: 'Robust physique', category: 'Physical' }],
