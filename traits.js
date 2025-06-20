@@ -29,3 +29,5 @@ document.addEventListener('DOMContentLoaded', () => {
     traits.displayTraits();
     traits.displayTraitBubbles();
 });
+
+export { traits };
