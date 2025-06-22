@@ -1,61 +1,179 @@
-<!-- ... (header and nav remain the same) ... -->
-<main>
-    <section id="create" class="tab-content">
-        <h2>Create Character</h2>
-        <div class="character-form">
-            <div class="form-group">
-                <label class="form-label" for="name">Name</label>
-                <div class="input-group">
-                    <input type="text" id="name" readonly>
-                    <button class="randomize-name" data-field="name">Random</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CharacterCraft - Enhanced Character Creation Tool</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="light">
+    <!-- Fixed Header -->
+    <header>
+        <div class="logo"></div>
+        <h1>CharacterCraft</h1>
+        <div class="theme-toggle">
+            <label for="theme-toggle">Dark Mode</label>
+            <input type="checkbox" id="theme-toggle" class="toggle">
+        </div>
+    </header>
+
+    <!-- Fixed Navigation -->
+    <nav>
+        <button class="tab-button active" data-tab="create">Create Character</button>
+        <button class="tab-button" data-tab="compare">Compare Characters</button>
+        <button class="tab-button" data-tab="saved">Saved Characters</button>
+        <button class="reset-app">Reset App</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Create Character Tab -->
+            <div id="create-tab" class="tab-content active">
+                <h2 class="section-title">Create Character</h2>
+                
+                <div class="character-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Character Name</label>
+                        <div class="input-group">
+                            <input type="text" id="name" placeholder="Enter character name">
+                            <button class="randomize-name btn-warning">Random</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age" class="form-label">Age</label>
+                        <div class="input-group">
+                            <input type="number" id="age" min="1" max="120" placeholder="Enter age">
+                            <button class="randomize-age btn-warning">Random</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender" class="form-label">Gender</label>
+                        <div class="input-group">
+                            <select id="gender">
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Non-binary">Non-binary</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <button class="randomize-gender btn-warning">Random</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="locale" class="form-label">Location/Origin</label>
+                        <div class="input-group">
+                            <input type="text" id="locale" placeholder="Enter location or origin">
+                            <button class="randomize-locale btn-warning">Random</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occupation" class="form-label">Occupation</label>
+                        <div class="input-group">
+                            <input type="text" id="occupation" placeholder="Enter occupation">
+                            <button class="randomize-occupation btn-warning">Random</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="traits" class="form-label">Character Traits</label>
+                        <div class="input-group">
+                            <textarea id="traits" placeholder="Enter character traits (comma-separated)"></textarea>
+                            <button class="randomize-traits btn-warning">Random</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="randomize-everything btn-primary">Randomize All</button>
+                    <button class="generate-bio btn-success">Generate Bio</button>
+                    <button class="generate-autobiography btn-success">Generate Autobiography</button>
+                    <button class="save-character btn-primary">Save Character</button>
+                </div>
+
+                <!-- Bio Output -->
+                <div class="bio-output empty" id="shortBioOutput">
+                    <div class="empty">External biography will appear here...</div>
+                </div>
+
+                <!-- Autobiography Output -->
+                <div class="bio-output empty" id="autobiographyOutput">
+                    <div class="empty">Autobiography will appear here...</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="export-bio btn-secondary" disabled>Export Bio</button>
+                    <button class="export-autobiography btn-secondary" disabled>Export Autobiography</button>
+                    <button class="export-full btn-secondary" disabled>Export Full Report</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label" for="age">Age</label>
-                <div class="input-group">
-                    <input type="text" id="age" readonly>
-                    <button class="randomize-age" data-field="age">Random</button>
+
+            <!-- Compare Characters Tab -->
+            <div id="compare-tab" class="tab-content">
+                <h2 class="section-title">Compare Characters</h2>
+                
+                <div class="character-form">
+                    <div class="form-group">
+                        <label for="character1" class="form-label">First Character</label>
+                        <select id="character1">
+                            <option value="">Select first character</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="character2" class="form-label">Second Character</label>
+                        <select id="character2">
+                            <option value="">Select second character</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="context" class="form-label">Scenario Context (Optional)</label>
+                        <input type="text" id="context" placeholder="e.g., 'trapped in an elevator', 'working on a project together'">
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="compare-characters btn-primary">Generate Comparison</button>
+                    <button class="randomize-comparison btn-warning">Random Scenario</button>
+                </div>
+                
+                <div class="bio-output empty" id="comparisonOutput">
+                    <div class="empty">Character comparison and writing prompts will appear here...</div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="export-comparison btn-secondary" disabled>Export Comparison Report</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label" for="gender">Gender</label>
-                <div class="input-group">
-                    <input type="text" id="gender" readonly>
-                    <button class="randomize-gender" data-field="gender">Random</button>
+
+            <!-- Saved Characters Tab -->
+            <div id="saved-tab" class="tab-content">
+                <h2 class="section-title">Saved Characters</h2>
+                
+                <div id="characterList" class="character-list">
+                    <div class="empty">No saved characters yet. Create and save a character to see it here.</div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="locale">Locale</label>
-                <div class="input-group">
-                    <input type="text" id="locale" readonly>
-                    <button class="randomize-locale" data-field="locale">Random</button>
+                
+                <div class="action-buttons">
+                    <button class="export-all-characters btn-secondary">Export All Characters</button>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="occupation">Occupation</label>
-                <div class="input-group">
-                    <input type="text" id="occupation" readonly>
-                    <button class="randomize-occupation" data-field="occupation">Random</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="traits">Traits</label>
-                <div class="input-group">
-                    <input type="text" id="traits" readonly>
-                    <button class="randomize-traits" data-field="traits">Random</button>
-                </div>
-            </div>
-            <div class="action-buttons">
-                <button class="randomize-everything" data-tab="none">Randomize All</button>
-                <button id="generateBio" class="generate-bio">Generate Bio</button>
-                <button id="saveCharacter" class="save-character">Save</button>
-                <button id="exportBio" class="export-bio">Export Bio</button>
-                <button id="generateAutobiography">Autobiography</button>
-                <button class="generate-report" data-char-id="">Generate Report</button>
             </div>
         </div>
-        <!-- Rest of the file remains the same -->
-    </section>
-    <!-- Other sections... -->
-</main>
-<!-- ... (footer and modal remain the same) ... -->
+    </main>
+
+    <!-- Fixed Footer -->
+    <footer>
+        <p>&copy; 2025 CharacterCraft - Enhanced Character Creation Tool</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
