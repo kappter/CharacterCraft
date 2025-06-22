@@ -80,6 +80,7 @@ class CharacterCraft {
         // Character comparison
         document.querySelector('.compare-characters')?.addEventListener('click', () => this.compareCharacters());
         document.querySelector('.randomize-comparison')?.addEventListener('click', () => this.randomizeComparison());
+        document.querySelector('.randomize-conflict')?.addEventListener('click', () => this.randomizeConflict());
         document.querySelector('.export-comparison')?.addEventListener('click', () => this.exportComparison());
 
         // Reset app
@@ -135,9 +136,42 @@ class CharacterCraft {
 
     randomizeName() {
         const names = [
+            // Western Names
             'Elena Rodriguez', 'Marcus Chen', 'Aria Patel', 'Kai Thompson', 'Luna Nakamura',
             'Diego Santos', 'Zara Ahmed', 'Felix Kowalski', 'Maya Singh', 'River Johnson',
-            'Sophia Andersson', 'Dmitri Volkov', 'Amara Okafor', 'Liam O\'Brien', 'Yuki Tanaka'
+            'Sophia Andersson', 'Dmitri Volkov', 'Amara Okafor', 'Liam O\'Brien', 'Yuki Tanaka',
+            'Isabella Garcia', 'Noah Williams', 'Emma Thompson', 'Oliver Martinez', 'Ava Davis',
+            'Ethan Brown', 'Mia Wilson', 'Lucas Anderson', 'Charlotte Taylor', 'Mason Moore',
+            
+            // International Names
+            'Akira Yamamoto', 'Priya Sharma', 'Hassan Al-Rashid', 'Ingrid Larsson', 'Raj Gupta',
+            'Fatima Hassan', 'Nikolai Petrov', 'Kenji Sato', 'Aaliyah Johnson', 'Tariq Rahman',
+            'Anastasia Kozlov', 'Hiroshi Tanaka', 'Leila Mansouri', 'Viktor Novak', 'Sakura Ito',
+            'Amara Diallo', 'Ravi Krishnan', 'Nadia Popov', 'Kenzo Watanabe', 'Zara Okafor',
+            
+            // Modern Names
+            'Phoenix Rivera', 'Sage Mitchell', 'Rowan Clarke', 'Indigo Walsh', 'Atlas Stone',
+            'Nova Sterling', 'Orion Blake', 'Iris Delacroix', 'Jasper Cross', 'Willow Hayes',
+            'Aspen Reid', 'Ember Fox', 'Storm Blackwood', 'Rain Sinclair', 'Sky Winters',
+            
+            // Classic Names
+            'Alexander Blackthorne', 'Victoria Ashworth', 'Theodore Pemberton', 'Evangeline Cross',
+            'Sebastian Hartwell', 'Cordelia Fairfax', 'Maximilian Grey', 'Ophelia Sinclair',
+            'Augustus Sterling', 'Persephone Vale', 'Bartholomew Ashford', 'Seraphina Blackwood',
+            
+            // Cultural Names
+            'Kwame Asante', 'Chioma Okwu', 'Rajesh Mehta', 'Ananya Iyer', 'Kofi Mensah',
+            'Adaora Nwosu', 'Vikram Reddy', 'Kavya Nair', 'Kwaku Boateng', 'Nneka Okafor',
+            'Arjun Kapoor', 'Deepika Rao', 'Kojo Appiah', 'Folake Adebayo', 'Rohit Joshi',
+            
+            // Unique Names
+            'Zephyr Nightingale', 'Lyra Moonstone', 'Caspian Wilde', 'Serenity Dawn',
+            'Orion Blackwater', 'Luna Starweaver', 'Phoenix Shadowmere', 'Aria Stormwind',
+            'Sage Thornfield', 'River Goldleaf', 'Atlas Ironwood', 'Nova Brightwater',
+            
+            // Professional Names
+            'Dr. Miranda Foster', 'Prof. James Whitfield', 'Captain Sarah Mitchell', 'Chef Antoine Dubois',
+            'Detective Rosa Morales', 'Judge Patricia Wong', 'Mayor David Kim', 'Senator Lisa Park'
         ];
         const randomName = names[Math.floor(Math.random() * names.length)];
         document.getElementById('name').value = randomName;
@@ -156,9 +190,40 @@ class CharacterCraft {
 
     randomizeLocale() {
         const locales = [
+            // Major Cities
             'Barcelona, Spain', 'Tokyo, Japan', 'New York, USA', 'London, UK', 'Sydney, Australia',
             'Toronto, Canada', 'Berlin, Germany', 'Mumbai, India', 'São Paulo, Brazil', 'Cairo, Egypt',
-            'Stockholm, Sweden', 'Cape Town, South Africa', 'Seoul, South Korea', 'Dublin, Ireland'
+            'Stockholm, Sweden', 'Cape Town, South Africa', 'Seoul, South Korea', 'Dublin, Ireland',
+            'Paris, France', 'Rome, Italy', 'Amsterdam, Netherlands', 'Vienna, Austria', 'Prague, Czech Republic',
+            
+            // Asian Cities
+            'Bangkok, Thailand', 'Singapore', 'Hong Kong', 'Kyoto, Japan', 'Beijing, China',
+            'Shanghai, China', 'Kuala Lumpur, Malaysia', 'Manila, Philippines', 'Jakarta, Indonesia',
+            'Ho Chi Minh City, Vietnam', 'Taipei, Taiwan', 'Osaka, Japan', 'Busan, South Korea',
+            
+            // European Cities
+            'Copenhagen, Denmark', 'Helsinki, Finland', 'Oslo, Norway', 'Zurich, Switzerland',
+            'Brussels, Belgium', 'Lisbon, Portugal', 'Athens, Greece', 'Budapest, Hungary',
+            'Warsaw, Poland', 'Reykjavik, Iceland', 'Edinburgh, Scotland', 'Florence, Italy',
+            
+            // American Cities
+            'San Francisco, USA', 'Los Angeles, USA', 'Chicago, USA', 'Boston, USA',
+            'Vancouver, Canada', 'Montreal, Canada', 'Mexico City, Mexico', 'Buenos Aires, Argentina',
+            'Lima, Peru', 'Bogotá, Colombia', 'Santiago, Chile', 'Montevideo, Uruguay',
+            
+            // African Cities
+            'Lagos, Nigeria', 'Nairobi, Kenya', 'Marrakech, Morocco', 'Casablanca, Morocco',
+            'Addis Ababa, Ethiopia', 'Accra, Ghana', 'Dakar, Senegal', 'Tunis, Tunisia',
+            'Johannesburg, South Africa', 'Durban, South Africa', 'Alexandria, Egypt',
+            
+            // Middle Eastern Cities
+            'Dubai, UAE', 'Tel Aviv, Israel', 'Istanbul, Turkey', 'Beirut, Lebanon',
+            'Doha, Qatar', 'Kuwait City, Kuwait', 'Riyadh, Saudi Arabia', 'Tehran, Iran',
+            
+            // Unique/Smaller Places
+            'Reykjavik, Iceland', 'Tallinn, Estonia', 'Riga, Latvia', 'Vilnius, Lithuania',
+            'Ljubljana, Slovenia', 'Sarajevo, Bosnia', 'Skopje, North Macedonia', 'Tirana, Albania',
+            'Wellington, New Zealand', 'Perth, Australia', 'Adelaide, Australia', 'Darwin, Australia'
         ];
         const randomLocale = locales[Math.floor(Math.random() * locales.length)];
         document.getElementById('locale').value = randomLocale;
@@ -166,9 +231,45 @@ class CharacterCraft {
 
     randomizeOccupation() {
         const occupations = [
-            'Software Engineer', 'Graphic Designer', 'Teacher', 'Chef', 'Journalist',
-            'Architect', 'Musician', 'Therapist', 'Photographer', 'Marine Biologist',
-            'Librarian', 'Social Worker', 'Veterinarian', 'Artist', 'Translator'
+            // Technology
+            'Software Engineer', 'Data Scientist', 'UX Designer', 'Cybersecurity Analyst', 'AI Researcher',
+            'Web Developer', 'Mobile App Developer', 'DevOps Engineer', 'Product Manager', 'Systems Administrator',
+            
+            // Creative Arts
+            'Graphic Designer', 'Photographer', 'Filmmaker', 'Musician', 'Artist', 'Writer', 'Animator',
+            'Fashion Designer', 'Interior Designer', 'Sculptor', 'Illustrator', 'Video Editor',
+            
+            // Healthcare
+            'Doctor', 'Nurse', 'Therapist', 'Psychologist', 'Dentist', 'Veterinarian', 'Pharmacist',
+            'Physical Therapist', 'Surgeon', 'Pediatrician', 'Radiologist', 'Paramedic',
+            
+            // Education
+            'Teacher', 'Professor', 'School Principal', 'Librarian', 'Educational Consultant',
+            'Tutor', 'Research Scientist', 'Academic Advisor', 'Curriculum Developer',
+            
+            // Business & Finance
+            'Accountant', 'Financial Advisor', 'Investment Banker', 'Marketing Manager', 'Sales Representative',
+            'Business Analyst', 'Consultant', 'Entrepreneur', 'Real Estate Agent', 'Insurance Agent',
+            
+            // Service Industry
+            'Chef', 'Restaurant Manager', 'Barista', 'Hotel Manager', 'Travel Agent', 'Event Planner',
+            'Personal Trainer', 'Hairstylist', 'Massage Therapist', 'Wedding Planner',
+            
+            // Media & Communications
+            'Journalist', 'News Anchor', 'Radio Host', 'Public Relations Specialist', 'Social Media Manager',
+            'Content Creator', 'Podcaster', 'Translator', 'Editor', 'Copywriter',
+            
+            // Science & Research
+            'Marine Biologist', 'Environmental Scientist', 'Chemist', 'Physicist', 'Archaeologist',
+            'Geologist', 'Astronomer', 'Botanist', 'Zoologist', 'Climate Researcher',
+            
+            // Public Service
+            'Police Officer', 'Firefighter', 'Social Worker', 'Judge', 'Lawyer', 'Diplomat',
+            'City Planner', 'Government Official', 'Military Officer', 'Emergency Dispatcher',
+            
+            // Unique/Specialized
+            'Food Critic', 'Wine Sommelier', 'Professional Athlete', 'Life Coach', 'Voice Actor',
+            'Stunt Performer', 'Cruise Ship Captain', 'Park Ranger', 'Museum Curator', 'Art Restorer'
         ];
         const randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
         document.getElementById('occupation').value = randomOccupation;
@@ -176,9 +277,42 @@ class CharacterCraft {
 
     randomizeTraits() {
         const traits = [
+            // Positive Traits
             'Creative', 'Analytical', 'Empathetic', 'Ambitious', 'Calm', 'Adventurous',
-            'Organized', 'Spontaneous', 'Introverted', 'Extroverted', 'Patient', 'Energetic',
-            'Optimistic', 'Realistic', 'Confident', 'Humble', 'Independent', 'Collaborative'
+            'Organized', 'Spontaneous', 'Patient', 'Energetic', 'Optimistic', 'Confident',
+            'Independent', 'Collaborative', 'Loyal', 'Honest', 'Generous', 'Compassionate',
+            'Resilient', 'Innovative', 'Charismatic', 'Diplomatic', 'Resourceful', 'Determined',
+            'Witty', 'Charming', 'Thoughtful', 'Reliable', 'Adaptable', 'Courageous',
+            
+            // Personality Types
+            'Introverted', 'Extroverted', 'Intuitive', 'Logical', 'Emotional', 'Practical',
+            'Idealistic', 'Realistic', 'Perfectionist', 'Flexible', 'Traditional', 'Progressive',
+            'Cautious', 'Bold', 'Reserved', 'Outgoing', 'Methodical', 'Impulsive',
+            
+            // Social Traits
+            'Sociable', 'Solitary', 'Talkative', 'Quiet', 'Friendly', 'Aloof', 'Warm',
+            'Distant', 'Supportive', 'Critical', 'Trusting', 'Skeptical', 'Open-minded',
+            'Judgmental', 'Inclusive', 'Exclusive', 'Humble', 'Proud', 'Modest', 'Boastful',
+            
+            // Work Ethic
+            'Hardworking', 'Lazy', 'Dedicated', 'Casual', 'Focused', 'Scattered',
+            'Disciplined', 'Undisciplined', 'Punctual', 'Tardy', 'Thorough', 'Hasty',
+            'Detail-oriented', 'Big-picture', 'Efficient', 'Inefficient',
+            
+            // Emotional Traits
+            'Sensitive', 'Thick-skinned', 'Moody', 'Even-tempered', 'Passionate', 'Indifferent',
+            'Jealous', 'Secure', 'Anxious', 'Relaxed', 'Excitable', 'Stoic', 'Dramatic',
+            'Understated', 'Volatile', 'Stable', 'Melancholic', 'Cheerful',
+            
+            // Intellectual Traits
+            'Curious', 'Incurious', 'Wise', 'Naive', 'Scholarly', 'Practical', 'Philosophical',
+            'Concrete', 'Abstract', 'Literal', 'Imaginative', 'Factual', 'Speculative',
+            'Empirical', 'Theoretical', 'Applied',
+            
+            // Unique Traits
+            'Eccentric', 'Conventional', 'Mysterious', 'Transparent', 'Unpredictable', 'Consistent',
+            'Quirky', 'Serious', 'Playful', 'Stern', 'Mischievous', 'Responsible', 'Rebellious',
+            'Conformist', 'Artistic', 'Scientific', 'Spiritual', 'Materialistic'
         ];
         const selectedTraits = [];
         const numTraits = Math.floor(Math.random() * 3) + 2; // 2-4 traits
@@ -445,6 +579,64 @@ class CharacterCraft {
             }, 100);
         } else {
             alert(`Random scenario set: "${randomScenario}"\n\nPlease select two characters to see how they would interact in this situation.`);
+        }
+    }
+
+    randomizeConflict() {
+        // Random conflict types for character interactions
+        const conflictTypes = [
+            'ideological differences about social justice',
+            'competing for the same romantic interest',
+            'disagreement over a major life decision',
+            'conflicting approaches to solving a problem',
+            'past betrayal that needs to be addressed',
+            'competition for a promotion or opportunity',
+            'different values about money and success',
+            'clash over parenting or family responsibilities',
+            'opposing views on risk-taking vs. safety',
+            'disagreement about loyalty vs. honesty',
+            'conflict over personal boundaries',
+            'different communication styles causing misunderstandings',
+            'competing creative visions on a project',
+            'clash between tradition and innovation',
+            'disagreement about work-life balance',
+            'conflict over environmental vs. economic priorities',
+            'different approaches to handling conflict itself',
+            'competing for limited resources or funding',
+            'clash between individual needs and group needs',
+            'disagreement about privacy vs. transparency',
+            'conflict over religious or spiritual beliefs',
+            'different attitudes toward authority and rules',
+            'competing interpretations of the same event',
+            'clash between perfectionism and pragmatism',
+            'disagreement about timing and urgency',
+            'conflict over personal vs. professional priorities',
+            'different approaches to handling failure',
+            'clash between optimism and realism',
+            'disagreement about change vs. stability',
+            'conflict over trust and vulnerability'
+        ];
+
+        // Randomly select a conflict type
+        const randomConflict = conflictTypes[Math.floor(Math.random() * conflictTypes.length)];
+        
+        // Set the context field with conflict focus
+        const contextField = document.getElementById('context');
+        if (contextField) {
+            contextField.value = `experiencing conflict over ${randomConflict}`;
+        }
+
+        // If characters are already selected, automatically generate comparison
+        const char1Id = document.getElementById('character1')?.value;
+        const char2Id = document.getElementById('character2')?.value;
+        
+        if (char1Id && char2Id && char1Id !== char2Id) {
+            // Small delay to let the context field update visually
+            setTimeout(() => {
+                this.compareCharacters();
+            }, 100);
+        } else {
+            alert(`Random conflict set: "${randomConflict}"\n\nPlease select two characters to see how they would handle this conflict.`);
         }
     }
 
