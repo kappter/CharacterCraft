@@ -79,6 +79,7 @@ class CharacterCraft {
 
         // Character comparison
         document.querySelector('.compare-characters')?.addEventListener('click', () => this.compareCharacters());
+        document.querySelector('.randomize-comparison')?.addEventListener('click', () => this.randomizeComparison());
         document.querySelector('.export-comparison')?.addEventListener('click', () => this.exportComparison());
 
         // Reset app
@@ -389,6 +390,64 @@ class CharacterCraft {
         this.enableExportButtons(['comparison']);
     }
 
+    randomizeComparison() {
+        // Random scenario contexts for character interactions
+        const scenarios = [
+            'trapped in an elevator together',
+            'working on a project together',
+            'stuck in traffic during a road trip',
+            'waiting in a long line at the DMV',
+            'attending the same wedding as strangers',
+            'sharing a table at a crowded coffee shop',
+            'both applying for the same job',
+            'neighbors dealing with a power outage',
+            'passengers on a delayed flight',
+            'volunteers at a community event',
+            'students in the same class',
+            'roommates for the first time',
+            'competing in a cooking competition',
+            'lost in a foreign city together',
+            'witnesses to the same unusual event',
+            'both trying to adopt the same pet',
+            'sharing an Uber during a storm',
+            'contestants on a game show',
+            'jury members on the same case',
+            'camping in adjacent sites',
+            'both trying to return the same item',
+            'meeting at a speed networking event',
+            'both caring for the same elderly relative',
+            'competing for the last apartment',
+            'both attending their first yoga class',
+            'sharing a hospital waiting room',
+            'both learning to drive from the same instructor',
+            'meeting at a book club',
+            'both trying to catch the same bus',
+            'attending a cooking class together'
+        ];
+
+        // Randomly select a scenario
+        const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+        
+        // Set the context field
+        const contextField = document.getElementById('context');
+        if (contextField) {
+            contextField.value = randomScenario;
+        }
+
+        // If characters are already selected, automatically generate comparison
+        const char1Id = document.getElementById('character1')?.value;
+        const char2Id = document.getElementById('character2')?.value;
+        
+        if (char1Id && char2Id && char1Id !== char2Id) {
+            // Small delay to let the context field update visually
+            setTimeout(() => {
+                this.compareCharacters();
+            }, 100);
+        } else {
+            alert(`Random scenario set: "${randomScenario}"\n\nPlease select two characters to see how they would interact in this situation.`);
+        }
+    }
+
     generateComparison(char1, char2, context) {
         const contextText = context ? ` in the context of "${context}"` : '';
         const char1Traits = char1.traits.split(',').map(t => t.trim()).filter(t => t);
@@ -526,8 +585,11 @@ class CharacterCraft {
                     <h4>${char.name}</h4>
                     <p>${char.age} years old, ${char.gender} ${char.occupation} from ${char.locale}</p>
                     <p style="font-size: 0.8rem; color: var(--text-muted);">Traits: ${char.traits}</p>
+                    ${char.createdAt ? `<p style="font-size: 0.75rem; color: var(--text-muted);">Created: ${new Date(char.createdAt).toLocaleDateString()}</p>` : ''}
                 </div>
                 <div class="character-actions">
+                    <button class="btn-secondary" onclick="app.editCharacter('${char.id}')">Edit</button>
+                    <button class="btn-primary" onclick="app.viewCharacterReport('${char.id}')">Report</button>
                     <button class="btn-danger" onclick="app.deleteCharacter('${char.id}')">Delete</button>
                 </div>
             </div>
@@ -544,6 +606,195 @@ class CharacterCraft {
             this.displaySavedCharacters();
             this.updateCharacterSelects();
         }
+    }
+
+    editCharacter(characterId) {
+        const character = this.characters.find(c => c.id === characterId);
+        if (!character) return;
+
+        // Load character data into the form
+        document.getElementById('name').value = character.name || '';
+        document.getElementById('age').value = character.age || '';
+        document.getElementById('gender').value = character.gender || '';
+        document.getElementById('locale').value = character.locale || '';
+        document.getElementById('occupation').value = character.occupation || '';
+        document.getElementById('traits').value = character.traits || '';
+
+        // Load existing bio and autobiography if they exist
+        if (character.bio) {
+            const bioOutput = document.getElementById('shortBioOutput');
+            if (bioOutput) {
+                bioOutput.innerHTML = character.bio;
+                bioOutput.classList.remove('empty');
+                this.enableExportButtons(['bio', 'full']);
+            }
+        }
+
+        if (character.autobiography) {
+            const autobiographyOutput = document.getElementById('autobiographyOutput');
+            if (autobiographyOutput) {
+                autobiographyOutput.innerHTML = character.autobiography;
+                autobiographyOutput.classList.remove('empty');
+                this.enableExportButtons(['autobiography', 'full']);
+            }
+        }
+
+        // Switch to Create Character tab
+        this.switchTab('create');
+        
+        alert(`Character "${character.name}" loaded for editing. Make your changes and save to update.`);
+    }
+
+    viewCharacterReport(characterId) {
+        const character = this.characters.find(c => c.id === characterId);
+        if (!character) return;
+
+        // Generate a detailed report
+        const reportContent = this.generateCharacterReport(character);
+        
+        // Create a modal or new window to display the report
+        const reportWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
+        reportWindow.document.write(reportContent);
+        reportWindow.document.close();
+    }
+
+    generateCharacterReport(character) {
+        const createdDate = character.createdAt ? new Date(character.createdAt).toLocaleDateString() : 'Unknown';
+        
+        return `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Character Report: ${character.name}</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            line-height: 1.6; 
+            background: #f8f9fa;
+        }
+        .header { 
+            background: linear-gradient(135deg, #2c3e50, #3498db); 
+            color: white; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            margin-bottom: 2rem; 
+            text-align: center;
+        }
+        .section { 
+            background: white;
+            margin-bottom: 20px; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .basic-info { background: #e8f4fd; }
+        .bio-section { background: #f0f8f0; }
+        .autobiography-section { background: #fff8e1; }
+        h1, h2 { color: #2c3e50; margin-top: 0; }
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1rem; 
+            margin: 1rem 0; 
+        }
+        .info-item { 
+            background: rgba(255,255,255,0.7); 
+            padding: 0.5rem; 
+            border-radius: 4px; 
+        }
+        .autobiography-output { font-family: Georgia, serif; }
+        .autobiography-output p { text-indent: 2rem; margin-bottom: 1.5rem; }
+        .quote { 
+            font-style: italic; 
+            border-left: 4px solid #3498db; 
+            padding-left: 1.5rem; 
+            margin: 2rem 0; 
+            background: rgba(52, 152, 219, 0.1);
+            padding: 1rem 1rem 1rem 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .print-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .print-btn:hover { background: #2980b9; }
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+            .section { box-shadow: none; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Character Report</h1>
+        <h2>${character.name}</h2>
+        <p>Generated on ${new Date().toLocaleDateString()}</p>
+    </div>
+    
+    <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+        <button class="print-btn" onclick="window.print()">Print Report</button>
+        <button class="print-btn" onclick="window.close()">Close Window</button>
+    </div>
+    
+    <div class="section basic-info">
+        <h2>Basic Information</h2>
+        <div class="info-grid">
+            <div class="info-item"><strong>Name:</strong> ${character.name}</div>
+            <div class="info-item"><strong>Age:</strong> ${character.age}</div>
+            <div class="info-item"><strong>Gender:</strong> ${character.gender}</div>
+            <div class="info-item"><strong>Location:</strong> ${character.locale}</div>
+            <div class="info-item"><strong>Occupation:</strong> ${character.occupation}</div>
+            <div class="info-item"><strong>Created:</strong> ${createdDate}</div>
+        </div>
+        <div style="margin-top: 1rem;">
+            <strong>Key Traits:</strong> ${character.traits}
+        </div>
+    </div>
+    
+    ${character.bio ? `
+    <div class="section bio-section">
+        <h2>External Biography</h2>
+        <div>${character.bio}</div>
+    </div>
+    ` : ''}
+    
+    ${character.autobiography ? `
+    <div class="section autobiography-section">
+        <h2>Personal Autobiography</h2>
+        <div class="autobiography-output">${character.autobiography}</div>
+    </div>
+    ` : ''}
+    
+    ${!character.bio && !character.autobiography ? `
+    <div class="section">
+        <h2>Additional Content</h2>
+        <p><em>No biography or autobiography has been generated for this character yet. Use the "Generate Bio" and "Generate Autobiography" buttons in the main application to create detailed content.</em></p>
+    </div>
+    ` : ''}
+    
+    <div class="section">
+        <h2>Character Development Notes</h2>
+        <p><strong>Character Archetype:</strong> Based on the traits (${character.traits}), this character represents a complex individual with multiple facets to explore in storytelling.</p>
+        <p><strong>Story Potential:</strong> The combination of ${character.occupation} background and ${character.locale} origin provides rich material for character development and plot creation.</p>
+        <p><strong>Writing Tips:</strong> Consider how this character's age (${character.age}) and life experiences would influence their dialogue, decision-making, and relationships with other characters.</p>
+    </div>
+    
+    <footer style="text-align: center; margin-top: 3rem; padding: 2rem; color: #666; border-top: 1px solid #ddd;">
+        <p>Generated by CharacterCraft - Enhanced Character Creation Tool</p>
+        <p style="font-size: 0.9rem;">This report contains detailed character information for creative writing and storytelling purposes.</p>
+    </footer>
+</body>
+</html>`;
     }
 
     enableExportButtons(types) {
