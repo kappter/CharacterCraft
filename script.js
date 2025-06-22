@@ -83,6 +83,11 @@ class CharacterCraft {
         document.querySelector('.randomize-conflict')?.addEventListener('click', () => this.randomizeConflict());
         document.querySelector('.export-comparison')?.addEventListener('click', () => this.exportComparison());
 
+        // Trait assignment
+        document.getElementById('trait-character-select')?.addEventListener('change', (e) => this.selectCharacterForTraits(e.target.value));
+        document.getElementById('save-trait-changes')?.addEventListener('click', () => this.saveTraitChanges());
+        document.getElementById('reset-traits')?.addEventListener('click', () => this.resetTraits());
+
         // Reset app
         document.querySelector('.reset-app')?.addEventListener('click', () => this.resetApp());
     }
@@ -121,6 +126,9 @@ class CharacterCraft {
             this.displaySavedCharacters();
         } else if (tabId === 'compare') {
             this.updateCharacterSelects();
+        } else if (tabId === 'traits') {
+            this.updateTraitCharacterSelect();
+            this.initializeTraitBubbles();
         }
     }
 
@@ -1118,6 +1126,177 @@ class CharacterCraft {
             localStorage.clear();
             location.reload();
         }
+    }
+
+    // Trait Assignment Methods
+    updateTraitCharacterSelect() {
+        const select = document.getElementById('trait-character-select');
+        if (!select) return;
+
+        // Clear existing options except the first one
+        select.innerHTML = '<option value="">Choose a character...</option>';
+
+        // Add saved characters
+        this.characters.forEach(character => {
+            const option = document.createElement('option');
+            option.value = character.id;
+            option.textContent = `${character.name} (${character.age}, ${character.occupation})`;
+            select.appendChild(option);
+        });
+    }
+
+    initializeTraitBubbles() {
+        // Add click event listeners to all trait bubbles
+        document.querySelectorAll('.trait-bubble').forEach(bubble => {
+            bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
+        });
+    }
+
+    selectCharacterForTraits(characterId) {
+        const characterInfo = document.getElementById('selected-character-info');
+        const saveButton = document.getElementById('save-trait-changes');
+        const resetButton = document.getElementById('reset-traits');
+
+        if (!characterId) {
+            characterInfo.style.display = 'none';
+            saveButton.style.display = 'none';
+            resetButton.style.display = 'none';
+            this.clearTraitSelection();
+            return;
+        }
+
+        const character = this.characters.find(c => c.id === characterId);
+        if (!character) return;
+
+        // Store current character for editing
+        this.currentTraitCharacter = character;
+        this.originalTraits = [...(character.traits || [])];
+
+        // Display character info
+        document.getElementById('character-name-display').textContent = character.name;
+        document.getElementById('character-details-display').textContent = 
+            `${character.age} years old, ${character.gender}, ${character.locale}, ${character.occupation}`;
+
+        // Display current traits
+        this.updateCurrentTraitsDisplay();
+
+        // Update trait bubble states
+        this.updateTraitBubbleStates();
+
+        // Show character info and action buttons
+        characterInfo.style.display = 'block';
+        saveButton.style.display = 'inline-block';
+        resetButton.style.display = 'inline-block';
+    }
+
+    updateCurrentTraitsDisplay() {
+        const container = document.getElementById('current-traits-display');
+        if (!container || !this.currentTraitCharacter) return;
+
+        const traits = this.currentTraitCharacter.traits || [];
+        
+        if (traits.length === 0) {
+            container.innerHTML = '<span class="no-traits">No traits assigned</span>';
+            return;
+        }
+
+        container.innerHTML = traits.map(trait => 
+            `<span class="trait-bubble assigned" data-trait="${trait}">${trait}</span>`
+        ).join('');
+
+        // Add click listeners to current trait bubbles for removal
+        container.querySelectorAll('.trait-bubble').forEach(bubble => {
+            bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
+        });
+    }
+
+    updateTraitBubbleStates() {
+        if (!this.currentTraitCharacter) return;
+
+        const currentTraits = this.currentTraitCharacter.traits || [];
+
+        // Reset all bubbles
+        document.querySelectorAll('.trait-bubble').forEach(bubble => {
+            bubble.classList.remove('assigned');
+        });
+
+        // Mark assigned traits
+        currentTraits.forEach(trait => {
+            const bubbles = document.querySelectorAll(`[data-trait="${trait}"]`);
+            bubbles.forEach(bubble => bubble.classList.add('assigned'));
+        });
+    }
+
+    toggleTrait(bubble) {
+        if (!this.currentTraitCharacter) return;
+
+        const trait = bubble.getAttribute('data-trait');
+        if (!trait) return;
+
+        const currentTraits = this.currentTraitCharacter.traits || [];
+        const traitIndex = currentTraits.indexOf(trait);
+
+        if (traitIndex === -1) {
+            // Add trait
+            currentTraits.push(trait);
+            bubble.classList.add('assigned', 'just-assigned');
+            setTimeout(() => bubble.classList.remove('just-assigned'), 300);
+        } else {
+            // Remove trait
+            currentTraits.splice(traitIndex, 1);
+            document.querySelectorAll(`[data-trait="${trait}"]`).forEach(b => {
+                b.classList.remove('assigned');
+            });
+        }
+
+        // Update character traits
+        this.currentTraitCharacter.traits = currentTraits;
+
+        // Update displays
+        this.updateCurrentTraitsDisplay();
+        this.updateTraitBubbleStates();
+    }
+
+    saveTraitChanges() {
+        if (!this.currentTraitCharacter) return;
+
+        // Find and update the character in the main array
+        const characterIndex = this.characters.findIndex(c => c.id === this.currentTraitCharacter.id);
+        if (characterIndex !== -1) {
+            this.characters[characterIndex] = { ...this.currentTraitCharacter };
+            
+            // Save to localStorage
+            localStorage.setItem('characters', JSON.stringify(this.characters));
+            
+            // Update original traits for reset functionality
+            this.originalTraits = [...(this.currentTraitCharacter.traits || [])];
+            
+            alert(`Traits saved for ${this.currentTraitCharacter.name}!`);
+        }
+    }
+
+    resetTraits() {
+        if (!this.currentTraitCharacter || !this.originalTraits) return;
+
+        // Reset to original traits
+        this.currentTraitCharacter.traits = [...this.originalTraits];
+
+        // Update displays
+        this.updateCurrentTraitsDisplay();
+        this.updateTraitBubbleStates();
+
+        alert('Traits reset to original values.');
+    }
+
+    clearTraitSelection() {
+        // Reset all bubble states
+        document.querySelectorAll('.trait-bubble').forEach(bubble => {
+            bubble.classList.remove('assigned');
+        });
+
+        // Clear current character
+        this.currentTraitCharacter = null;
+        this.originalTraits = null;
     }
 }
 
