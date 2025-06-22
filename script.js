@@ -75,7 +75,7 @@ class CharacterCraft {
         // Export buttons
         document.querySelector('.export-bio')?.addEventListener('click', () => this.exportBio());
         document.querySelector('.export-autobiography')?.addEventListener('click', () => this.exportAutobiography());
-        document.querySelector('.export-full-report')?.addEventListener('click', () => this.exportFullReport());
+        document.querySelector('.export-full')?.addEventListener('click', () => this.exportFullReport());
 
         // Character comparison
         document.querySelector('.compare-characters')?.addEventListener('click', () => this.compareCharacters());
@@ -1193,7 +1193,12 @@ class CharacterCraft {
         const container = document.getElementById('current-traits-display');
         if (!container || !this.currentTraitCharacter) return;
 
-        const traits = this.currentTraitCharacter.traits || [];
+        // Ensure traits is always an array
+        let traits = this.currentTraitCharacter.traits || [];
+        if (typeof traits === 'string') {
+            traits = traits.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            this.currentTraitCharacter.traits = traits; // Update to array format
+        }
         
         if (traits.length === 0) {
             container.innerHTML = '<span class="no-traits">No traits assigned</span>';
@@ -1213,7 +1218,12 @@ class CharacterCraft {
     updateTraitBubbleStates() {
         if (!this.currentTraitCharacter) return;
 
-        const currentTraits = this.currentTraitCharacter.traits || [];
+        // Ensure traits is always an array
+        let currentTraits = this.currentTraitCharacter.traits || [];
+        if (typeof currentTraits === 'string') {
+            currentTraits = currentTraits.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            this.currentTraitCharacter.traits = currentTraits; // Update to array format
+        }
 
         // Reset all bubbles
         document.querySelectorAll('.trait-bubble').forEach(bubble => {
@@ -1233,7 +1243,12 @@ class CharacterCraft {
         const trait = bubble.getAttribute('data-trait');
         if (!trait) return;
 
-        const currentTraits = this.currentTraitCharacter.traits || [];
+        // Ensure traits is always an array
+        let currentTraits = this.currentTraitCharacter.traits || [];
+        if (typeof currentTraits === 'string') {
+            currentTraits = currentTraits.split(',').map(t => t.trim()).filter(t => t.length > 0);
+        }
+
         const traitIndex = currentTraits.indexOf(trait);
 
         if (traitIndex === -1) {
@@ -1249,7 +1264,7 @@ class CharacterCraft {
             });
         }
 
-        // Update character traits
+        // Update character traits (keep as array)
         this.currentTraitCharacter.traits = currentTraits;
 
         // Update displays
