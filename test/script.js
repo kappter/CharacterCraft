@@ -1,362 +1,703 @@
-const tabs = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
-const themeToggle = document.querySelector('#theme-toggle');
-let isRandomizing = false;
+// Enhanced CharacterCraft - Main Script with Autobiography Features
+class CharacterCraft {
+    constructor() {
+        this.characters = JSON.parse(localStorage.getItem('characters')) || [];
+        this.currentCharacter = null;
+        this.autobiographyData = this.initializeAutobiographyData();
+        this.init();
+    }
 
-// Fallback CSV data
-const fallbackData = {
-    physicalTraits: [{ characteristic: 'Strong Build', description: 'Robust physique', category: 'Physical' }],
-    psychologicalTraits: [{ characteristic: 'Calm Demeanor', description: 'Steady under pressure', category: 'Psychological' }],
-    backgrounds: [{ characteristic: 'City Life', description: 'Raised in an urban setting', category: 'Background' }],
-    motivations: [{ characteristic: 'Seek Knowledge', description: 'Driven by curiosity', category: 'Motivations' }],
-    scenarios: [
-        { type: 'Meeting', context: 'met unexpectedly at a bustling market' },
-        { type: 'Collaboration', context: 'teamed up on a critical project' },
-        { type: 'Conflict', context: 'clashed over a disputed resource' }
-    ],
-    outcomes: [
-        { result: 'formed a lasting alliance', condition: 'complementary traits' },
-        { result: 'parted ways amicably', condition: 'neutral traits' },
-        { result: 'ended in a heated rivalry', condition: 'conflicting traits' }
-    ]
-};
+    init() {
+        this.initializeEventListeners();
+        this.initializeTheme();
+        this.updateCharacterSelects();
+        this.displaySavedCharacters();
+        console.log('Enhanced CharacterCraft initialized');
+    }
 
-function loadFileData(fileName) {
-    console.warn(`loadFileData called for ${fileName}, using fallback data as no file loading implemented`);
-    return ''; // Return empty string to trigger fallback in parseCSV
-}
-
-function switchTab(tabId) {
-    if (!isRandomizing) {
-        tabs.forEach(tab => tab.classList.remove('active'));
-        tabContents.forEach(content => content.classList.add('hidden'));
-        const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
-        const activeContent = document.querySelector(`#${tabId}-tab`);
-        if (activeTab && activeContent) {
-            activeTab.classList.add('active');
-            activeContent.classList.remove('hidden');
-            if (tabId === 'saved' && typeof characters.updateCharacterSelects === 'function') {
-                setTimeout(() => {
-                    characters.updateCharacterSelects();
-                    console.log('Character selects updated on Saved tab');
-                }, 300);
+    initializeAutobiographyData() {
+        return {
+            milestones: [
+                { category: 'childhood', text: 'I remember the smell of {locale_food} cooking in our kitchen, and how {parent_figure} would tell me stories about {cultural_element}.' },
+                { category: 'education', text: 'School was where I first realized I was {trait1}. My teacher, {teacher_name}, saw something in me that I didn\'t see in myself.' },
+                { category: 'first_job', text: 'My first real job taught me that being {trait2} wasn\'t always an advantage in the workplace.' },
+                { category: 'relationships', text: 'I learned about love through {relationship_type}, which showed me both my capacity for {positive_trait} and my tendency toward {struggle_area}.' },
+                { category: 'transportation', text: 'I still remember my first {transport_method} - it represented freedom, but also the weight of responsibility.' }
+            ],
+            struggles: [
+                { type: 'health', text: 'What people don\'t know is that I\'ve been dealing with {health_issue} for years. It\'s shaped how I approach {life_area}.' },
+                { type: 'financial', text: 'Money has always been a source of anxiety for me. Growing up {financial_background}, I learned to {coping_mechanism}.' },
+                { type: 'relationships', text: 'I struggle with {relationship_issue}, which makes it hard for people to see past my {public_trait} exterior.' },
+                { type: 'identity', text: 'Sometimes I feel like I\'m performing a version of myself that others expect, rather than being who I really am.' }
+            ],
+            secrets: [
+                { type: 'creative', text: 'In private, I write {creative_outlet}. It\'s something I\'ve never shared because {fear_reason}.' },
+                { type: 'dreams', text: 'I\'ve always dreamed of {secret_dream}, but I\'ve never told anyone because it seems {perceived_barrier}.' },
+                { type: 'past', text: 'There\'s something from my past in {locale} that I\'ve never talked about - {past_event}.' }
+            ],
+            writingStyles: {
+                young: { tone: 'energetic', uncertainty: 'high', discovery: 'high' },
+                middle: { tone: 'reflective', uncertainty: 'medium', discovery: 'medium' },
+                mature: { tone: 'contemplative', uncertainty: 'low', discovery: 'low' }
             }
-        }
-        console.log(`Switched to tab: ${tabId}`);
-    }
-}
-
-function resetApp() {
-    if (!isRandomizing) {
-        localStorage.clear();
-        switchTab('create');
-        document.querySelectorAll('input').forEach(input => input.value = '');
-        document.querySelector('#shortBioOutput').innerHTML = '';
-        document.querySelector('#comparisonOutput').innerHTML = '';
-        if (typeof characters.updateCharacterSelects === 'function') {
-            characters.updateCharacterSelects();
-            console.log('Character selects reset');
-        }
-        if (typeof characters.displayCharacters === 'function') {
-            characters.displayCharacters();
-            console.log('Characters display reset');
-        }
-        console.log('App reset');
-    }
-}
-
-function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    themeToggle.checked = newTheme === 'dark';
-    console.log(`Theme toggled to: ${newTheme}`);
-}
-
-function initializeTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggle.checked = savedTheme === 'dark';
-    console.log(`Initialized theme: ${savedTheme}`);
-}
-
-function parseCSV(csvString, fileName) {
-    if (typeof Papa !== 'undefined' && Papa.parse) {
-        const result = Papa.parse(csvString, {
-            header: true,
-            skipEmptyLines: true,
-            transformHeader: (header) => header.trim(),
-            transform: (value) => value.trim()
-        });
-        if (result.errors.length) {
-            console.error(`CSV Parsing Errors for ${fileName}:`, result.errors);
-            return []; // Return empty array on error to use fallback
-        }
-        return result.data.filter(row => row.characteristic && row.description && row.category) || [];
-    } else {
-        console.error('Papa Parse is not loaded or defined');
-        return [];
-    }
-}
-
-function getRandomItem(array) {
-    return array.length ? array[Math.floor(Math.random() * array.length)] : { characteristic: 'Unknown', description: '' };
-}
-
-function generateDetailedBio(char) {
-    const traitsData = parseCSV(loadFileData('traits.csv') || '', 'traits.csv');
-    const motivationsData = parseCSV(loadFileData('motivations_beliefs.csv') || '', 'motivations_beliefs.csv');
-    const physicalTraitsData = parseCSV(loadFileData('physical_traits.csv') || '', 'physical_traits.csv');
-    const backgroundData = parseCSV(loadFileData('background_details.csv') || '', 'background_details.csv');
-    const psychologicalData = parseCSV(loadFileData('psychological_traits.csv') || '', 'psychological_traits.csv');
-
-    const physicalTraits = physicalTraitsData.length ? physicalTraitsData.filter(t => t.category === 'Physical') : fallbackData.physicalTraits;
-    const psychologicalTraits = psychologicalData.length ? psychologicalData.filter(t => t.category === 'Psychological') : fallbackData.psychologicalTraits;
-    const backgrounds = backgroundData.length ? backgroundData.filter(t => t.category === 'Background') : fallbackData.backgrounds;
-    const motivations = motivationsData.length ? motivationsData.filter(t => t.category === 'Motivations') : fallbackData.motivations;
-
-    console.log('Parsed Data:', { physicalTraits, psychologicalTraits, backgrounds, motivations });
-
-    const randomPhysical = getRandomItem(physicalTraits);
-    const randomPsychological = getRandomItem(psychologicalTraits);
-    const randomBackground = getRandomItem(backgrounds);
-    const randomMotivation = getRandomItem(motivations);
-
-    let bio = `
-        <p>${char.name || 'Unknown'}, a ${char.age || 'Unknown'}-year-old ${char.gender || 'Unknown'} ${char.occupation || 'Unknown'} from ${char.locale || 'Unknown'}, carries the weight of a ${randomBackground.characteristic} (${randomBackground.description}). This background has shaped their early life, instilling a deep connection to their roots and influencing their worldview with a blend of resilience and adaptability.</p>
-        
-        <p>Driven by a ${randomMotivation.characteristic} (${randomMotivation.description}), they pursue their goals with unwavering determination. This motivation often leads them to seek out new challenges, whether in their professional life as a ${char.occupation || 'Unknown'} or in personal endeavors, reflecting a complex inner drive that defines their character.</p>
-        
-        <p>Their physical presence is marked by a ${randomPhysical.characteristic} (${randomPhysical.description}), which complements their ${randomPsychological.characteristic} (${randomPsychological.description}). This combination of traits allows them to navigate social and professional landscapes with a unique grace, often leaving a lasting impression on those they encounter.</p>
-        
-        <p>Complemented by additional traits like ${char.traits || 'Unknown'}, their personality is a rich tapestry of experiences and qualities. Whether collaborating with others or pursuing solitary projects, they bring a distinctive flair that sets them apart in their community.</p>
-    `;
-    return bio;
-}
-
-function generateIntersectionScenario(char1, char2) {
-    const scenario = getRandomItem(fallbackData.scenarios);
-    const outcome = getRandomItem(fallbackData.outcomes);
-    const context1 = document.querySelector('#context1')?.value || 'a neutral setting';
-    const context2 = document.querySelector('#context2')?.value || 'a different perspective';
-    const psychTraits1 = parseCSV(loadFileData('psychological_traits.csv') || '', 'psychological_traits.csv');
-    const psychTraits2 = psychTraits1; // Using same data for simplicity
-    const trait1 = getRandomItem(psychTraits1).characteristic;
-    const trait2 = getRandomItem(psychTraits2).characteristic;
-    const interaction = trait1.includes('Calm') && trait2.includes('Aggressive') ? 'initial tension' : 
-                       trait1.includes('Optimistic') && trait2.includes('Pessimistic') ? 'surprising synergy' : 
-                       'natural harmony';
-
-    let narrative = `
-        <p>In a twist of fate, ${char1.name || 'Unknown'} and ${char2.name || 'Unknown'} ${scenario.context}. ${char1.name}, a ${char1.age || 'Unknown'}-year-old ${char1.gender || 'Unknown'} ${char1.occupation || 'Unknown'} from ${char1.locale || 'Unknown'} with traits like ${char1.traits || 'Unknown'}, crossed paths with ${char2.name}, a ${char2.age || 'Unknown'}-year-old ${char2.gender || 'Unknown'} ${char2.occupation || 'Unknown'} from ${char2.locale || 'Unknown'} with traits like ${char2.traits || 'Unknown'}.</p>
-        <p>Their ${scenario.type.toLowerCase()} unfolded in ${context1}, marked by ${interaction} due to ${char1.name}'s ${trait1} clashing or complementing ${char2.name}'s ${trait2}. This led to ${context2}, where they ${outcome.result}.</p>
-    `;
-    return narrative;
-}
-
-function handleClick(event) {
-    event.preventDefault();
-    const { tagName, className, dataset } = event.target;
-    console.log(`Click detected: event=click, tag=${tagName}, class=${className}, id=${event.target.id || 'unknown'}, data-tab=${dataset.tab || 'none'}`);
-
-    if (tagName === 'BUTTON' && dataset.tab) {
-        switchTab(dataset.tab);
-    } else if (className.includes('reset-app')) {
-        resetApp();
-    } else if (className.includes('randomize-everything')) {
-        if (typeof window.utils?.randomizeAllFields === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize all fields');
-            isRandomizing = true;
-            try {
-                window.utils.randomizeAllFields();
-                if (typeof traits.randomizeTraits === 'function') {
-                    traits.randomizeTraits();
-                    const traitsInput = document.querySelector('#traits');
-                    if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
-                }
-                console.log('Randomize all fields completed');
-            } catch (error) {
-                console.error('Randomization failed:', error);
-            } finally {
-                setTimeout(() => { isRandomizing = false; }, 1200);
-            }
-        } else {
-            console.error('utils.randomizeAllFields is not a function or already randomizing');
-        }
-    } else if (className.includes('generate-bio')) {
-        const char = {
-            name: document.querySelector('#name')?.value || 'Unknown',
-            age: document.querySelector('#age')?.value || 'Unknown',
-            gender: document.querySelector('#gender')?.value || 'Unknown',
-            locale: document.querySelector('#locale')?.value || 'Unknown',
-            occupation: document.querySelector('#occupation')?.value || 'Unknown',
-            traits: document.querySelector('#traits')?.value || 'Unknown'
         };
-        const bio = generateDetailedBio(char);
-        document.querySelector('#shortBioOutput').innerHTML = bio;
-        const exportButton = document.querySelector('.export-bio'); // Use class instead of ID
-        if (exportButton) exportButton.disabled = false;
-        console.log('Bio generated:', { char, bio });
-    } else if (className.includes('save-character')) {
-        if (typeof characters.saveCharacter === 'function') {
-            console.log('Attempting to save character');
-            characters.saveCharacter();
-            console.log('Character save completed');
-            switchTab('saved');
-        }
-    } else if (className.includes('export-bio')) {
-        const bio = document.querySelector('#shortBioOutput')?.innerText || 'No bio available';
-        const blob = new Blob([bio], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'character_bio.txt';
-        a.click();
-        URL.revokeObjectURL(url);
-    } else if (className.includes('compare-characters')) {
-        const char1Id = document.querySelector('#character1')?.value;
-        const char2Id = document.querySelector('#character2')?.value;
-        const chars = JSON.parse(localStorage.getItem('characters') || '[]');
-        const char1 = chars.find(c => c.id == char1Id) || {};
-        const char2 = chars.find(c => c.id == char2Id) || {};
-        const scenario = generateIntersectionScenario(char1, char2);
-        document.querySelector('#comparisonOutput').innerHTML = scenario;
-        document.querySelector('#exportComparisonButton').disabled = false; // Fix this ID in index.html too
-        console.log('Comparison scenario generated:', { char1, char2, scenario });
-    } else if (className.includes('randomize-comparison')) {
-        document.querySelector('#context1').value = 'a neutral setting';
-        document.querySelector('#context2').value = 'a different perspective';
-    } else if (className.includes('export-comparison')) {
-        const comparison = document.querySelector('#comparisonOutput')?.innerText || 'No comparison available';
-        const blob = new Blob([comparison], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'comparison_scenario.txt';
-        a.click();
-        URL.revokeObjectURL(url);
-    } else if (className.includes('update-character')) {
-        if (typeof characters.updateCharacter === 'function') characters.updateCharacter();
-    } else if (className.includes('export-report')) {
-        const reportContent = document.querySelector('#characterReportContent');
-        const bio = document.querySelector('#shortBioOutput')?.innerText || generateDetailedBio({
-            name: reportContent?.querySelector('p:nth-child(1)')?.textContent.replace('Name: ', '') || 'Unknown',
-            age: reportContent?.querySelector('p:nth-child(2)')?.textContent.replace('Age: ', '') || 'Unknown',
-            gender: reportContent?.querySelector('p:nth-child(3)')?.textContent.replace('Gender: ', '') || 'Unknown',
-            locale: reportContent?.querySelector('p:nth-child(4)')?.textContent.replace('Locale: ', '') || 'Unknown',
-            occupation: reportContent?.querySelector('p:nth-child(5)')?.textContent.replace('Occupation: ', '') || 'Unknown',
-            traits: reportContent?.querySelector('p:nth-child(6)')?.textContent.replace('Traits: ', '') || 'Unknown'
+    }
+
+    initializeEventListeners() {
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tabId = e.target.dataset.tab;
+                this.switchTab(tabId);
+            });
         });
-        const fullReport = (reportContent?.innerText || '') + '\n\nDetailed Bio:\n' + bio;
-        const blob = new Blob([fullReport], { type: 'text/plain' });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => this.toggleTheme());
+        }
+
+        // Character creation
+        document.querySelector('.randomize-everything')?.addEventListener('click', () => this.randomizeAll());
+        document.querySelector('.generate-bio')?.addEventListener('click', () => this.generateBio());
+        document.querySelector('.generate-autobiography')?.addEventListener('click', () => this.generateAutobiography());
+        document.querySelector('.save-character')?.addEventListener('click', () => this.saveCharacter());
+
+        // Individual randomization buttons
+        document.querySelector('.randomize-name')?.addEventListener('click', () => this.randomizeName());
+        document.querySelector('.randomize-age')?.addEventListener('click', () => this.randomizeAge());
+        document.querySelector('.randomize-gender')?.addEventListener('click', () => this.randomizeGender());
+        document.querySelector('.randomize-locale')?.addEventListener('click', () => this.randomizeLocale());
+        document.querySelector('.randomize-occupation')?.addEventListener('click', () => this.randomizeOccupation());
+        document.querySelector('.randomize-traits')?.addEventListener('click', () => this.randomizeTraits());
+
+        // Export buttons
+        document.querySelector('.export-bio')?.addEventListener('click', () => this.exportBio());
+        document.querySelector('.export-autobiography')?.addEventListener('click', () => this.exportAutobiography());
+        document.querySelector('.export-full-report')?.addEventListener('click', () => this.exportFullReport());
+
+        // Character comparison
+        document.querySelector('.compare-characters')?.addEventListener('click', () => this.compareCharacters());
+        document.querySelector('.export-comparison')?.addEventListener('click', () => this.exportComparison());
+
+        // Reset app
+        document.querySelector('.reset-app')?.addEventListener('click', () => this.resetApp());
+    }
+
+    initializeTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.checked = savedTheme === 'dark';
+        }
+    }
+
+    toggleTheme() {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
+
+    switchTab(tabId) {
+        // Update tab buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabId}"]`)?.classList.add('active');
+
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(`${tabId}-tab`)?.classList.add('active');
+
+        // Refresh data for specific tabs
+        if (tabId === 'saved') {
+            this.displaySavedCharacters();
+        } else if (tabId === 'compare') {
+            this.updateCharacterSelects();
+        }
+    }
+
+    // Character Creation Methods
+    randomizeAll() {
+        this.randomizeName();
+        this.randomizeAge();
+        this.randomizeGender();
+        this.randomizeLocale();
+        this.randomizeOccupation();
+        this.randomizeTraits();
+    }
+
+    randomizeName() {
+        const names = [
+            'Elena Rodriguez', 'Marcus Chen', 'Aria Patel', 'Kai Thompson', 'Luna Nakamura',
+            'Diego Santos', 'Zara Ahmed', 'Felix Kowalski', 'Maya Singh', 'River Johnson',
+            'Sophia Andersson', 'Dmitri Volkov', 'Amara Okafor', 'Liam O\'Brien', 'Yuki Tanaka'
+        ];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        document.getElementById('name').value = randomName;
+    }
+
+    randomizeAge() {
+        const age = Math.floor(Math.random() * 60) + 18; // 18-77
+        document.getElementById('age').value = age;
+    }
+
+    randomizeGender() {
+        const genders = ['Male', 'Female', 'Non-binary', 'Other'];
+        const randomGender = genders[Math.floor(Math.random() * genders.length)];
+        document.getElementById('gender').value = randomGender;
+    }
+
+    randomizeLocale() {
+        const locales = [
+            'Barcelona, Spain', 'Tokyo, Japan', 'New York, USA', 'London, UK', 'Sydney, Australia',
+            'Toronto, Canada', 'Berlin, Germany', 'Mumbai, India', 'São Paulo, Brazil', 'Cairo, Egypt',
+            'Stockholm, Sweden', 'Cape Town, South Africa', 'Seoul, South Korea', 'Dublin, Ireland'
+        ];
+        const randomLocale = locales[Math.floor(Math.random() * locales.length)];
+        document.getElementById('locale').value = randomLocale;
+    }
+
+    randomizeOccupation() {
+        const occupations = [
+            'Software Engineer', 'Graphic Designer', 'Teacher', 'Chef', 'Journalist',
+            'Architect', 'Musician', 'Therapist', 'Photographer', 'Marine Biologist',
+            'Librarian', 'Social Worker', 'Veterinarian', 'Artist', 'Translator'
+        ];
+        const randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
+        document.getElementById('occupation').value = randomOccupation;
+    }
+
+    randomizeTraits() {
+        const traits = [
+            'Creative', 'Analytical', 'Empathetic', 'Ambitious', 'Calm', 'Adventurous',
+            'Organized', 'Spontaneous', 'Introverted', 'Extroverted', 'Patient', 'Energetic',
+            'Optimistic', 'Realistic', 'Confident', 'Humble', 'Independent', 'Collaborative'
+        ];
+        const selectedTraits = [];
+        const numTraits = Math.floor(Math.random() * 3) + 2; // 2-4 traits
+        
+        for (let i = 0; i < numTraits; i++) {
+            const availableTraits = traits.filter(trait => !selectedTraits.includes(trait));
+            if (availableTraits.length > 0) {
+                const randomTrait = availableTraits[Math.floor(Math.random() * availableTraits.length)];
+                selectedTraits.push(randomTrait);
+            }
+        }
+        
+        document.getElementById('traits').value = selectedTraits.join(', ');
+    }
+
+    generateBio() {
+        const character = this.getCharacterFromForm();
+        if (!character.name) {
+            alert('Please enter a character name first.');
+            return;
+        }
+
+        const bio = this.generateDetailedBio(character);
+        const bioOutput = document.getElementById('shortBioOutput');
+        if (bioOutput) {
+            bioOutput.innerHTML = bio;
+            bioOutput.classList.remove('empty');
+        }
+        
+        // Enable export buttons
+        this.enableExportButtons(['bio', 'full']);
+    }
+
+    generateAutobiography() {
+        const character = this.getCharacterFromForm();
+        if (!character.name) {
+            alert('Please enter a character name first.');
+            return;
+        }
+
+        const autobiography = this.generateDetailedAutobiography(character);
+        const autobiographyOutput = document.getElementById('autobiographyOutput');
+        if (autobiographyOutput) {
+            autobiographyOutput.innerHTML = autobiography;
+            autobiographyOutput.classList.remove('empty');
+        }
+        
+        // Enable export buttons
+        this.enableExportButtons(['autobiography', 'full']);
+    }
+
+    generateDetailedBio(character) {
+        const age = character.age;
+        const traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Generate contextual details based on character info
+        const ageGroup = age < 30 ? 'young' : age < 50 ? 'middle-aged' : 'experienced';
+        const primaryTraits = traits.slice(0, 3);
+        const locale = character.locale || 'an undisclosed location';
+        
+        return `
+            <h3>Character Biography</h3>
+            <p><strong>${character.name}</strong>, a ${age}-year-old ${character.gender} ${character.occupation} from ${locale}, is known for their distinctive personality traits including ${primaryTraits.join(', ')}.</p>
+            <p>As a ${ageGroup} professional in their field, ${character.name} has developed a reputation for being ${primaryTraits[0]?.toLowerCase() || 'dedicated'} and ${primaryTraits[1]?.toLowerCase() || 'reliable'}. Their background in ${locale} has given them a unique perspective that influences both their personal relationships and professional approach.</p>
+            <p>Colleagues and friends describe ${character.name} as someone who embodies ${primaryTraits.slice(0, 2).join(' and ')}, making them both memorable and influential in their personal and professional circles. Their work as a ${character.occupation} reflects their core values and has shaped their worldview significantly.</p>
+            <p>Those who know ${character.name} well would say that their ${traits.slice(-1)[0]?.toLowerCase() || 'unique'} nature, combined with their life experiences in ${locale}, has created a complex individual whose external persona only hints at the depth of their character.</p>
+        `;
+    }
+
+    generateDetailedAutobiography(character) {
+        const age = character.age;
+        const traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+        const locale = character.locale || 'my hometown';
+        const occupation = character.occupation || 'my work';
+        
+        // Determine writing style based on age
+        let ageStyle = '';
+        let lifeReflection = '';
+        
+        if (age < 25) {
+            ageStyle = "I'm still figuring out who I'm supposed to be. Some days I feel like I have it all together, other days I feel like I'm pretending to be an adult.";
+            lifeReflection = "Everything feels so immediate, so important. I know I'm supposed to have a plan, but honestly, I'm just trying to figure out what makes me happy.";
+        } else if (age < 40) {
+            ageStyle = "I'm learning to accept that I'm not the person I thought I'd be at this age, and that's okay. Life has a way of surprising you.";
+            lifeReflection = "I've started to understand that the path isn't always straight, and that the detours often teach you more than the destination.";
+        } else if (age < 60) {
+            ageStyle = "Looking back, I can see the threads that connect all the different versions of myself. The experiences that shaped me, the choices that defined me.";
+            lifeReflection = "I've learned that wisdom isn't about having all the answers - it's about asking better questions and being comfortable with uncertainty.";
+        } else {
+            ageStyle = "At this stage of life, I'm more interested in authenticity than approval. I've learned that the opinions that matter most come from people who truly know me.";
+            lifeReflection = "Time has taught me that legacy isn't about what you accomplish, but about how you touch the lives of others along the way.";
+        }
+
+        // Generate personal struggles and secrets
+        const struggles = this.generatePersonalStruggles(character);
+        const secrets = this.generateSecrets(character);
+        
+        return `
+            <h3>Autobiography</h3>
+            <div class="autobiography-output">
+                <p>My name is ${character.name}, and if you met me, you'd probably see a ${age}-year-old ${character.occupation} from ${locale}. But that's just the surface, the version of me that fits neatly into conversations and forms. The real story is messier, more complicated, and infinitely more human.</p>
+                
+                <p>Growing up in ${locale}, I learned early that the world was bigger and more complex than our little corner of it. My childhood was filled with moments that seemed ordinary then but feel significant now - the smell of morning coffee, the sound of familiar voices, the weight of expectations I didn't yet understand.</p>
+                
+                <p>People often describe me as ${traits.slice(0, 2).join(' and ')}, and I suppose that's accurate enough. But what they don't see is how those traits developed - through struggles with self-doubt, through relationships that taught me about vulnerability, through quiet moments when I questioned everything I thought I knew about myself.</p>
+                
+                <p>${struggles}</p>
+                
+                <p>My work as a ${occupation} is both exactly what I expected and nothing like I imagined. The day-to-day reality is different from the dreams, but there's something satisfying about building a life that's recognizably mine, even if it's not perfect.</p>
+                
+                <p>${secrets}</p>
+                
+                <p class="quote">${ageStyle} ${lifeReflection}</p>
+                
+                <p>Maybe that's what growing up really means - not having all the answers, but being comfortable with the questions. Not being perfect, but being real. Not having everything figured out, but being willing to keep learning, keep growing, keep becoming.</p>
+            </div>
+        `;
+    }
+
+    generatePersonalStruggles(character) {
+        const struggles = [
+            `What people don't know is that I've been dealing with anxiety for years. It's shaped how I approach relationships and work, making me both more empathetic and more guarded.`,
+            `Money has always been a source of stress for me. Growing up, we didn't have much, and I learned to be careful with every dollar. Sometimes I think I'm too careful.`,
+            `I struggle with feeling like I'm not enough - not smart enough, not successful enough, not interesting enough. It's something I work on every day.`,
+            `There are parts of my past that I don't talk about much. Not because they're shameful, but because they're mine, and some things need to stay private to stay sacred.`
+        ];
+        
+        return struggles[Math.floor(Math.random() * struggles.length)];
+    }
+
+    generateSecrets(character) {
+        const secrets = [
+            `In private, I write poetry. It's something I've never shared because it feels too vulnerable, too revealing of who I really am underneath all the roles I play.`,
+            `I've always dreamed of traveling the world, not as a tourist but as someone who really understands different cultures. But I've never told anyone because it seems impractical, unrealistic.`,
+            `Sometimes I feel like I'm performing a version of myself that others expect, rather than being who I really am. It's exhausting, but I'm not sure how to stop.`,
+            `There's a part of me that's still that kid from ${character.locale || 'home'}, wondering if I'm fooling everyone into thinking I belong in the life I've built.`
+        ];
+        
+        return secrets[Math.floor(Math.random() * secrets.length)];
+    }
+
+    saveCharacter() {
+        const character = this.getCharacterFromForm();
+        if (!character.name) {
+            alert('Please enter a character name first.');
+            return;
+        }
+
+        // Get generated content
+        const bioElement = document.getElementById('shortBioOutput');
+        const autobiographyElement = document.getElementById('autobiographyOutput');
+        
+        if (bioElement && !bioElement.classList.contains('empty')) {
+            character.bio = bioElement.innerHTML;
+        }
+        
+        if (autobiographyElement && !autobiographyElement.classList.contains('empty')) {
+            character.autobiography = autobiographyElement.innerHTML;
+        }
+
+        character.id = Date.now().toString();
+        character.createdAt = new Date().toISOString();
+
+        this.characters.push(character);
+        localStorage.setItem('characters', JSON.stringify(this.characters));
+
+        this.updateCharacterSelects();
+        this.displaySavedCharacters();
+        
+        alert(`Character "${character.name}" saved successfully!`);
+    }
+
+    getCharacterFromForm() {
+        return {
+            name: document.getElementById('name')?.value || '',
+            age: parseInt(document.getElementById('age')?.value) || 25,
+            gender: document.getElementById('gender')?.value || '',
+            locale: document.getElementById('locale')?.value || '',
+            occupation: document.getElementById('occupation')?.value || '',
+            traits: document.getElementById('traits')?.value || ''
+        };
+    }
+
+    compareCharacters() {
+        const char1Id = document.getElementById('character1')?.value;
+        const char2Id = document.getElementById('character2')?.value;
+        const context = document.getElementById('context')?.value || '';
+
+        if (!char1Id || !char2Id) {
+            alert('Please select two characters to compare.');
+            return;
+        }
+
+        if (char1Id === char2Id) {
+            alert('Please select two different characters.');
+            return;
+        }
+
+        const char1 = this.characters.find(c => c.id === char1Id);
+        const char2 = this.characters.find(c => c.id === char2Id);
+
+        const comparison = this.generateComparison(char1, char2, context);
+        const comparisonOutput = document.getElementById('comparisonOutput');
+        if (comparisonOutput) {
+            comparisonOutput.innerHTML = comparison;
+            comparisonOutput.classList.remove('empty');
+        }
+        
+        this.enableExportButtons(['comparison']);
+    }
+
+    generateComparison(char1, char2, context) {
+        const contextText = context ? ` in the context of "${context}"` : '';
+        const char1Traits = char1.traits.split(',').map(t => t.trim()).filter(t => t);
+        const char2Traits = char2.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Find potential conflicts and synergies
+        const conflicts = this.findCharacterConflicts(char1Traits, char2Traits);
+        const synergies = this.findCharacterSynergies(char1Traits, char2Traits);
+        
+        return `
+            <h3>Character Comparison & Writing Prompt</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1rem 0;">
+                <div style="background: var(--surface-color); padding: 1.5rem; border-radius: 8px;">
+                    <h4>${char1.name}</h4>
+                    <p><strong>Age:</strong> ${char1.age}<br>
+                    <strong>Gender:</strong> ${char1.gender}<br>
+                    <strong>Occupation:</strong> ${char1.occupation}<br>
+                    <strong>Location:</strong> ${char1.locale}<br>
+                    <strong>Key Traits:</strong> ${char1.traits}</p>
+                </div>
+                <div style="background: var(--surface-color); padding: 1.5rem; border-radius: 8px;">
+                    <h4>${char2.name}</h4>
+                    <p><strong>Age:</strong> ${char2.age}<br>
+                    <strong>Gender:</strong> ${char2.gender}<br>
+                    <strong>Occupation:</strong> ${char2.occupation}<br>
+                    <strong>Location:</strong> ${char2.locale}<br>
+                    <strong>Key Traits:</strong> ${char2.traits}</p>
+                </div>
+            </div>
+            
+            <h4>Detailed Writing Prompt</h4>
+            <div style="background: var(--surface-color); padding: 1.5rem; border-left: 4px solid var(--secondary-color); margin: 1rem 0;">
+                <p><strong>Setting:</strong> ${char1.name} and ${char2.name} find themselves${contextText}. Their different backgrounds (${char1.locale} vs ${char2.locale}) and contrasting ages (${char1.age} vs ${char2.age}) create an interesting dynamic from the start.</p>
+                
+                <p><strong>Character Dynamics:</strong></p>
+                <ul style="margin-left: 2rem;">
+                    <li><strong>Potential Conflicts:</strong> ${conflicts}</li>
+                    <li><strong>Possible Synergies:</strong> ${synergies}</li>
+                    <li><strong>Professional Tension:</strong> The difference between a ${char1.occupation} and a ${char2.occupation} could create interesting workplace or social dynamics.</li>
+                </ul>
+                
+                <p><strong>Story Arc Suggestions:</strong></p>
+                <ul style="margin-left: 2rem;">
+                    <li><strong>Initial Conflict:</strong> Their first interaction highlights their differences, particularly ${char1.name}'s ${char1Traits[0]?.toLowerCase()} nature clashing with ${char2.name}'s ${char2Traits[0]?.toLowerCase()} approach.</li>
+                    <li><strong>Growing Understanding:</strong> As they work together${contextText}, they begin to appreciate each other's perspectives and strengths.</li>
+                    <li><strong>Character Growth:</strong> Both characters learn something valuable - ${char1.name} discovers the value of ${char2Traits[1]?.toLowerCase()}, while ${char2.name} learns to appreciate ${char1Traits[1]?.toLowerCase()}.</li>
+                    <li><strong>Resolution:</strong> They find a way to combine their different approaches, creating something neither could have achieved alone.</li>
+                </ul>
+                
+                <p><strong>Dialogue Prompts:</strong></p>
+                <ul style="margin-left: 2rem;">
+                    <li>"You know, I never thought someone from ${char2.locale} would understand..." - ${char1.name}</li>
+                    <li>"That's exactly what I'd expect a ${char1.occupation} to say." - ${char2.name}</li>
+                    <li>"Maybe we're more alike than I thought." - Either character</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    findCharacterConflicts(traits1, traits2) {
+        const conflictPairs = {
+            'Organized': 'Spontaneous',
+            'Introverted': 'Extroverted',
+            'Calm': 'Energetic',
+            'Realistic': 'Optimistic',
+            'Independent': 'Collaborative',
+            'Analytical': 'Creative'
+        };
+        
+        const conflicts = [];
+        traits1.forEach(trait1 => {
+            traits2.forEach(trait2 => {
+                if (conflictPairs[trait1] === trait2 || conflictPairs[trait2] === trait1) {
+                    conflicts.push(`${trait1} vs ${trait2}`);
+                }
+            });
+        });
+        
+        return conflicts.length > 0 ? conflicts.join(', ') : 'Their traits complement rather than conflict with each other';
+    }
+
+    findCharacterSynergies(traits1, traits2) {
+        const synergyPairs = {
+            'Creative': ['Analytical', 'Organized'],
+            'Empathetic': ['Patient', 'Calm'],
+            'Ambitious': ['Organized', 'Energetic'],
+            'Collaborative': ['Empathetic', 'Patient']
+        };
+        
+        const synergies = [];
+        traits1.forEach(trait1 => {
+            traits2.forEach(trait2 => {
+                if (synergyPairs[trait1]?.includes(trait2) || synergyPairs[trait2]?.includes(trait1)) {
+                    synergies.push(`${trait1} + ${trait2}`);
+                }
+            });
+        });
+        
+        return synergies.length > 0 ? synergies.join(', ') : 'They could learn from each other\'s different approaches';
+    }
+
+    updateCharacterSelects() {
+        const selects = ['character1', 'character2'];
+        
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            if (select) {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">Select a character</option>';
+                
+                this.characters.forEach(char => {
+                    const option = document.createElement('option');
+                    option.value = char.id;
+                    option.textContent = char.name;
+                    select.appendChild(option);
+                });
+                
+                select.value = currentValue;
+            }
+        });
+    }
+
+    displaySavedCharacters() {
+        const container = document.getElementById('characterList');
+        if (!container) return;
+
+        if (this.characters.length === 0) {
+            container.innerHTML = '<div class="empty">No saved characters yet. Create and save a character to see it here.</div>';
+            return;
+        }
+
+        container.innerHTML = this.characters.map(char => `
+            <div class="character-card">
+                <div class="character-info">
+                    <h4>${char.name}</h4>
+                    <p>${char.age} years old, ${char.gender} ${char.occupation} from ${char.locale}</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Traits: ${char.traits}</p>
+                </div>
+                <div class="character-actions">
+                    <button class="btn-danger" onclick="app.deleteCharacter('${char.id}')">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    deleteCharacter(characterId) {
+        const character = this.characters.find(c => c.id === characterId);
+        if (!character) return;
+
+        if (confirm(`Are you sure you want to delete "${character.name}"?`)) {
+            this.characters = this.characters.filter(c => c.id !== characterId);
+            localStorage.setItem('characters', JSON.stringify(this.characters));
+            this.displaySavedCharacters();
+            this.updateCharacterSelects();
+        }
+    }
+
+    enableExportButtons(types) {
+        types.forEach(type => {
+            const button = document.querySelector(`.export-${type}`);
+            if (button) {
+                button.disabled = false;
+            }
+        });
+    }
+
+    // Export Methods
+    exportBio() {
+        const bioContent = document.getElementById('shortBioOutput')?.innerHTML;
+        if (!bioContent || bioContent.includes('empty')) {
+            alert('Please generate a bio first.');
+            return;
+        }
+        this.downloadFile('character_bio.html', this.wrapContentForExport(bioContent, 'Character Biography'), 'text/html');
+    }
+
+    exportAutobiography() {
+        const autobiographyContent = document.getElementById('autobiographyOutput')?.innerHTML;
+        if (!autobiographyContent || autobiographyContent.includes('empty')) {
+            alert('Please generate an autobiography first.');
+            return;
+        }
+        this.downloadFile('character_autobiography.html', this.wrapContentForExport(autobiographyContent, 'Character Autobiography'), 'text/html');
+    }
+
+    exportFullReport() {
+        const character = this.getCharacterFromForm();
+        const bioContent = document.getElementById('shortBioOutput')?.innerHTML || '';
+        const autobiographyContent = document.getElementById('autobiographyOutput')?.innerHTML || '';
+        
+        if ((!bioContent || bioContent.includes('empty')) && (!autobiographyContent || autobiographyContent.includes('empty'))) {
+            alert('Please generate a bio or autobiography first.');
+            return;
+        }
+        
+        const fullReport = this.generateFullReport(character, bioContent, autobiographyContent);
+        this.downloadFile('character_full_report.html', fullReport, 'text/html');
+    }
+
+    exportComparison() {
+        const comparisonContent = document.getElementById('comparisonOutput')?.innerHTML;
+        if (!comparisonContent || comparisonContent.includes('empty')) {
+            alert('Please generate a comparison first.');
+            return;
+        }
+        this.downloadFile('character_comparison.html', this.wrapContentForExport(comparisonContent, 'Character Comparison'), 'text/html');
+    }
+
+    wrapContentForExport(content, title) {
+        return `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1, h2, h3 { color: #2c3e50; }
+        .autobiography-output { font-family: Georgia, serif; }
+        .autobiography-output p { text-indent: 2rem; margin-bottom: 1.5rem; }
+        .quote { font-style: italic; border-left: 4px solid #3498db; padding-left: 1.5rem; margin: 2rem 0; }
+    </style>
+</head>
+<body>
+    ${content}
+    <hr style="margin-top: 3rem;">
+    <p style="text-align: center; color: #666; font-size: 0.9rem;">Generated by CharacterCraft - Enhanced Character Creation Tool</p>
+</body>
+</html>`;
+    }
+
+    generateFullReport(character, bioContent, autobiographyContent) {
+        return `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Character Report: ${character.name}</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        h1, h2 { color: #2c3e50; }
+        .basic-info { background: #f8f9fa; }
+        .autobiography-output { font-family: Georgia, serif; }
+        .autobiography-output p { text-indent: 2rem; margin-bottom: 1.5rem; }
+        .quote { font-style: italic; border-left: 4px solid #3498db; padding-left: 1.5rem; margin: 2rem 0; }
+    </style>
+</head>
+<body>
+    <h1>Character Report: ${character.name}</h1>
+    
+    <div class="section basic-info">
+        <h2>Basic Information</h2>
+        <p><strong>Name:</strong> ${character.name}</p>
+        <p><strong>Age:</strong> ${character.age}</p>
+        <p><strong>Gender:</strong> ${character.gender}</p>
+        <p><strong>Location:</strong> ${character.locale}</p>
+        <p><strong>Occupation:</strong> ${character.occupation}</p>
+        <p><strong>Key Traits:</strong> ${character.traits}</p>
+    </div>
+    
+    ${bioContent ? `<div class="section"><h2>External Biography</h2>${bioContent}</div>` : ''}
+    
+    ${autobiographyContent ? `<div class="section"><h2>Personal Autobiography</h2>${autobiographyContent}</div>` : ''}
+    
+    <hr style="margin-top: 3rem;">
+    <p style="text-align: center; color: #666; font-size: 0.9rem;">Generated by CharacterCraft - Enhanced Character Creation Tool</p>
+</body>
+</html>`;
+    }
+
+    downloadFile(filename, content, mimeType) {
+        const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'character_report.txt';
+        a.download = filename;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
-    } else if (className.includes('close-modal')) {
-        document.querySelector('#characterReportModal').classList.add('hidden');
-    } else if (className.includes('randomize-name')) {
-        if (typeof window.utils?.randomizeName === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize name');
-            isRandomizing = true;
-            window.utils.randomizeName();
-            console.log('Randomize name completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
-        } else {
-            console.error('utils.randomizeName is not a function or already randomizing');
-        }
-    } else if (className.includes('randomize-age')) {
-        if (typeof window.utils?.randomizeAge === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize age');
-            isRandomizing = true;
-            window.utils.randomizeAge();
-            console.log('Randomize age completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
-        } else {
-            console.error('utils.randomizeAge is not a function or already randomizing');
-        }
-    } else if (className.includes('randomize-gender')) {
-        if (typeof window.utils?.randomizeGender === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize gender');
-            isRandomizing = true;
-            window.utils.randomizeGender();
-            console.log('Randomize gender completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
-        } else {
-            console.error('utils.randomizeGender is not a function or already randomizing');
-        }
-    } else if (className.includes('randomize-locale')) {
-        if (typeof window.utils?.randomizeLocale === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize locale');
-            isRandomizing = true;
-            window.utils.randomizeLocale();
-            console.log('Randomize locale completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
-        } else {
-            console.error('utils.randomizeLocale is not a function or already randomizing');
-        }
-    } else if (className.includes('randomize-occupation')) {
-        if (typeof window.utils?.randomizeOccupation === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize occupation');
-            isRandomizing = true;
-            window.utils.randomizeOccupation();
-            console.log('Randomize occupation completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
-        } else {
-            console.error('utils.randomizeOccupation is not a function or already randomizing');
-        }
-    } else if (className.includes('randomize-traits')) {
-        if (typeof traits.randomizeTraits === 'function' && !isRandomizing) {
-            console.log('Attempting to randomize traits');
-            isRandomizing = true;
-            traits.randomizeTraits();
-            const traitsInput = document.querySelector('#traits');
-            if (traitsInput) traitsInput.value = traits.randomizedTraits ? traits.randomizedTraits.join(', ') : '';
-            console.log('Randomize traits completed');
-            setTimeout(() => { isRandomizing = false; }, 1000);
-        } else {
-            console.error('traits.randomizeTraits is not a function or already randomizing');
-        }
-    } else if (className.includes('randomize-context1')) {
-        document.querySelector('#context1').value = 'a neutral setting';
-    } else if (className.includes('randomize-context2')) {
-        document.querySelector('#context2').value = 'a different perspective';
-    } else if (className.includes('trait-bubble')) {
-        document.querySelector('#selectedTraits').innerHTML = `Trait: ${event.target.textContent}`;
-    } else if (className.includes('generate-report')) {
-        const charId = dataset.charId || document.querySelector('#characterSelect')?.value;
-        const chars = JSON.parse(localStorage.getItem('characters') || '[]');
-        const char = chars.find(c => c.id == charId) || {};
-        const reportContent = document.querySelector('#characterReportContent');
-        if (reportContent && char.id) {
-            reportContent.innerHTML = `
-                <p><strong>Name:</strong> ${char.name || 'Unknown'}</p>
-                <p><strong>Age:</strong> ${char.age || 'Unknown'}</p>
-                <p><strong>Gender:</strong> ${char.gender || 'Unknown'}</p>
-                <p><strong>Locale:</strong> ${char.locale || 'Unknown'}</p>
-                <p><strong>Occupation:</strong> ${char.occupation || 'Unknown'}</p>
-                <p><strong>Traits:</strong> ${char.traits || 'Unknown'}</p>
-            `;
-            document.querySelector('#characterReportModal').classList.remove('hidden');
-            console.log('Report generated:', char);
-        } else {
-            console.error('No character selected or invalid data:', { charId, chars });
+    }
+
+    resetApp() {
+        if (confirm('Are you sure you want to reset the app? This will clear all saved characters and data.')) {
+            localStorage.clear();
+            location.reload();
         }
     }
 }
 
+// Initialize the app when DOM is loaded
+let app;
 document.addEventListener('DOMContentLoaded', () => {
-    switchTab('create');
-    initializeTheme();
-    document.addEventListener('click', handleClick);
-    themeToggle.addEventListener('change', toggleTheme);
-    if (typeof characters.updateCharacterSelects === 'function') characters.updateCharacterSelects();
-    if (typeof characters.displayCharacters === 'function') characters.displayCharacters();
-    if (typeof traits.displayTraits === 'function') traits.displayTraits();
-    if (typeof traits.displayTraitBubbles === 'function') traits.displayTraitBubbles();
-    console.log('Event listeners bound for: click');
-    console.log('Page loaded, initialized create tab and event listeners');
+    app = new CharacterCraft();
 });
+
+// Legacy function support for existing HTML
+function generateDetailedBio() {
+    if (app) app.generateBio();
+}
+
+function generateAutobiography() {
+    if (app) app.generateAutobiography();
+}
+
+function saveCharacter() {
+    if (app) app.saveCharacter();
+}
+
+function randomizeEverything() {
+    if (app) app.randomizeAll();
+}
+
