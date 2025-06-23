@@ -1,8 +1,189 @@
 {
-    "firstNames": ["John", "Emma", "Liam", "Olivia", "Quinn"],
-    "lastNames": ["Smith", "Johnson", "Walker", "Brown", "Li"],
-    "genders": ["Male", "Female", "Non-binary"],
-    "locales": ["New York", "Tokyo", "Bangkok", "London", "Rio de Janeiro"],
-    "occupations": ["Engineer", "Teacher", "Architect", "Artist", "Doctor"],
-    "ageRanges": ["18-25", "26-35", "36-50", "51-75", "76-100"]
+    "firstNames": [
+        // English/Western Names
+        "Alexander", "Emma", "Liam", "Olivia", "Quinn", "Sophia", "Noah", "Isabella", "Ethan", "Mia",
+        "James", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Henry", "Evelyn", "Sebastian", "Abigail",
+        "William", "Emily", "Jack", "Elizabeth", "Owen", "Sofia", "Theodore", "Avery", "Samuel", "Ella",
+        "Daniel", "Scarlett", "Matthew", "Grace", "Joseph", "Chloe", "David", "Victoria", "Carter", "Riley",
+        "Wyatt", "Aria", "John", "Zoe", "Luke", "Lily", "Grayson", "Eleanor", "Isaac", "Hannah",
+        
+        // Spanish/Latino Names
+        "Diego", "Sofia", "Carlos", "Isabella", "Miguel", "Camila", "Antonio", "Valentina", "Jose", "Lucia",
+        "Francisco", "Elena", "Rafael", "Gabriela", "Eduardo", "Natalia", "Fernando", "Adriana", "Ricardo", "Daniela",
+        "Alejandro", "Carmen", "Pablo", "Rosa", "Manuel", "Ana", "Javier", "Maria", "Roberto", "Esperanza",
+        
+        // Asian Names
+        "Hiroshi", "Yuki", "Takeshi", "Sakura", "Kenji", "Akiko", "Ryu", "Mei", "Taro", "Hana",
+        "Wei", "Li", "Chen", "Xiao", "Ming", "Ling", "Jun", "Yan", "Feng", "Yu",
+        "Raj", "Priya", "Arjun", "Kavya", "Vikram", "Ananya", "Rohan", "Shreya", "Aditya", "Meera",
+        "Sung", "Min", "Jin", "Hye", "Joon", "Soo", "Woo", "Eun", "Ho", "Young",
+        
+        // African Names
+        "Kwame", "Ama", "Kofi", "Akosua", "Yaw", "Efua", "Kwaku", "Adwoa", "Kwabena", "Afia",
+        "Amara", "Zuri", "Kesi", "Nia", "Jengo", "Kaia", "Tau", "Zara", "Omari", "Sanaa",
+        "Chike", "Adanna", "Emeka", "Ngozi", "Obinna", "Chioma", "Kelechi", "Amaka", "Ikenna", "Uchenna",
+        
+        // Middle Eastern Names
+        "Omar", "Fatima", "Ali", "Aisha", "Hassan", "Zara", "Ahmed", "Layla", "Yusuf", "Noor",
+        "Khalil", "Amina", "Tariq", "Yasmin", "Samir", "Leila", "Karim", "Soraya", "Rashid", "Maryam",
+        
+        // European Names
+        "Giovanni", "Francesca", "Marco", "Giulia", "Luca", "Chiara", "Matteo", "Valentina", "Andrea", "Alessia",
+        "Pierre", "Marie", "Jean", "Claire", "Antoine", "Camille", "Nicolas", "Amelie", "Julien", "Celine",
+        "Hans", "Greta", "Klaus", "Ingrid", "Wolfgang", "Ursula", "Friedrich", "Brigitte", "Gunther", "Helga",
+        "Dmitri", "Katarina", "Alexei", "Natasha", "Sergei", "Olga", "Pavel", "Irina", "Viktor", "Svetlana",
+        
+        // Scandinavian Names
+        "Erik", "Astrid", "Lars", "Ingrid", "Nils", "Sigrid", "Bjorn", "Freya", "Magnus", "Liv",
+        "Sven", "Maja", "Gunnar", "Elsa", "Ragnar", "Saga", "Torsten", "Anja", "Leif", "Karin",
+        
+        // Celtic/Irish Names
+        "Cian", "Siobhan", "Eamon", "Niamh", "Padraig", "Aoife", "Seamus", "Brigid", "Declan", "Maeve",
+        "Finn", "Saoirse", "Ronan", "Ciara", "Cormac", "Aisling", "Tadhg", "Orla", "Ruairi", "Caoimhe",
+        
+        // Modern/Creative Names
+        "Phoenix", "River", "Sage", "Rowan", "Atlas", "Luna", "Orion", "Nova", "Zephyr", "Iris",
+        "Kai", "Aria", "Jax", "Lyra", "Zara", "Milo", "Indie", "Wren", "Cruz", "Skye"
+    ],
+    "lastNames": [
+        // English/Western Surnames
+        "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
+        "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
+        "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+        "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores",
+        
+        // European Surnames
+        "Mueller", "Schmidt", "Schneider", "Fischer", "Weber", "Meyer", "Wagner", "Becker", "Schulz", "Hoffmann",
+        "Dubois", "Martin", "Bernard", "Moreau", "Laurent", "Lefebvre", "Roux", "Fournier", "Dupont", "Lambert",
+        "Rossi", "Russo", "Ferrari", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Marino", "Greco",
+        "Petrov", "Ivanov", "Smirnov", "Kuznetsov", "Popov", "Volkov", "Sokolov", "Mikhailov", "Fedorov", "Morozov",
+        
+        // Asian Surnames
+        "Tanaka", "Suzuki", "Takahashi", "Watanabe", "Ito", "Yamamoto", "Nakamura", "Kobayashi", "Kato", "Yoshida",
+        "Wang", "Li", "Zhang", "Liu", "Chen", "Yang", "Huang", "Zhao", "Wu", "Zhou",
+        "Kim", "Lee", "Park", "Choi", "Jung", "Kang", "Cho", "Yoon", "Jang", "Lim",
+        "Patel", "Singh", "Kumar", "Sharma", "Gupta", "Agarwal", "Verma", "Mishra", "Yadav", "Tiwari",
+        
+        // Spanish/Latino Surnames
+        "Gonzalez", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Garcia", "Perez", "Sanchez", "Ramirez", "Cruz",
+        "Flores", "Gomez", "Diaz", "Reyes", "Morales", "Ortiz", "Gutierrez", "Chavez", "Ramos", "Castillo",
+        
+        // African Surnames
+        "Okafor", "Adebayo", "Oluwaseun", "Chukwu", "Nkomo", "Mthembu", "Dlamini", "Khumalo", "Mokoena", "Molefe",
+        "Asante", "Mensah", "Boateng", "Owusu", "Adjei", "Appiah", "Ofori", "Amoah", "Gyasi", "Opoku",
+        
+        // Middle Eastern Surnames
+        "Al-Ahmad", "Al-Hassan", "Al-Mohammed", "Al-Ali", "Al-Omar", "Al-Khalil", "Al-Rashid", "Al-Mansour", "Al-Zahra", "Al-Nouri",
+        "Hosseini", "Ahmadi", "Mohammadi", "Rezaei", "Moradi", "Karimi", "Rahimi", "Hashemi", "Mousavi", "Kazemi",
+        
+        // Scandinavian Surnames
+        "Andersen", "Nielsen", "Hansen", "Pedersen", "Larsen", "Sorensen", "Rasmussen", "Jorgensen", "Petersen", "Madsen",
+        "Johansson", "Andersson", "Karlsson", "Nilsson", "Eriksson", "Larsson", "Olsson", "Persson", "Svensson", "Gustafsson",
+        
+        // Celtic/Irish Surnames
+        "O'Brien", "O'Sullivan", "O'Connor", "O'Neill", "O'Reilly", "Murphy", "Kelly", "Ryan", "Doyle", "Walsh",
+        "McCarthy", "Gallagher", "O'Doherty", "Kennedy", "Lynch", "Murray", "Quinn", "Moore", "McLaughlin", "Carroll",
+        
+        // Modern/Compound Surnames
+        "Blackwood", "Whitfield", "Greenway", "Redmond", "Goldstein", "Silverstein", "Rosewood", "Fairfax", "Brightwater", "Stormwind"
+    ],
+    "genders": ["Male", "Female", "Non-binary", "Other"],
+    "locales": [
+        // Major World Cities
+        "New York City, USA", "London, England", "Tokyo, Japan", "Paris, France", "Sydney, Australia",
+        "Toronto, Canada", "Berlin, Germany", "Rome, Italy", "Madrid, Spain", "Amsterdam, Netherlands",
+        "Stockholm, Sweden", "Copenhagen, Denmark", "Vienna, Austria", "Zurich, Switzerland", "Dublin, Ireland",
+        
+        // Asian Cities
+        "Seoul, South Korea", "Bangkok, Thailand", "Singapore", "Hong Kong", "Mumbai, India",
+        "Delhi, India", "Beijing, China", "Shanghai, China", "Osaka, Japan", "Kyoto, Japan",
+        "Manila, Philippines", "Jakarta, Indonesia", "Kuala Lumpur, Malaysia", "Ho Chi Minh City, Vietnam", "Taipei, Taiwan",
+        
+        // Middle Eastern & African Cities
+        "Dubai, UAE", "Istanbul, Turkey", "Cairo, Egypt", "Tel Aviv, Israel", "Casablanca, Morocco",
+        "Cape Town, South Africa", "Lagos, Nigeria", "Nairobi, Kenya", "Accra, Ghana", "Addis Ababa, Ethiopia",
+        "Marrakech, Morocco", "Tunis, Tunisia", "Algiers, Algeria", "Khartoum, Sudan", "Dakar, Senegal",
+        
+        // Latin American Cities
+        "Mexico City, Mexico", "São Paulo, Brazil", "Rio de Janeiro, Brazil", "Buenos Aires, Argentina", "Lima, Peru",
+        "Bogotá, Colombia", "Santiago, Chile", "Caracas, Venezuela", "Quito, Ecuador", "La Paz, Bolivia",
+        "Montevideo, Uruguay", "San José, Costa Rica", "Panama City, Panama", "Guatemala City, Guatemala", "Havana, Cuba",
+        
+        // North American Cities
+        "Los Angeles, USA", "Chicago, USA", "Houston, USA", "Phoenix, USA", "Philadelphia, USA",
+        "San Antonio, USA", "San Diego, USA", "Dallas, USA", "San Francisco, USA", "Austin, USA",
+        "Vancouver, Canada", "Montreal, Canada", "Calgary, Canada", "Ottawa, Canada", "Quebec City, Canada",
+        
+        // European Cities
+        "Barcelona, Spain", "Milan, Italy", "Munich, Germany", "Prague, Czech Republic", "Budapest, Hungary",
+        "Warsaw, Poland", "Krakow, Poland", "Athens, Greece", "Lisbon, Portugal", "Oslo, Norway",
+        "Helsinki, Finland", "Brussels, Belgium", "Geneva, Switzerland", "Lyon, France", "Marseille, France",
+        
+        // Oceania Cities
+        "Melbourne, Australia", "Brisbane, Australia", "Perth, Australia", "Adelaide, Australia", "Auckland, New Zealand",
+        "Wellington, New Zealand", "Christchurch, New Zealand", "Suva, Fiji", "Port Moresby, Papua New Guinea", "Nuku'alofa, Tonga",
+        
+        // Smaller Cities & Towns
+        "Asheville, North Carolina", "Boulder, Colorado", "Portland, Oregon", "Burlington, Vermont", "Savannah, Georgia",
+        "Bath, England", "Bruges, Belgium", "Salzburg, Austria", "Siena, Italy", "Rothenburg, Germany",
+        "Kyoto, Japan", "Luang Prabang, Laos", "Hoi An, Vietnam", "Ubud, Indonesia", "Galle, Sri Lanka",
+        
+        // Rural & Unique Locations
+        "The Scottish Highlands", "Tuscany, Italy", "Provence, France", "The Swiss Alps", "The Norwegian Fjords",
+        "Rural Montana, USA", "The Australian Outback", "The Canadian Rockies", "Patagonia, Argentina", "The Amazon Rainforest",
+        "A small fishing village in Maine", "A mountain town in Colorado", "A vineyard in Napa Valley", "A ranch in Texas", "A farm in Iowa",
+        "An island in the Caribbean", "A coastal town in Portugal", "A village in the English Countryside", "A monastery in Tibet", "A desert oasis in Morocco"
+    ],
+    "occupations": [
+        // Traditional Professions
+        "Doctor", "Lawyer", "Teacher", "Engineer", "Nurse", "Architect", "Accountant", "Pharmacist", "Dentist", "Veterinarian",
+        "Police Officer", "Firefighter", "Paramedic", "Social Worker", "Psychologist", "Therapist", "Counselor", "Librarian", "Professor", "Researcher",
+        
+        // Creative & Arts
+        "Artist", "Musician", "Writer", "Actor", "Director", "Producer", "Photographer", "Graphic Designer", "Fashion Designer", "Interior Designer",
+        "Sculptor", "Painter", "Illustrator", "Animator", "Film Editor", "Sound Engineer", "Choreographer", "Dancer", "Singer", "Composer",
+        
+        // Technology & Innovation
+        "Software Developer", "Data Scientist", "Cybersecurity Specialist", "UX Designer", "Product Manager", "Systems Administrator", "DevOps Engineer", "AI Researcher",
+        "Robotics Engineer", "Blockchain Developer", "Mobile App Developer", "Game Developer", "Web Developer", "Database Administrator", "Network Engineer", "IT Consultant",
+        
+        // Business & Finance
+        "CEO", "CFO", "Marketing Manager", "Sales Representative", "Financial Advisor", "Investment Banker", "Real Estate Agent", "Insurance Agent",
+        "Business Analyst", "Project Manager", "Human Resources Manager", "Operations Manager", "Supply Chain Manager", "Consultant", "Entrepreneur", "Venture Capitalist",
+        
+        // Service & Hospitality
+        "Chef", "Restaurant Manager", "Hotel Manager", "Travel Agent", "Tour Guide", "Flight Attendant", "Bartender", "Sommelier",
+        "Event Planner", "Wedding Coordinator", "Personal Trainer", "Massage Therapist", "Hair Stylist", "Makeup Artist", "Personal Shopper", "Concierge",
+        
+        // Trades & Manual Labor
+        "Electrician", "Plumber", "Carpenter", "Mechanic", "Welder", "Mason", "Roofer", "Painter", "Landscaper", "Construction Worker",
+        "HVAC Technician", "Auto Mechanic", "Heavy Equipment Operator", "Truck Driver", "Delivery Driver", "Warehouse Worker", "Factory Worker", "Maintenance Worker",
+        
+        // Science & Research
+        "Biologist", "Chemist", "Physicist", "Geologist", "Meteorologist", "Astronomer", "Marine Biologist", "Environmental Scientist", "Archaeologist", "Anthropologist",
+        "Lab Technician", "Research Assistant", "Clinical Researcher", "Epidemiologist", "Geneticist", "Neuroscientist", "Botanist", "Zoologist", "Ecologist", "Paleontologist",
+        
+        // Media & Communications
+        "Journalist", "News Anchor", "Radio Host", "Podcast Producer", "Social Media Manager", "Public Relations Specialist", "Communications Director", "Editor",
+        "Copywriter", "Content Creator", "Blogger", "YouTuber", "Influencer", "Voice Actor", "Translator", "Interpreter", "Technical Writer", "Grant Writer",
+        
+        // Government & Public Service
+        "Mayor", "City Council Member", "Judge", "Prosecutor", "Public Defender", "Diplomat", "Foreign Service Officer", "Military Officer", "Intelligence Analyst",
+        "Park Ranger", "Postal Worker", "DMV Employee", "Tax Assessor", "Building Inspector", "Code Enforcement Officer", "Emergency Management Director", "Public Health Official",
+        
+        // Education & Academia
+        "Principal", "School Counselor", "Special Education Teacher", "ESL Teacher", "Substitute Teacher", "Tutor", "Academic Advisor", "Dean",
+        "Curriculum Developer", "Educational Consultant", "School Psychologist", "Speech Therapist", "Occupational Therapist", "Physical Therapist", "School Nurse", "Librarian",
+        
+        // Unique & Specialized
+        "Sommelier", "Food Critic", "Travel Blogger", "Professional Athlete", "Sports Coach", "Personal Trainer", "Life Coach", "Motivational Speaker",
+        "Antique Dealer", "Art Curator", "Museum Director", "Auctioneer", "Appraiser", "Genealogist", "Private Investigator", "Security Guard",
+        "Beekeeper", "Organic Farmer", "Vintner", "Cheese Maker", "Artisan Baker", "Craft Brewer", "Distiller", "Chocolatier",
+        "Professional Organizer", "Pet Groomer", "Dog Walker", "Pet Sitter", "Animal Trainer", "Zookeeper", "Wildlife Rehabilitator", "Marine Mammal Trainer",
+        
+        // Emerging & Modern Careers
+        "Drone Pilot", "Virtual Reality Developer", "Sustainability Consultant", "Digital Nomad", "Online Course Creator", "App Developer", "Cryptocurrency Trader",
+        "Social Media Influencer", "Professional Gamer", "Esports Coach", "Streaming Content Creator", "Podcast Host", "Digital Marketing Specialist", "SEO Specialist"
+    ],
+    "ageRanges": ["18-25", "26-35", "36-50", "51-65", "66-80", "81-100"]
 }

@@ -1,9 +1,9 @@
 // Enhanced CharacterCraft - Main Script with Autobiography Features
-// Trait Opposites Mapping for Hover and Split Bubble Functionality
+// Comprehensive Trait Opposites Mapping for CharacterCraft
 const TRAIT_OPPOSITES = {
-    // Personality Types
+    // Personality Core Types
     "Creative": "Conventional", "Conventional": "Creative",
-    "Analytical": "Intuitive", "Intuitive": "Analytical", 
+    "Analytical": "Intuitive", "Intuitive": "Analytical",
     "Empathetic": "Detached", "Detached": "Empathetic",
     "Ambitious": "Content", "Content": "Ambitious",
     "Calm": "Anxious", "Anxious": "Calm",
@@ -13,7 +13,7 @@ const TRAIT_OPPOSITES = {
     "Independent": "Dependent", "Dependent": "Independent",
     "Logical": "Emotional", "Emotional": "Logical",
 
-    // Social Traits
+    // Social & Interpersonal Traits
     "Charismatic": "Awkward", "Awkward": "Charismatic",
     "Diplomatic": "Blunt", "Blunt": "Diplomatic",
     "Resourceful": "Helpless", "Helpless": "Resourceful",
@@ -28,8 +28,11 @@ const TRAIT_OPPOSITES = {
     "Humble": "Arrogant", "Arrogant": "Humble",
     "Trusting": "Suspicious", "Suspicious": "Trusting",
     "Forgiving": "Vindictive", "Vindictive": "Forgiving",
+    "Sociable": "Antisocial", "Antisocial": "Sociable",
+    "Open-minded": "Close-minded", "Close-minded": "Open-minded",
+    "Inclusive": "Exclusive", "Exclusive": "Inclusive",
 
-    // Work & Intellectual
+    // Work & Professional Traits
     "Hardworking": "Lazy", "Lazy": "Hardworking",
     "Dedicated": "Uncommitted", "Uncommitted": "Dedicated",
     "Focused": "Distracted", "Distracted": "Focused",
@@ -42,46 +45,78 @@ const TRAIT_OPPOSITES = {
     "Flexible": "Rigid", "Rigid": "Flexible",
     "Competitive": "Cooperative", "Cooperative": "Competitive",
     "Leader": "Follower", "Follower": "Leader",
+    "Detail-oriented": "Big-picture", "Big-picture": "Detail-oriented",
+    "Efficient": "Inefficient", "Inefficient": "Efficient",
+    "Thorough": "Superficial", "Superficial": "Thorough",
+    "Progressive": "Conservative", "Conservative": "Progressive",
 
-    // Emotional & Unique
+    // Emotional & Psychological Traits
     "Sensitive": "Insensitive", "Insensitive": "Sensitive",
     "Passionate": "Apathetic", "Apathetic": "Passionate",
     "Artistic": "Unartistic", "Unartistic": "Artistic",
     "Eccentric": "Conventional", "Mysterious": "Transparent", "Transparent": "Mysterious",
-    "Adventurous": "Cautious", "Romantic": "Unromantic", "Unromantic": "Romantic",
+    "Mischievous": "Serious", "Serious": "Mischievous",
     "Spiritual": "Materialistic", "Materialistic": "Spiritual",
-    "Rebellious": "Conformist", "Conformist": "Rebellious",
+    "Cheerful": "Gloomy", "Gloomy": "Cheerful",
+    "Even-tempered": "Moody", "Moody": "Even-tempered",
+    "Stoic": "Expressive", "Expressive": "Stoic",
+    "Philosophical": "Pragmatic", "Pragmatic": "Philosophical",
+    "Imaginative": "Literal", "Literal": "Imaginative",
+    "Theoretical": "Applied", "Applied": "Theoretical",
+
+    // Behavioral & Lifestyle Traits
+    "Adventurous": "Cautious", "Outgoing": "Reserved", "Reserved": "Outgoing",
     "Energetic": "Lethargic", "Lethargic": "Energetic",
-    "Playful": "Serious", "Serious": "Playful",
-    "Bold": "Timid", "Timid": "Bold",
-    "Wise": "Naive", "Naive": "Wise",
-    "Mature": "Immature", "Immature": "Mature",
-    "Outgoing": "Reserved", "Reserved": "Outgoing",
-    "Supportive": "Unsupportive", "Unsupportive": "Supportive",
-    "Excitable": "Calm", "Thoughtful": "Thoughtless", "Thoughtless": "Thoughtful",
-    "Reliable": "Unreliable", "Unreliable": "Reliable",
-    "Open-minded": "Close-minded", "Close-minded": "Open-minded",
-    "Adaptable": "Inflexible", "Inflexible": "Adaptable",
-    "Assertive": "Passive", "Passive": "Assertive",
     "Disciplined": "Undisciplined", "Undisciplined": "Disciplined",
-    "Observant": "Oblivious", "Oblivious": "Observant",
+    "Punctual": "Tardy", "Tardy": "Punctual",
+    "Neat": "Messy", "Messy": "Neat",
+    "Frugal": "Spendthrift", "Spendthrift": "Frugal",
+    "Health-conscious": "Indulgent", "Indulgent": "Health-conscious",
+    "Tech-savvy": "Tech-averse", "Tech-averse": "Tech-savvy",
+    "Urban": "Rural", "Rural": "Urban",
+    "Minimalist": "Maximalist", "Maximalist": "Minimalist",
+
+    // Communication & Expression
+    "Articulate": "Inarticulate", "Inarticulate": "Articulate",
+    "Verbose": "Concise", "Concise": "Verbose",
+    "Persuasive": "Unconvincing", "Unconvincing": "Persuasive",
+    "Eloquent": "Tongue-tied", "Tongue-tied": "Eloquent",
+    "Direct": "Indirect", "Indirect": "Direct",
     "Tactful": "Tactless", "Tactless": "Tactful",
-    "Sincere": "Insincere", "Insincere": "Sincere",
-    "Courageous": "Cowardly", "Cowardly": "Courageous",
-    "Gentle": "Harsh", "Harsh": "Gentle",
-    "Scholarly": "Unscholarly", "Unscholarly": "Scholarly",
-    "Worldly": "Naive", "Sophisticated": "Unsophisticated", "Unsophisticated": "Sophisticated"
+
+    // Moral & Ethical Traits
+    "Principled": "Unprincipled", "Unprincipled": "Principled",
+    "Ethical": "Unethical", "Unethical": "Ethical",
+    "Fair": "Unfair", "Unfair": "Fair",
+    "Just": "Unjust", "Unjust": "Just",
+    "Compassionate": "Ruthless", "Ruthless": "Compassionate",
+    "Altruistic": "Self-serving", "Self-serving": "Altruistic",
+
+    // Learning & Growth
+    "Studious": "Negligent", "Negligent": "Studious",
+    "Inquisitive": "Incurious", "Incurious": "Inquisitive",
+    "Adaptable": "Inflexible", "Inflexible": "Adaptable",
+    "Open to feedback": "Defensive", "Defensive": "Open to feedback",
+    "Growth-minded": "Fixed-minded", "Fixed-minded": "Growth-minded",
+
+    // Risk & Decision Making
+    "Bold": "Timid", "Timid": "Bold",
+    "Decisive": "Hesitant", "Hesitant": "Decisive",
+    "Risk-taking": "Risk-averse", "Risk-averse": "Risk-taking",
+    "Impulsive": "Deliberate", "Deliberate": "Impulsive",
+    "Proactive": "Reactive", "Reactive": "Proactive"
 };
 
 // Helper functions for trait opposites
-function getOppositeTrait(trait) {
-    return TRAIT_OPPOSITES[trait] || `Non-${trait}`;
+function getOpposite(trait) {
+    return TRAIT_OPPOSITES[trait] || null;
 }
 
-function hasDefinedOpposite(trait) {
+function hasOpposite(trait) {
     return trait in TRAIT_OPPOSITES;
 }
 
+// Enhanced CharacterCraft Application Class
 class CharacterCraft {
     constructor() {
         this.characters = JSON.parse(localStorage.getItem('characters')) || [];
@@ -165,6 +200,13 @@ class CharacterCraft {
         document.querySelector('.randomize-comparison')?.addEventListener('click', () => this.randomizeComparison());
         document.querySelector('.randomize-conflict')?.addEventListener('click', () => this.randomizeConflict());
         document.querySelector('.export-comparison')?.addEventListener('click', () => this.exportComparison());
+
+        // Character import/export
+        document.querySelector('.export-all-characters')?.addEventListener('click', () => this.exportAllCharacters());
+        document.querySelector('.export-selected-character')?.addEventListener('click', () => this.exportSelectedCharacter());
+        document.querySelector('.import-characters')?.addEventListener('click', () => this.triggerCharacterImport());
+        document.getElementById('character-import-file')?.addEventListener('change', (e) => this.importCharacters(e));
+        document.querySelector('.clear-all-characters')?.addEventListener('click', () => this.clearAllCharacters());
 
         // Trait assignment
         document.getElementById('trait-character-select')?.addEventListener('change', (e) => this.selectCharacterForTraits(e.target.value));
@@ -457,7 +499,12 @@ class CharacterCraft {
 
     generateDetailedBio(character) {
         const age = character.age;
-        const traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Handle both string and array formats for traits
+        let traits = character.traits || [];
+        if (typeof traits === 'string') {
+            traits = traits.split(',').map(t => t.trim()).filter(t => t);
+        }
         
         // Generate contextual details based on character info
         const ageGroup = age < 30 ? 'young' : age < 50 ? 'middle-aged' : 'experienced';
@@ -475,7 +522,13 @@ class CharacterCraft {
 
     generateDetailedAutobiography(character) {
         const age = character.age;
-        const traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Handle both string and array formats for traits
+        let traits = character.traits || [];
+        if (typeof traits === 'string') {
+            traits = traits.split(',').map(t => t.trim()).filter(t => t);
+        }
+        
         const locale = character.locale || 'my hometown';
         const occupation = character.occupation || 'my work';
         
@@ -616,8 +669,9 @@ class CharacterCraft {
     }
 
     randomizeComparison() {
-        // Random scenario contexts for character interactions
+        // Expanded random scenario contexts for character interactions
         const scenarios = [
+            // Classic Situations
             'trapped in an elevator together',
             'working on a project together',
             'stuck in traffic during a road trip',
@@ -647,7 +701,109 @@ class CharacterCraft {
             'both learning to drive from the same instructor',
             'meeting at a book club',
             'both trying to catch the same bus',
-            'attending a cooking class together'
+            'attending a cooking class together',
+            
+            // Adventure & Travel
+            'stranded at an airport during a blizzard',
+            'sharing a cabin on a cruise ship',
+            'both lost in the same hiking trail',
+            'stuck in a foreign country during a political crisis',
+            'sharing a rental car that breaks down',
+            'both attending the same destination wedding',
+            'trapped in a ski lodge during an avalanche',
+            'sharing a train compartment on a long journey',
+            'both on the same archaeological dig',
+            'stranded on a small island after a boat accident',
+            'both participating in a wilderness survival course',
+            'sharing a hotel room due to overbooking',
+            'both on a guided tour that goes wrong',
+            'trapped in a museum after closing time',
+            'both attending a retreat in a remote location',
+            
+            // Professional & Academic
+            'competing for the same research grant',
+            'both starting at a new company on the same day',
+            'sharing an office space in a co-working environment',
+            'both presenting at the same conference',
+            'competing for tenure at the same university',
+            'both interviewing for positions at rival companies',
+            'sharing a lab space for different experiments',
+            'both mentoring the same difficult student',
+            'competing for the same artistic residency',
+            'both covering the same news story as journalists',
+            'sharing a booth at a trade show',
+            'both auditioning for the same role',
+            'competing for the same business loan',
+            'both teaching at the same summer camp',
+            'sharing a studio space for their art',
+            
+            // Social & Community
+            'both running for the same local political office',
+            'competing in a neighborhood talent show',
+            'both organizing rival charity events',
+            'sharing a community garden plot',
+            'both coaching rival youth sports teams',
+            'competing for the same volunteer leadership position',
+            'both planning their children\'s birthday parties on the same day',
+            'sharing a table at a speed dating event',
+            'both trying to save the same historic building',
+            'competing for the same spot in a prestigious club',
+            'both organizing their high school reunion',
+            'sharing a therapy group session',
+            'both attending the same support group',
+            'competing for the same scholarship',
+            'both trying to adopt from the same animal shelter',
+            
+            // Crisis & Emergency
+            'both trapped in a building during an earthquake',
+            'sharing a bomb shelter during an emergency',
+            'both helping during a natural disaster',
+            'trapped in a subway tunnel during a power outage',
+            'both evacuating during a wildfire',
+            'sharing a safe room during a tornado',
+            'both responding to the same emergency as first responders',
+            'trapped in a car during a flash flood',
+            'both helping at an emergency shelter',
+            'sharing a lifeboat after a shipwreck',
+            'both quarantined together during a health crisis',
+            'trapped in a mall during a security lockdown',
+            'both helping during a blackout in the city',
+            'sharing a hospital room during a crisis',
+            'both coordinating disaster relief efforts',
+            
+            // Unusual & Creative
+            'both participating in a reality TV show',
+            'sharing a time capsule discovery',
+            'both investigating the same mystery',
+            'trapped in a virtual reality simulation',
+            'both attending a masquerade ball',
+            'sharing a paranormal investigation',
+            'both participating in a social experiment',
+            'trapped in a escape room that malfunctions',
+            'both attending a silent retreat',
+            'sharing a meditation retreat',
+            'both participating in a historical reenactment',
+            'trapped in a library during a lockdown',
+            'both attending a costume party with the same costume',
+            'sharing a witness protection program',
+            'both participating in a sleep study',
+            
+            // Family & Personal
+            'both dating siblings without knowing it',
+            'sharing custody of the same pet after a breakup',
+            'both planning surprise parties for the same person',
+            'competing for their parent\'s approval',
+            'both caring for the same aging neighbor',
+            'sharing a family secret they just discovered',
+            'both attending their ex\'s wedding',
+            'competing for the same inheritance',
+            'both trying to reconnect with the same estranged family member',
+            'sharing a childhood home they both inherited',
+            'both attending the same therapy session',
+            'competing for the same adoption opportunity',
+            'both discovering they\'re related',
+            'sharing a long-lost family treasure',
+            'both trying to solve a family mystery'
         ];
 
         // Randomly select a scenario
@@ -674,38 +830,139 @@ class CharacterCraft {
     }
 
     randomizeConflict() {
-        // Random conflict types for character interactions
+        // Expanded conflict types for character interactions
         const conflictTypes = [
+            // Ideological & Values
             'ideological differences about social justice',
-            'competing for the same romantic interest',
             'disagreement over a major life decision',
             'conflicting approaches to solving a problem',
-            'past betrayal that needs to be addressed',
-            'competition for a promotion or opportunity',
             'different values about money and success',
-            'clash over parenting or family responsibilities',
-            'opposing views on risk-taking vs. safety',
-            'disagreement about loyalty vs. honesty',
-            'conflict over personal boundaries',
-            'different communication styles causing misunderstandings',
-            'competing creative visions on a project',
             'clash between tradition and innovation',
             'disagreement about work-life balance',
             'conflict over environmental vs. economic priorities',
             'different approaches to handling conflict itself',
-            'competing for limited resources or funding',
-            'clash between individual needs and group needs',
             'disagreement about privacy vs. transparency',
             'conflict over religious or spiritual beliefs',
             'different attitudes toward authority and rules',
-            'competing interpretations of the same event',
             'clash between perfectionism and pragmatism',
+            'disagreement about change vs. stability',
+            'conflict over trust and vulnerability',
+            'different philosophies about education and learning',
+            'clash between individualism and collectivism',
+            'disagreement about technology and progress',
+            'conflict over artistic expression and censorship',
+            'different views on justice and punishment',
+            'clash between science and faith',
+            
+            // Relationships & Personal
+            'competing for the same romantic interest',
+            'past betrayal that needs to be addressed',
+            'disagreement about loyalty vs. honesty',
+            'conflict over personal boundaries',
+            'different communication styles causing misunderstandings',
+            'clash over parenting or family responsibilities',
             'disagreement about timing and urgency',
             'conflict over personal vs. professional priorities',
             'different approaches to handling failure',
             'clash between optimism and realism',
-            'disagreement about change vs. stability',
-            'conflict over trust and vulnerability'
+            'disagreement about emotional expression',
+            'conflict over independence vs. interdependence',
+            'different expectations about commitment',
+            'clash over forgiveness and grudges',
+            'disagreement about public vs. private life',
+            'conflict over family traditions and customs',
+            'different approaches to conflict resolution',
+            'clash over personal growth and change',
+            'disagreement about social obligations',
+            'conflict over personal space and togetherness',
+            
+            // Professional & Career
+            'competition for a promotion or opportunity',
+            'competing creative visions on a project',
+            'competing for limited resources or funding',
+            'clash between individual needs and group needs',
+            'disagreement over leadership styles',
+            'conflict over work ethics and standards',
+            'different approaches to teamwork',
+            'clash over innovation vs. proven methods',
+            'disagreement about risk management',
+            'conflict over credit and recognition',
+            'different views on professional development',
+            'clash over company culture and values',
+            'disagreement about client relationships',
+            'conflict over budget allocation',
+            'different approaches to problem-solving',
+            'clash over quality vs. efficiency',
+            'disagreement about delegation and control',
+            'conflict over workplace policies',
+            'different views on success metrics',
+            'clash over professional boundaries',
+            
+            // Social & Community
+            'competing interpretations of the same event',
+            'disagreement about community involvement',
+            'conflict over neighborhood changes',
+            'different approaches to social activism',
+            'clash over cultural preservation vs. progress',
+            'disagreement about public safety measures',
+            'conflict over resource distribution in community',
+            'different views on education policy',
+            'clash over development vs. conservation',
+            'disagreement about social responsibility',
+            'conflict over representation and inclusion',
+            'different approaches to community leadership',
+            'clash over local vs. global priorities',
+            'disagreement about tradition vs. modernization',
+            'conflict over public vs. private interests',
+            'different views on civic engagement',
+            'clash over generational differences',
+            'disagreement about cultural appropriation',
+            'conflict over historical interpretation',
+            'different approaches to social change',
+            
+            // Ethical & Moral
+            'disagreement about right and wrong',
+            'conflict over means vs. ends',
+            'different views on personal responsibility',
+            'clash over truth vs. kindness',
+            'disagreement about moral obligations',
+            'conflict over justice vs. mercy',
+            'different approaches to ethical dilemmas',
+            'clash over individual rights vs. collective good',
+            'disagreement about moral relativism',
+            'conflict over duty vs. desire',
+            'different views on accountability',
+            'clash over transparency vs. discretion',
+            'disagreement about moral authority',
+            'conflict over competing loyalties',
+            'different approaches to moral education',
+            'clash over punishment vs. rehabilitation',
+            'disagreement about moral progress',
+            'conflict over cultural vs. universal values',
+            'different views on moral courage',
+            'clash over intention vs. impact',
+            
+            // Creative & Intellectual
+            'competing artistic visions',
+            'disagreement about creative ownership',
+            'conflict over intellectual property',
+            'different approaches to creative process',
+            'clash over commercial vs. artistic integrity',
+            'disagreement about creative collaboration',
+            'conflict over interpretation of art or literature',
+            'different views on creative education',
+            'clash over traditional vs. experimental methods',
+            'disagreement about creative criticism',
+            'conflict over creative freedom vs. responsibility',
+            'different approaches to creative inspiration',
+            'clash over originality vs. influence',
+            'disagreement about creative standards',
+            'conflict over creative recognition',
+            'different views on creative purpose',
+            'clash over form vs. content',
+            'disagreement about creative audience',
+            'conflict over creative legacy',
+            'different approaches to creative failure'
         ];
 
         // Randomly select a conflict type
@@ -733,8 +990,17 @@ class CharacterCraft {
 
     generateComparison(char1, char2, context) {
         const contextText = context ? ` in the context of "${context}"` : '';
-        const char1Traits = char1.traits.split(',').map(t => t.trim()).filter(t => t);
-        const char2Traits = char2.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Handle both string and array formats for traits
+        let char1Traits = char1.traits || [];
+        if (typeof char1Traits === 'string') {
+            char1Traits = char1Traits.split(',').map(t => t.trim()).filter(t => t);
+        }
+        
+        let char2Traits = char2.traits || [];
+        if (typeof char2Traits === 'string') {
+            char2Traits = char2Traits.split(',').map(t => t.trim()).filter(t => t);
+        }
         
         // Find potential conflicts and synergies
         const conflicts = this.findCharacterConflicts(char1Traits, char2Traits);
@@ -749,7 +1015,7 @@ class CharacterCraft {
                     <strong>Gender:</strong> ${char1.gender}<br>
                     <strong>Occupation:</strong> ${char1.occupation}<br>
                     <strong>Location:</strong> ${char1.locale}<br>
-                    <strong>Key Traits:</strong> ${char1.traits}</p>
+                    <strong>Key Traits:</strong> ${Array.isArray(char1.traits) ? char1Traits.join(', ') : char1.traits}</p>
                 </div>
                 <div style="background: var(--surface-color); padding: 1.5rem; border-radius: 8px;">
                     <h4>${char2.name}</h4>
@@ -757,7 +1023,7 @@ class CharacterCraft {
                     <strong>Gender:</strong> ${char2.gender}<br>
                     <strong>Occupation:</strong> ${char2.occupation}<br>
                     <strong>Location:</strong> ${char2.locale}<br>
-                    <strong>Key Traits:</strong> ${char2.traits}</p>
+                    <strong>Key Traits:</strong> ${Array.isArray(char2.traits) ? char2Traits.join(', ') : char2.traits}</p>
                 </div>
             </div>
             
@@ -1233,16 +1499,94 @@ class CharacterCraft {
         document.querySelectorAll('.trait-bubble').forEach(bubble => {
             const trait = bubble.getAttribute('data-trait');
             if (trait) {
-                // Add opposite trait data attribute for hover tooltip
-                const opposite = getOppositeTrait(trait);
-                bubble.setAttribute('data-opposite', `Opposite: ${opposite}`);
+                const opposite = getOpposite(trait);
                 
-                // Add hover effect class
-                bubble.classList.add('hoverable');
+                if (opposite) {
+                    // Set up data attributes for tooltips
+                    bubble.setAttribute('data-opposite', opposite);
+                    
+                    // Check if this should be a split bubble (has a defined opposite)
+                    if (hasOpposite(trait)) {
+                        this.convertToSplitBubble(bubble, trait, opposite);
+                    } else {
+                        // Regular bubble with hover tooltip
+                        bubble.setAttribute('data-opposite', `Opposite: ${opposite}`);
+                        bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
+                    }
+                } else {
+                    // No opposite defined, regular bubble
+                    bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
+                }
             }
-            
-            bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
         });
+    }
+
+    convertToSplitBubble(bubble, trait, opposite) {
+        // Convert regular bubble to split bubble
+        bubble.classList.add('split');
+        bubble.innerHTML = `
+            <span class="trait-side left" data-trait="${trait}" data-side="trait">${trait}</span>
+            <span class="trait-side right" data-trait="${opposite}" data-side="opposite">${opposite}</span>
+        `;
+        
+        // Add click listeners to each side
+        const leftSide = bubble.querySelector('.trait-side.left');
+        const rightSide = bubble.querySelector('.trait-side.right');
+        
+        leftSide.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleSplitTrait(bubble, trait, 'trait');
+        });
+        
+        rightSide.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleSplitTrait(bubble, opposite, 'opposite');
+        });
+    }
+
+    toggleSplitTrait(bubble, selectedTrait, side) {
+        if (!this.currentTraitCharacter) return;
+
+        // Ensure traits is always an array
+        let currentTraits = this.currentTraitCharacter.traits || [];
+        if (typeof currentTraits === 'string') {
+            currentTraits = currentTraits.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            this.currentTraitCharacter.traits = currentTraits;
+        }
+
+        const trait = bubble.querySelector('.trait-side.left').getAttribute('data-trait');
+        const opposite = bubble.querySelector('.trait-side.right').getAttribute('data-trait');
+        
+        // Remove both trait and opposite if they exist
+        const traitIndex = currentTraits.indexOf(trait);
+        const oppositeIndex = currentTraits.indexOf(opposite);
+        
+        if (traitIndex > -1) currentTraits.splice(traitIndex, 1);
+        if (oppositeIndex > -1) currentTraits.splice(oppositeIndex, 1);
+        
+        // Clear previous selections on this bubble
+        bubble.querySelector('.trait-side.left').classList.remove('selected');
+        bubble.querySelector('.trait-side.right').classList.remove('selected');
+        
+        // Add the selected trait
+        currentTraits.push(selectedTrait);
+        
+        // Update visual state
+        if (side === 'trait') {
+            bubble.querySelector('.trait-side.left').classList.add('selected');
+        } else {
+            bubble.querySelector('.trait-side.right').classList.add('selected');
+        }
+        
+        // Update character data
+        this.currentTraitCharacter.traits = currentTraits;
+        
+        // Update displays
+        this.updateCurrentTraitsDisplay();
+        
+        // Add animation
+        bubble.classList.add('just-assigned');
+        setTimeout(() => bubble.classList.remove('just-assigned'), 300);
     }
 
     selectCharacterForTraits(characterId) {
@@ -1318,15 +1662,37 @@ class CharacterCraft {
             this.currentTraitCharacter.traits = currentTraits; // Update to array format
         }
 
-        // Reset all bubbles
+        // Reset all bubbles (both regular and split)
         document.querySelectorAll('.trait-bubble').forEach(bubble => {
             bubble.classList.remove('assigned');
+            
+            // Reset split bubble selections
+            if (bubble.classList.contains('split')) {
+                bubble.querySelectorAll('.trait-side').forEach(side => {
+                    side.classList.remove('selected');
+                });
+            }
         });
 
         // Mark assigned traits
         currentTraits.forEach(trait => {
-            const bubbles = document.querySelectorAll(`[data-trait="${trait}"]`);
-            bubbles.forEach(bubble => bubble.classList.add('assigned'));
+            // Handle regular bubbles
+            const regularBubbles = document.querySelectorAll(`.trait-bubble:not(.split)[data-trait="${trait}"]`);
+            regularBubbles.forEach(bubble => bubble.classList.add('assigned'));
+            
+            // Handle split bubbles
+            const splitBubbles = document.querySelectorAll('.trait-bubble.split');
+            splitBubbles.forEach(splitBubble => {
+                const leftSide = splitBubble.querySelector('.trait-side.left');
+                const rightSide = splitBubble.querySelector('.trait-side.right');
+                
+                if (leftSide && leftSide.getAttribute('data-trait') === trait) {
+                    leftSide.classList.add('selected');
+                }
+                if (rightSide && rightSide.getAttribute('data-trait') === trait) {
+                    rightSide.classList.add('selected');
+                }
+            });
         });
     }
 
@@ -1405,6 +1771,193 @@ class CharacterCraft {
         // Clear current character
         this.currentTraitCharacter = null;
         this.originalTraits = null;
+    }
+
+    // Character Import/Export Methods
+    exportAllCharacters() {
+        if (this.characters.length === 0) {
+            alert('No characters to export. Create and save some characters first.');
+            return;
+        }
+
+        const exportData = {
+            version: '1.0',
+            exportDate: new Date().toISOString(),
+            characterCount: this.characters.length,
+            characters: this.characters.map(char => ({
+                ...char,
+                exportedAt: new Date().toISOString()
+            }))
+        };
+
+        const filename = `CharacterCraft_Export_${new Date().toISOString().split('T')[0]}.json`;
+        this.downloadFile(filename, JSON.stringify(exportData, null, 2), 'application/json');
+        
+        alert(`Successfully exported ${this.characters.length} character(s) to ${filename}`);
+    }
+
+    exportSelectedCharacter() {
+        // This would be implemented with character selection UI
+        // For now, export the most recently created character
+        if (this.characters.length === 0) {
+            alert('No characters to export.');
+            return;
+        }
+
+        const latestCharacter = this.characters[this.characters.length - 1];
+        const exportData = {
+            version: '1.0',
+            exportDate: new Date().toISOString(),
+            characterCount: 1,
+            characters: [{
+                ...latestCharacter,
+                exportedAt: new Date().toISOString()
+            }]
+        };
+
+        const filename = `${latestCharacter.name.replace(/[^a-zA-Z0-9]/g, '_')}_Character.json`;
+        this.downloadFile(filename, JSON.stringify(exportData, null, 2), 'application/json');
+        
+        alert(`Successfully exported character "${latestCharacter.name}" to ${filename}`);
+    }
+
+    triggerCharacterImport() {
+        const fileInput = document.getElementById('character-import-file');
+        if (fileInput) {
+            fileInput.click();
+        }
+    }
+
+    async importCharacters(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Show progress indicator
+        this.showImportProgress('Reading file...');
+
+        try {
+            const text = await file.text();
+            const importData = JSON.parse(text);
+
+            // Validate import data structure
+            if (!this.validateImportData(importData)) {
+                throw new Error('Invalid file format. Please select a valid CharacterCraft export file.');
+            }
+
+            // Show import progress
+            this.showImportProgress(`Importing ${importData.characterCount} character(s)...`);
+
+            // Process imported characters
+            const importedCharacters = importData.characters.map(char => ({
+                ...char,
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9), // Generate new ID
+                importedAt: new Date().toISOString(),
+                originalId: char.id // Keep reference to original ID
+            }));
+
+            // Add to existing characters
+            this.characters.push(...importedCharacters);
+            localStorage.setItem('characters', JSON.stringify(this.characters));
+
+            // Update UI
+            this.displaySavedCharacters();
+            this.updateCharacterSelects();
+            this.updateTraitCharacterSelect();
+
+            // Show success message
+            this.showImportMessage('success', 
+                `Successfully imported ${importedCharacters.length} character(s)! ` +
+                `You now have ${this.characters.length} total characters.`
+            );
+
+            // Clear file input
+            event.target.value = '';
+
+        } catch (error) {
+            console.error('Import error:', error);
+            this.showImportMessage('error', 
+                `Import failed: ${error.message}. Please check that you selected a valid CharacterCraft export file.`
+            );
+        } finally {
+            this.hideImportProgress();
+        }
+    }
+
+    validateImportData(data) {
+        return (
+            data &&
+            typeof data === 'object' &&
+            data.version &&
+            Array.isArray(data.characters) &&
+            data.characters.every(char => 
+                char.name && 
+                char.age !== undefined && 
+                char.gender !== undefined &&
+                char.locale !== undefined &&
+                char.occupation !== undefined
+            )
+        );
+    }
+
+    showImportProgress(message) {
+        const progressDiv = document.querySelector('.import-progress');
+        if (progressDiv) {
+            progressDiv.querySelector('.progress-text').textContent = message;
+            progressDiv.classList.add('show');
+        }
+    }
+
+    hideImportProgress() {
+        const progressDiv = document.querySelector('.import-progress');
+        if (progressDiv) {
+            progressDiv.classList.remove('show');
+        }
+    }
+
+    showImportMessage(type, message) {
+        // Hide any existing messages
+        document.querySelectorAll('.import-message').forEach(msg => {
+            msg.classList.remove('show');
+        });
+
+        // Show new message
+        const messageDiv = document.querySelector(`.import-message.${type}`);
+        if (messageDiv) {
+            messageDiv.textContent = message;
+            messageDiv.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                messageDiv.classList.remove('show');
+            }, 5000);
+        } else {
+            // Fallback to alert if message div doesn't exist
+            alert(message);
+        }
+    }
+
+    clearAllCharacters() {
+        if (this.characters.length === 0) {
+            alert('No characters to clear.');
+            return;
+        }
+
+        const confirmMessage = `Are you sure you want to delete all ${this.characters.length} saved characters? This action cannot be undone.`;
+        
+        if (confirm(confirmMessage)) {
+            this.characters = [];
+            localStorage.setItem('characters', JSON.stringify(this.characters));
+            
+            // Update UI
+            this.displaySavedCharacters();
+            this.updateCharacterSelects();
+            this.updateTraitCharacterSelect();
+            
+            // Clear trait assignment if active
+            this.clearTraitSelection();
+            
+            alert('All characters have been deleted.');
+        }
     }
 }
 

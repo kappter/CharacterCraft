@@ -98,14 +98,22 @@
                     <button class="save-character btn-primary">Save Character</button>
                 </div>
 
-                <!-- Bio Output -->
-                <div class="bio-output empty" id="shortBioOutput">
-                    <div class="empty">External biography will appear here...</div>
+                <!-- Bio Section -->
+                <div class="bio-section">
+                    <h3 class="bio-title">Character Biography</h3>
+                    <p class="bio-subtitle">How the world sees this character - external perspective and public persona</p>
+                    <div class="bio-output empty" id="shortBioOutput">
+                        <div class="empty">External biography will appear here...</div>
+                    </div>
                 </div>
 
-                <!-- Autobiography Output -->
-                <div class="bio-output empty" id="autobiographyOutput">
-                    <div class="empty">Autobiography will appear here...</div>
+                <!-- Autobiography Section -->
+                <div class="autobiography-section">
+                    <h3 class="bio-title">Character Autobiography</h3>
+                    <p class="bio-subtitle">What is known within - internal thoughts, private history, and personal journey</p>
+                    <div class="bio-output empty" id="autobiographyOutput">
+                        <div class="empty">Autobiography will appear here...</div>
+                    </div>
                 </div>
 
                 <div class="action-buttons">
@@ -163,8 +171,31 @@
                     <div class="empty">No saved characters yet. Create and save a character to see it here.</div>
                 </div>
                 
+                <!-- Import/Export Section -->
+                <div class="import-export-section">
+                    <h3>Character Collaboration</h3>
+                    <p>Share characters with other writers or import characters from collaborators</p>
+                    
+                    <div class="import-export-controls">
+                        <div class="export-controls">
+                            <h4>Export Characters</h4>
+                            <button class="export-all-characters btn-primary">Export All Characters</button>
+                            <button class="export-selected-character btn-secondary" disabled>Export Selected Character</button>
+                        </div>
+                        
+                        <div class="import-controls">
+                            <h4>Import Characters</h4>
+                            <input type="file" id="character-import-file" accept=".json" style="display: none;">
+                            <button class="import-characters btn-primary">Import Characters</button>
+                            <div class="import-info">
+                                <small>Supports .json files exported from CharacterCraft</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="action-buttons">
-                    <button class="export-all-characters btn-secondary">Export All Characters</button>
+                    <button class="clear-all-characters btn-warning">Clear All Characters</button>
                 </div>
             </div>
 
@@ -316,4 +347,18 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+
+                        </div>
+                    </div>
+                    
+                    <!-- Import Progress and Messages -->
+                    <div class="import-progress">
+                        <div class="progress-text">Processing...</div>
+                        <div class="progress-details">Please wait while we import your characters.</div>
+                    </div>
+                    
+                    <div class="import-message success"></div>
+                    <div class="import-message error"></div>
+                </div>
 

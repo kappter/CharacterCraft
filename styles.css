@@ -626,27 +626,29 @@ footer {
     gap: 0.75rem;
     margin-top: 1rem;
 }
-
+/* Enhanced Trait Bubble Styles with Split Functionality */
 .trait-bubble {
     display: inline-block;
     padding: 0.5rem 1rem;
+    margin: 0.25rem;
     background: var(--secondary-color);
     color: white;
+    border: 2px solid var(--secondary-color);
     border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
-    user-select: none;
+    font-size: 0.9rem;
+    font-weight: 500;
     position: relative;
-    overflow: hidden;
+    user-select: none;
+    min-width: 80px;
+    text-align: center;
 }
 
 .trait-bubble:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    background: var(--primary-color);
+    z-index: 10;
 }
 
 .trait-bubble.assigned {
@@ -673,6 +675,130 @@ footer {
 .trait-bubble:active {
     transform: translateY(0);
     transition: transform 0.1s ease;
+}
+
+/* Split Bubble Styles */
+.trait-bubble.split {
+    background: linear-gradient(135deg, var(--secondary-color) 50%, var(--warning-color) 50%);
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+    padding: 0;
+    border: none;
+}
+
+.trait-bubble.split .trait-side {
+    display: inline-block;
+    width: 50%;
+    padding: 0.5rem 0.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+}
+
+.trait-bubble.split .trait-side.left {
+    background: rgba(52, 152, 219, 0.9);
+    color: white;
+    border-radius: 25px 0 0 25px;
+}
+
+.trait-bubble.split .trait-side.right {
+    background: rgba(243, 156, 18, 0.9);
+    color: white;
+    border-radius: 0 25px 25px 0;
+}
+
+.trait-bubble.split .trait-side:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    z-index: 3;
+}
+
+.trait-bubble.split .trait-side.selected {
+    background: var(--success-color);
+    font-weight: bold;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.trait-bubble.split .trait-side.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Opposite Trait Tooltip */
+.trait-bubble:not(.split)::before {
+    content: attr(data-opposite);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+    font-weight: normal;
+}
+
+.trait-bubble:not(.split)::after {
+    content: '';
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.trait-bubble:not(.split):hover::before,
+.trait-bubble:not(.split):hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Split bubble tooltip */
+.trait-bubble.split::before {
+    content: "Click left for " attr(data-trait) " or right for " attr(data-opposite);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+    font-weight: normal;
+}
+
+.trait-bubble.split:hover::before {
+    opacity: 1;
+    visibility: visible;
 }
 
 .trait-bubbles.assigned .trait-bubble {
@@ -901,5 +1027,251 @@ footer {
 .export-character-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
+}
+
+
+/* Import/Export Section Styles */
+.import-export-section {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: var(--surface-color);
+    border-radius: 12px;
+    border: 2px dashed var(--border-color);
+}
+
+.import-export-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.import-export-section p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.import-export-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.export-controls,
+.import-controls {
+    padding: 1.5rem;
+    background: var(--background-color);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.export-controls h4,
+.import-controls h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.export-controls button,
+.import-controls button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.import-info {
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.import-info small {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Character selection for export */
+.character-export-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--surface-color);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.character-export-item:hover {
+    background: var(--secondary-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.character-export-item.selected {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.character-export-item input[type="checkbox"] {
+    margin-right: 0.75rem;
+    transform: scale(1.2);
+}
+
+.character-export-info {
+    flex-grow: 1;
+}
+
+.character-export-info .name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.character-export-info .details {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Import progress indicator */
+.import-progress {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--surface-color);
+    border-radius: 6px;
+    border-left: 4px solid var(--secondary-color);
+    display: none;
+}
+
+.import-progress.show {
+    display: block;
+}
+
+.import-progress .progress-text {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.import-progress .progress-details {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+/* Success/Error messages */
+.import-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    display: none;
+}
+
+.import-message.success {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.import-message.error {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+.import-message.show {
+    display: block;
+}
+
+/* Responsive design for import/export */
+@media (max-width: 768px) {
+    .import-export-controls {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .import-export-section {
+        padding: 1.5rem;
+    }
+    
+    .export-controls,
+    .import-controls {
+        padding: 1rem;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .import-export-section {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .character-export-item {
+    background: var(--surface-color);
+}
+
+[data-theme="dark"] .character-export-item:hover {
+    background: var(--secondary-color);
+}
+
+[data-theme="dark"] .import-progress {
+    background: var(--surface-color);
+}
+
+
+/* Bio Section Styling */
+.bio-section, .autobiography-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--surface-color);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.bio-title {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bio-title::before {
+    content: "📖";
+    font-size: 1.2rem;
+}
+
+.autobiography-section .bio-title::before {
+    content: "✍️";
+}
+
+.bio-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-style: italic;
+    margin: 0 0 1rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    opacity: 0.8;
+}
+
+.bio-section .bio-output,
+.autobiography-section .bio-output {
+    margin-top: 1rem;
+    border: none;
+    background: var(--background-color);
+    border-radius: 8px;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .bio-section,
+[data-theme="dark"] .autobiography-section {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .bio-subtitle {
+    color: var(--text-secondary);
+    border-bottom-color: var(--border-color);
 }
 
