@@ -1,5 +1,5 @@
 // Sigil Generation System for CharacterCraft
-// Creates unique PNG graphics with three letters arranged in a circle
+// Creates unique PNG graphics with massive letters filling entire circle diameter
 
 class SigilGenerator {
     constructor() {
@@ -8,9 +8,10 @@ class SigilGenerator {
         this.size = 200; // Canvas size
         this.centerX = this.size / 2;
         this.centerY = this.size / 2;
-        this.radius = 60; // Circle radius for letter placement
+        this.circleRadius = 85; // Circle radius
+        this.letterSize = this.circleRadius * 1.8; // Massive letters filling circle diameter
         
-        // Bold sans serif fonts for logo-style appearance
+        // Bold sans serif fonts for maximum impact
         this.fonts = [
             'Arial Black',
             'Helvetica Bold', 
@@ -22,18 +23,17 @@ class SigilGenerator {
             'Futura Bold'
         ];
         
-        // Color schemes for sigils
+        // High contrast color schemes for dramatic effect
         this.colorSchemes = [
-            { bg: '#1a1a2e', letters: '#16213e', accent: '#0f3460' }, // Deep blue
-            { bg: '#2d1b69', letters: '#11998e', accent: '#38ef7d' }, // Purple-teal
-            { bg: '#8e2de2', letters: '#4a00e0', accent: '#ffffff' }, // Purple gradient
-            { bg: '#ff6b6b', letters: '#ee5a24', accent: '#ffffff' }, // Red-orange
-            { bg: '#4834d4', letters: '#686de0', accent: '#ffffff' }, // Blue-purple
-            { bg: '#00d2d3', letters: '#ff9ff3', accent: '#ffffff' }, // Cyan-pink
-            { bg: '#ff9a9e', letters: '#fecfef', accent: '#ffffff' }, // Pink gradient
-            { bg: '#a8edea', letters: '#fed6e3', accent: '#333333' }, // Soft pastels
-            { bg: '#ffecd2', letters: '#fcb69f', accent: '#333333' }, // Warm pastels
-            { bg: '#667eea', letters: '#764ba2', accent: '#ffffff' }  // Blue-purple
+            { bg: '#ffffff', letters: '#000000', accent: '#333333' }, // Classic black on white
+            { bg: '#000000', letters: '#ffffff', accent: '#cccccc' }, // White on black
+            { bg: '#1a1a2e', letters: '#ffffff', accent: '#0f3460' }, // Deep blue
+            { bg: '#2d1b69', letters: '#38ef7d', accent: '#11998e' }, // Purple-green
+            { bg: '#8e2de2', letters: '#ffffff', accent: '#4a00e0' }, // Purple gradient
+            { bg: '#ff6b6b', letters: '#ffffff', accent: '#ee5a24' }, // Red-orange
+            { bg: '#4834d4', letters: '#ffffff', accent: '#686de0' }, // Blue-purple
+            { bg: '#00d2d3', letters: '#333333', accent: '#ff9ff3' }, // Cyan-pink
+            { bg: '#667eea', letters: '#ffffff', accent: '#764ba2' }  // Blue-purple
         ];
     }
     
@@ -99,54 +99,51 @@ class SigilGenerator {
     
     // Draw background circle with gradient
     drawBackground(colorScheme) {
-        const gradient = this.ctx.createRadialGradient(
-            this.centerX, this.centerY, 0,
-            this.centerX, this.centerY, this.radius + 40
-        );
-        gradient.addColorStop(0, colorScheme.bg);
-        gradient.addColorStop(1, colorScheme.accent);
+        // Clear canvas
+        this.ctx.fillStyle = colorScheme.bg;
+        this.ctx.fillRect(0, 0, this.size, this.size);
         
-        this.ctx.fillStyle = gradient;
+        // Draw outer circle border
+        this.ctx.strokeStyle = colorScheme.accent;
+        this.ctx.lineWidth = 4;
         this.ctx.beginPath();
-        this.ctx.arc(this.centerX, this.centerY, this.radius + 30, 0, 2 * Math.PI);
-        this.ctx.fill();
+        this.ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
+        this.ctx.stroke();
         
-        // Add subtle border
+        // Draw inner circle for contrast
         this.ctx.strokeStyle = colorScheme.letters;
         this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.arc(this.centerX, this.centerY, this.circleRadius - 5, 0, 2 * Math.PI);
         this.ctx.stroke();
     }
     
-    // Draw a single letter at specified position and rotation
-    drawLetter(letter, angle, colorScheme, font, fontSize = 48) {
+    // Draw a massive letter filling the entire circle diameter
+    drawMassiveLetter(letter, rotation, colorScheme, font) {
         this.ctx.save();
         
-        // Calculate position on circle
-        const x = this.centerX + Math.cos(angle) * this.radius;
-        const y = this.centerY + Math.sin(angle) * this.radius;
+        // Move to center point
+        this.ctx.translate(this.centerX, this.centerY);
         
-        // Move to letter position
-        this.ctx.translate(x, y);
+        // Apply rotation around center
+        this.ctx.rotate(rotation);
         
-        // Rotate the letter
-        this.ctx.rotate(angle + Math.PI / 2); // Add 90 degrees for better orientation
-        
-        // Set font and style
-        this.ctx.font = `bold ${fontSize}px ${font}`;
+        // Set massive font size to fill circle diameter
+        this.ctx.font = `bold ${this.letterSize}px ${font}`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         
         // Draw letter shadow for depth
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-        this.ctx.fillText(letter, 2, 2);
+        this.ctx.fillText(letter, 3, 3);
         
-        // Draw main letter
+        // Draw main letter with high contrast
         this.ctx.fillStyle = colorScheme.letters;
         this.ctx.fillText(letter, 0, 0);
         
         // Add letter outline for definition
         this.ctx.strokeStyle = colorScheme.accent;
-        this.ctx.lineWidth = 1;
+        this.ctx.lineWidth = 3;
         this.ctx.strokeText(letter, 0, 0);
         
         this.ctx.restore();
@@ -172,29 +169,83 @@ class SigilGenerator {
     generateSigil(characterName, options = {}) {
         this.initCanvas();
         
-        // Extract letters and generate rotations
+        // Extract letters and generate dramatic rotations
         const letters = this.extractLetters(characterName);
-        const rotations = this.generateRotations();
+        const rotations = this.generateDramaticRotations(letters.length);
         
         // Select random color scheme and font
         const colorScheme = this.colorSchemes[Math.floor(Math.random() * this.colorSchemes.length)];
         const font = this.fonts[Math.floor(Math.random() * this.fonts.length)];
         
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.size, this.size);
-        
-        // Draw background
+        // Clear canvas and draw background
         this.drawBackground(colorScheme);
         
-        // Draw letters at calculated positions and rotations
+        // Draw massive letters with dramatic overlapping
         letters.forEach((letter, index) => {
-            this.drawLetter(letter, rotations[index], colorScheme, font);
+            this.drawMassiveLetter(letter, rotations[index], colorScheme, font);
         });
         
-        // Draw center overlap effect
-        this.drawCenterOverlap(colorScheme);
+        // Draw center point to emphasize intersection
+        this.drawCenterPoint(colorScheme);
         
         return this.canvas;
+    }
+    
+    // Generate dramatic rotations for maximum visual impact
+    generateDramaticRotations(letterCount) {
+        const rotations = [];
+        
+        if (letterCount === 1) {
+            rotations.push(0); // Single letter, no rotation needed
+        } else if (letterCount === 2) {
+            // Two letters: create dramatic intersection like the user's K+K example
+            rotations.push(0); // First letter vertical
+            rotations.push(Math.PI / 2.5 + (Math.random() - 0.5) * (Math.PI / 8)); // Second at ~72 degrees ± variation
+        } else if (letterCount === 3) {
+            // Three letters: create triangular intersection pattern
+            rotations.push(0); // First letter vertical
+            rotations.push(Math.PI / 3 + (Math.random() - 0.5) * (Math.PI / 12)); // Second at ~60 degrees
+            rotations.push(2 * Math.PI / 3 + (Math.random() - 0.5) * (Math.PI / 12)); // Third at ~120 degrees
+        } else {
+            // Four or more letters: distribute evenly with slight variation
+            const baseAngle = (2 * Math.PI) / letterCount;
+            for (let i = 0; i < letterCount; i++) {
+                const rotation = i * baseAngle + (Math.random() - 0.5) * (Math.PI / 8); // ±22.5 degrees variation
+                rotations.push(rotation);
+            }
+        }
+        
+        return rotations;
+    }
+    
+    // Enhanced center point with intersection emphasis
+    drawCenterPoint(colorScheme) {
+        this.ctx.save();
+        
+        // Draw center intersection point
+        this.ctx.fillStyle = colorScheme.accent;
+        this.ctx.beginPath();
+        this.ctx.arc(this.centerX, this.centerY, 4, 0, 2 * Math.PI);
+        this.ctx.fill();
+        
+        // Add subtle cross lines to emphasize intersection
+        this.ctx.strokeStyle = colorScheme.accent;
+        this.ctx.lineWidth = 1;
+        this.ctx.globalAlpha = 0.5;
+        
+        // Horizontal line
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.centerX - 8, this.centerY);
+        this.ctx.lineTo(this.centerX + 8, this.centerY);
+        this.ctx.stroke();
+        
+        // Vertical line
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.centerX, this.centerY - 8);
+        this.ctx.lineTo(this.centerX, this.centerY + 8);
+        this.ctx.stroke();
+        
+        this.ctx.restore();
     }
     
     // Generate sigil as data URL for embedding
