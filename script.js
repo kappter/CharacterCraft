@@ -475,6 +475,9 @@ class CharacterCraft {
             bioOutput.classList.remove('empty');
         }
         
+        // Generate and display character sigil
+        this.generateAndDisplaySigil(character, 'bio');
+        
         // Enable export buttons
         this.enableExportButtons(['bio', 'full']);
     }
@@ -492,6 +495,9 @@ class CharacterCraft {
             autobiographyOutput.innerHTML = autobiography;
             autobiographyOutput.classList.remove('empty');
         }
+        
+        // Generate and display character sigil
+        this.generateAndDisplaySigil(character, 'autobiography');
         
         // Enable export buttons
         this.enableExportButtons(['autobiography', 'full']);
@@ -1959,6 +1965,93 @@ class CharacterCraft {
             alert('All characters have been deleted.');
         }
     }
+
+    // Sigil Generation and Display Methods
+    generateAndDisplaySigil(character, section) {
+        if (!window.sigilGenerator || !window.enhancedSigilLogic) {
+            console.warn('Sigil generation system not loaded');
+            return;
+        }
+
+        try {
+            // Extract character traits for enhanced sigil generation
+            let traits = [];
+            if (character.traits) {
+                if (Array.isArray(character.traits)) {
+                    traits = character.traits;
+                } else if (typeof character.traits === 'string') {
+                    traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+                }
+            }
+
+            // Generate sigil elements using enhanced logic
+            const sigilElements = window.enhancedSigilLogic.generateSigilElements(
+                character.name, 
+                traits, 
+                'auto'
+            );
+
+            // Update the sigil generator with enhanced elements
+            const originalExtractLetters = window.sigilGenerator.extractLetters;
+            const originalGenerateRotations = window.sigilGenerator.generateRotations;
+
+            window.sigilGenerator.extractLetters = () => sigilElements.letters;
+            window.sigilGenerator.generateRotations = () => sigilElements.rotations;
+
+            // Generate the sigil
+            const sigilDataURL = window.sigilGenerator.generateSigilDataURL(character.name);
+
+            // Restore original methods
+            window.sigilGenerator.extractLetters = originalExtractLetters;
+            window.sigilGenerator.generateRotations = originalGenerateRotations;
+
+            // Display the sigil
+            this.displaySigil(sigilDataURL, section, character.name);
+
+            // Store sigil data with character for export
+            character.sigil = sigilDataURL;
+
+        } catch (error) {
+            console.error('Error generating sigil:', error);
+        }
+    }
+
+    displaySigil(sigilDataURL, section, characterName) {
+        const containerId = section === 'bio' ? 'bioSigilContainer' : 'autobiographySigilContainer';
+        const sigilId = section === 'bio' ? 'bioSigil' : 'autobiographySigil';
+        
+        const container = document.getElementById(containerId);
+        const sigilImg = document.getElementById(sigilId);
+        
+        if (container && sigilImg) {
+            // Set the sigil image
+            sigilImg.src = sigilDataURL;
+            sigilImg.alt = `Sigil for ${characterName}`;
+            
+            // Show the container with animation
+            container.style.display = 'flex';
+            
+            // Add animation class
+            sigilImg.classList.add('sigil-animate');
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                sigilImg.classList.remove('sigil-animate');
+            }, 800);
+        }
+    }
+
+    // Helper method to get current character name for sigil download
+    getCurrentCharacterName() {
+        const nameInput = document.getElementById('name');
+        return nameInput ? nameInput.value || 'Character' : 'Character';
+    }
+}
+
+// Global helper function for sigil download
+function getCurrentCharacterName() {
+    const nameInput = document.getElementById('name');
+    return nameInput ? nameInput.value || 'Character' : 'Character';
 }
 
 // Initialize the app when DOM is loaded

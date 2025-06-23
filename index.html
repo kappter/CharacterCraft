@@ -34,6 +34,7 @@
             <!-- Create Character Tab -->
             <div id="create-tab" class="tab-content active">
                 <h2 class="section-title">Create Character</h2>
+                <p class="section-subtitle">Make a new persona or maybe even a future version of yourself or someone you know</p>
                 
                 <div class="character-form">
                     <div class="form-group">
@@ -100,8 +101,18 @@
 
                 <!-- Bio Section -->
                 <div class="bio-section">
-                    <h3 class="bio-title">Character Biography</h3>
-                    <p class="bio-subtitle">How the world sees this character - external perspective and public persona</p>
+                    <div class="bio-header">
+                        <div class="bio-text-content">
+                            <h3 class="bio-title">📖 Character Biography</h3>
+                            <p class="bio-subtitle">How the world sees this character - external perspective and public persona</p>
+                        </div>
+                        <div class="character-sigil-container" id="bioSigilContainer" style="display: none;">
+                            <div class="sigil-wrapper">
+                                <img id="bioSigil" class="character-sigil" alt="Character Sigil" />
+                                <div class="sigil-label">Character Sigil</div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="bio-output empty" id="shortBioOutput">
                         <div class="empty">External biography will appear here...</div>
                     </div>
@@ -109,13 +120,26 @@
 
                 <!-- Autobiography Section -->
                 <div class="autobiography-section">
-                    <h3 class="bio-title">Character Autobiography</h3>
-                    <p class="bio-subtitle">What is known within - internal thoughts, private history, and personal journey</p>
+                    <div class="bio-header">
+                        <div class="bio-text-content">
+                            <h3 class="bio-title">✍️ Character Autobiography</h3>
+                            <p class="bio-subtitle">What is known within - internal thoughts, private history, and personal journey</p>
+                        </div>
+                        <div class="character-sigil-container" id="autobiographySigilContainer" style="display: none;">
+                            <div class="sigil-wrapper">
+                                <img id="autobiographySigil" class="character-sigil" alt="Character Sigil" />
+                                <div class="sigil-actions">
+                                    <button class="download-sigil btn-small" onclick="downloadCharacterSigil(getCurrentCharacterName())">
+                                        Download Sigil
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="bio-output empty" id="autobiographyOutput">
                         <div class="empty">Autobiography will appear here...</div>
                     </div>
                 </div>
-
                 <div class="action-buttons">
                     <button class="export-bio btn-secondary" disabled>Export Bio</button>
                     <button class="export-autobiography btn-secondary" disabled>Export Autobiography</button>
@@ -344,6 +368,9 @@
         <p>&copy; 2025 CharacterCraft - Enhanced Character Creation Tool</p>
     </footer>
 
+    <!-- Sigil Generation System -->
+    <script src="enhanced_sigil_logic.js"></script>
+    <script src="sigil_generator.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
