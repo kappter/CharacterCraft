@@ -1,9 +1,9 @@
 // Enhanced CharacterCraft - Main Script with Autobiography Features
-// Trait Opposites Mapping for Hover and Split Bubble Functionality
+// Comprehensive Trait Opposites Mapping for CharacterCraft
 const TRAIT_OPPOSITES = {
-    // Personality Types
+    // Personality Core Types
     "Creative": "Conventional", "Conventional": "Creative",
-    "Analytical": "Intuitive", "Intuitive": "Analytical", 
+    "Analytical": "Intuitive", "Intuitive": "Analytical",
     "Empathetic": "Detached", "Detached": "Empathetic",
     "Ambitious": "Content", "Content": "Ambitious",
     "Calm": "Anxious", "Anxious": "Calm",
@@ -13,7 +13,7 @@ const TRAIT_OPPOSITES = {
     "Independent": "Dependent", "Dependent": "Independent",
     "Logical": "Emotional", "Emotional": "Logical",
 
-    // Social Traits
+    // Social & Interpersonal Traits
     "Charismatic": "Awkward", "Awkward": "Charismatic",
     "Diplomatic": "Blunt", "Blunt": "Diplomatic",
     "Resourceful": "Helpless", "Helpless": "Resourceful",
@@ -28,8 +28,11 @@ const TRAIT_OPPOSITES = {
     "Humble": "Arrogant", "Arrogant": "Humble",
     "Trusting": "Suspicious", "Suspicious": "Trusting",
     "Forgiving": "Vindictive", "Vindictive": "Forgiving",
+    "Sociable": "Antisocial", "Antisocial": "Sociable",
+    "Open-minded": "Close-minded", "Close-minded": "Open-minded",
+    "Inclusive": "Exclusive", "Exclusive": "Inclusive",
 
-    // Work & Intellectual
+    // Work & Professional Traits
     "Hardworking": "Lazy", "Lazy": "Hardworking",
     "Dedicated": "Uncommitted", "Uncommitted": "Dedicated",
     "Focused": "Distracted", "Distracted": "Focused",
@@ -42,46 +45,78 @@ const TRAIT_OPPOSITES = {
     "Flexible": "Rigid", "Rigid": "Flexible",
     "Competitive": "Cooperative", "Cooperative": "Competitive",
     "Leader": "Follower", "Follower": "Leader",
+    "Detail-oriented": "Big-picture", "Big-picture": "Detail-oriented",
+    "Efficient": "Inefficient", "Inefficient": "Efficient",
+    "Thorough": "Superficial", "Superficial": "Thorough",
+    "Progressive": "Conservative", "Conservative": "Progressive",
 
-    // Emotional & Unique
+    // Emotional & Psychological Traits
     "Sensitive": "Insensitive", "Insensitive": "Sensitive",
     "Passionate": "Apathetic", "Apathetic": "Passionate",
     "Artistic": "Unartistic", "Unartistic": "Artistic",
     "Eccentric": "Conventional", "Mysterious": "Transparent", "Transparent": "Mysterious",
-    "Adventurous": "Cautious", "Romantic": "Unromantic", "Unromantic": "Romantic",
+    "Mischievous": "Serious", "Serious": "Mischievous",
     "Spiritual": "Materialistic", "Materialistic": "Spiritual",
-    "Rebellious": "Conformist", "Conformist": "Rebellious",
+    "Cheerful": "Gloomy", "Gloomy": "Cheerful",
+    "Even-tempered": "Moody", "Moody": "Even-tempered",
+    "Stoic": "Expressive", "Expressive": "Stoic",
+    "Philosophical": "Pragmatic", "Pragmatic": "Philosophical",
+    "Imaginative": "Literal", "Literal": "Imaginative",
+    "Theoretical": "Applied", "Applied": "Theoretical",
+
+    // Behavioral & Lifestyle Traits
+    "Adventurous": "Cautious", "Outgoing": "Reserved", "Reserved": "Outgoing",
     "Energetic": "Lethargic", "Lethargic": "Energetic",
-    "Playful": "Serious", "Serious": "Playful",
-    "Bold": "Timid", "Timid": "Bold",
-    "Wise": "Naive", "Naive": "Wise",
-    "Mature": "Immature", "Immature": "Mature",
-    "Outgoing": "Reserved", "Reserved": "Outgoing",
-    "Supportive": "Unsupportive", "Unsupportive": "Supportive",
-    "Excitable": "Calm", "Thoughtful": "Thoughtless", "Thoughtless": "Thoughtful",
-    "Reliable": "Unreliable", "Unreliable": "Reliable",
-    "Open-minded": "Close-minded", "Close-minded": "Open-minded",
-    "Adaptable": "Inflexible", "Inflexible": "Adaptable",
-    "Assertive": "Passive", "Passive": "Assertive",
     "Disciplined": "Undisciplined", "Undisciplined": "Disciplined",
-    "Observant": "Oblivious", "Oblivious": "Observant",
+    "Punctual": "Tardy", "Tardy": "Punctual",
+    "Neat": "Messy", "Messy": "Neat",
+    "Frugal": "Spendthrift", "Spendthrift": "Frugal",
+    "Health-conscious": "Indulgent", "Indulgent": "Health-conscious",
+    "Tech-savvy": "Tech-averse", "Tech-averse": "Tech-savvy",
+    "Urban": "Rural", "Rural": "Urban",
+    "Minimalist": "Maximalist", "Maximalist": "Minimalist",
+
+    // Communication & Expression
+    "Articulate": "Inarticulate", "Inarticulate": "Articulate",
+    "Verbose": "Concise", "Concise": "Verbose",
+    "Persuasive": "Unconvincing", "Unconvincing": "Persuasive",
+    "Eloquent": "Tongue-tied", "Tongue-tied": "Eloquent",
+    "Direct": "Indirect", "Indirect": "Direct",
     "Tactful": "Tactless", "Tactless": "Tactful",
-    "Sincere": "Insincere", "Insincere": "Sincere",
-    "Courageous": "Cowardly", "Cowardly": "Courageous",
-    "Gentle": "Harsh", "Harsh": "Gentle",
-    "Scholarly": "Unscholarly", "Unscholarly": "Scholarly",
-    "Worldly": "Naive", "Sophisticated": "Unsophisticated", "Unsophisticated": "Sophisticated"
+
+    // Moral & Ethical Traits
+    "Principled": "Unprincipled", "Unprincipled": "Principled",
+    "Ethical": "Unethical", "Unethical": "Ethical",
+    "Fair": "Unfair", "Unfair": "Fair",
+    "Just": "Unjust", "Unjust": "Just",
+    "Compassionate": "Ruthless", "Ruthless": "Compassionate",
+    "Altruistic": "Self-serving", "Self-serving": "Altruistic",
+
+    // Learning & Growth
+    "Studious": "Negligent", "Negligent": "Studious",
+    "Inquisitive": "Incurious", "Incurious": "Inquisitive",
+    "Adaptable": "Inflexible", "Inflexible": "Adaptable",
+    "Open to feedback": "Defensive", "Defensive": "Open to feedback",
+    "Growth-minded": "Fixed-minded", "Fixed-minded": "Growth-minded",
+
+    // Risk & Decision Making
+    "Bold": "Timid", "Timid": "Bold",
+    "Decisive": "Hesitant", "Hesitant": "Decisive",
+    "Risk-taking": "Risk-averse", "Risk-averse": "Risk-taking",
+    "Impulsive": "Deliberate", "Deliberate": "Impulsive",
+    "Proactive": "Reactive", "Reactive": "Proactive"
 };
 
 // Helper functions for trait opposites
-function getOppositeTrait(trait) {
-    return TRAIT_OPPOSITES[trait] || `Non-${trait}`;
+function getOpposite(trait) {
+    return TRAIT_OPPOSITES[trait] || null;
 }
 
-function hasDefinedOpposite(trait) {
+function hasOpposite(trait) {
     return trait in TRAIT_OPPOSITES;
 }
 
+// Enhanced CharacterCraft Application Class
 class CharacterCraft {
     constructor() {
         this.characters = JSON.parse(localStorage.getItem('characters')) || [];
@@ -165,6 +200,13 @@ class CharacterCraft {
         document.querySelector('.randomize-comparison')?.addEventListener('click', () => this.randomizeComparison());
         document.querySelector('.randomize-conflict')?.addEventListener('click', () => this.randomizeConflict());
         document.querySelector('.export-comparison')?.addEventListener('click', () => this.exportComparison());
+
+        // Character import/export
+        document.querySelector('.export-all-characters')?.addEventListener('click', () => this.exportAllCharacters());
+        document.querySelector('.export-selected-character')?.addEventListener('click', () => this.exportSelectedCharacter());
+        document.querySelector('.import-characters')?.addEventListener('click', () => this.triggerCharacterImport());
+        document.getElementById('character-import-file')?.addEventListener('change', (e) => this.importCharacters(e));
+        document.querySelector('.clear-all-characters')?.addEventListener('click', () => this.clearAllCharacters());
 
         // Trait assignment
         document.getElementById('trait-character-select')?.addEventListener('change', (e) => this.selectCharacterForTraits(e.target.value));
@@ -457,7 +499,12 @@ class CharacterCraft {
 
     generateDetailedBio(character) {
         const age = character.age;
-        const traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Handle both string and array formats for traits
+        let traits = character.traits || [];
+        if (typeof traits === 'string') {
+            traits = traits.split(',').map(t => t.trim()).filter(t => t);
+        }
         
         // Generate contextual details based on character info
         const ageGroup = age < 30 ? 'young' : age < 50 ? 'middle-aged' : 'experienced';
@@ -475,7 +522,13 @@ class CharacterCraft {
 
     generateDetailedAutobiography(character) {
         const age = character.age;
-        const traits = character.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Handle both string and array formats for traits
+        let traits = character.traits || [];
+        if (typeof traits === 'string') {
+            traits = traits.split(',').map(t => t.trim()).filter(t => t);
+        }
+        
         const locale = character.locale || 'my hometown';
         const occupation = character.occupation || 'my work';
         
@@ -733,8 +786,17 @@ class CharacterCraft {
 
     generateComparison(char1, char2, context) {
         const contextText = context ? ` in the context of "${context}"` : '';
-        const char1Traits = char1.traits.split(',').map(t => t.trim()).filter(t => t);
-        const char2Traits = char2.traits.split(',').map(t => t.trim()).filter(t => t);
+        
+        // Handle both string and array formats for traits
+        let char1Traits = char1.traits || [];
+        if (typeof char1Traits === 'string') {
+            char1Traits = char1Traits.split(',').map(t => t.trim()).filter(t => t);
+        }
+        
+        let char2Traits = char2.traits || [];
+        if (typeof char2Traits === 'string') {
+            char2Traits = char2Traits.split(',').map(t => t.trim()).filter(t => t);
+        }
         
         // Find potential conflicts and synergies
         const conflicts = this.findCharacterConflicts(char1Traits, char2Traits);
@@ -749,7 +811,7 @@ class CharacterCraft {
                     <strong>Gender:</strong> ${char1.gender}<br>
                     <strong>Occupation:</strong> ${char1.occupation}<br>
                     <strong>Location:</strong> ${char1.locale}<br>
-                    <strong>Key Traits:</strong> ${char1.traits}</p>
+                    <strong>Key Traits:</strong> ${Array.isArray(char1.traits) ? char1Traits.join(', ') : char1.traits}</p>
                 </div>
                 <div style="background: var(--surface-color); padding: 1.5rem; border-radius: 8px;">
                     <h4>${char2.name}</h4>
@@ -757,7 +819,7 @@ class CharacterCraft {
                     <strong>Gender:</strong> ${char2.gender}<br>
                     <strong>Occupation:</strong> ${char2.occupation}<br>
                     <strong>Location:</strong> ${char2.locale}<br>
-                    <strong>Key Traits:</strong> ${char2.traits}</p>
+                    <strong>Key Traits:</strong> ${Array.isArray(char2.traits) ? char2Traits.join(', ') : char2.traits}</p>
                 </div>
             </div>
             
@@ -1233,16 +1295,94 @@ class CharacterCraft {
         document.querySelectorAll('.trait-bubble').forEach(bubble => {
             const trait = bubble.getAttribute('data-trait');
             if (trait) {
-                // Add opposite trait data attribute for hover tooltip
-                const opposite = getOppositeTrait(trait);
-                bubble.setAttribute('data-opposite', `Opposite: ${opposite}`);
+                const opposite = getOpposite(trait);
                 
-                // Add hover effect class
-                bubble.classList.add('hoverable');
+                if (opposite) {
+                    // Set up data attributes for tooltips
+                    bubble.setAttribute('data-opposite', opposite);
+                    
+                    // Check if this should be a split bubble (has a defined opposite)
+                    if (hasOpposite(trait)) {
+                        this.convertToSplitBubble(bubble, trait, opposite);
+                    } else {
+                        // Regular bubble with hover tooltip
+                        bubble.setAttribute('data-opposite', `Opposite: ${opposite}`);
+                        bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
+                    }
+                } else {
+                    // No opposite defined, regular bubble
+                    bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
+                }
             }
-            
-            bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
         });
+    }
+
+    convertToSplitBubble(bubble, trait, opposite) {
+        // Convert regular bubble to split bubble
+        bubble.classList.add('split');
+        bubble.innerHTML = `
+            <span class="trait-side left" data-trait="${trait}" data-side="trait">${trait}</span>
+            <span class="trait-side right" data-trait="${opposite}" data-side="opposite">${opposite}</span>
+        `;
+        
+        // Add click listeners to each side
+        const leftSide = bubble.querySelector('.trait-side.left');
+        const rightSide = bubble.querySelector('.trait-side.right');
+        
+        leftSide.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleSplitTrait(bubble, trait, 'trait');
+        });
+        
+        rightSide.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleSplitTrait(bubble, opposite, 'opposite');
+        });
+    }
+
+    toggleSplitTrait(bubble, selectedTrait, side) {
+        if (!this.currentTraitCharacter) return;
+
+        // Ensure traits is always an array
+        let currentTraits = this.currentTraitCharacter.traits || [];
+        if (typeof currentTraits === 'string') {
+            currentTraits = currentTraits.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            this.currentTraitCharacter.traits = currentTraits;
+        }
+
+        const trait = bubble.querySelector('.trait-side.left').getAttribute('data-trait');
+        const opposite = bubble.querySelector('.trait-side.right').getAttribute('data-trait');
+        
+        // Remove both trait and opposite if they exist
+        const traitIndex = currentTraits.indexOf(trait);
+        const oppositeIndex = currentTraits.indexOf(opposite);
+        
+        if (traitIndex > -1) currentTraits.splice(traitIndex, 1);
+        if (oppositeIndex > -1) currentTraits.splice(oppositeIndex, 1);
+        
+        // Clear previous selections on this bubble
+        bubble.querySelector('.trait-side.left').classList.remove('selected');
+        bubble.querySelector('.trait-side.right').classList.remove('selected');
+        
+        // Add the selected trait
+        currentTraits.push(selectedTrait);
+        
+        // Update visual state
+        if (side === 'trait') {
+            bubble.querySelector('.trait-side.left').classList.add('selected');
+        } else {
+            bubble.querySelector('.trait-side.right').classList.add('selected');
+        }
+        
+        // Update character data
+        this.currentTraitCharacter.traits = currentTraits;
+        
+        // Update displays
+        this.updateCurrentTraitsDisplay();
+        
+        // Add animation
+        bubble.classList.add('just-assigned');
+        setTimeout(() => bubble.classList.remove('just-assigned'), 300);
     }
 
     selectCharacterForTraits(characterId) {
@@ -1318,15 +1458,37 @@ class CharacterCraft {
             this.currentTraitCharacter.traits = currentTraits; // Update to array format
         }
 
-        // Reset all bubbles
+        // Reset all bubbles (both regular and split)
         document.querySelectorAll('.trait-bubble').forEach(bubble => {
             bubble.classList.remove('assigned');
+            
+            // Reset split bubble selections
+            if (bubble.classList.contains('split')) {
+                bubble.querySelectorAll('.trait-side').forEach(side => {
+                    side.classList.remove('selected');
+                });
+            }
         });
 
         // Mark assigned traits
         currentTraits.forEach(trait => {
-            const bubbles = document.querySelectorAll(`[data-trait="${trait}"]`);
-            bubbles.forEach(bubble => bubble.classList.add('assigned'));
+            // Handle regular bubbles
+            const regularBubbles = document.querySelectorAll(`.trait-bubble:not(.split)[data-trait="${trait}"]`);
+            regularBubbles.forEach(bubble => bubble.classList.add('assigned'));
+            
+            // Handle split bubbles
+            const splitBubbles = document.querySelectorAll('.trait-bubble.split');
+            splitBubbles.forEach(splitBubble => {
+                const leftSide = splitBubble.querySelector('.trait-side.left');
+                const rightSide = splitBubble.querySelector('.trait-side.right');
+                
+                if (leftSide && leftSide.getAttribute('data-trait') === trait) {
+                    leftSide.classList.add('selected');
+                }
+                if (rightSide && rightSide.getAttribute('data-trait') === trait) {
+                    rightSide.classList.add('selected');
+                }
+            });
         });
     }
 
@@ -1405,6 +1567,193 @@ class CharacterCraft {
         // Clear current character
         this.currentTraitCharacter = null;
         this.originalTraits = null;
+    }
+
+    // Character Import/Export Methods
+    exportAllCharacters() {
+        if (this.characters.length === 0) {
+            alert('No characters to export. Create and save some characters first.');
+            return;
+        }
+
+        const exportData = {
+            version: '1.0',
+            exportDate: new Date().toISOString(),
+            characterCount: this.characters.length,
+            characters: this.characters.map(char => ({
+                ...char,
+                exportedAt: new Date().toISOString()
+            }))
+        };
+
+        const filename = `CharacterCraft_Export_${new Date().toISOString().split('T')[0]}.json`;
+        this.downloadFile(filename, JSON.stringify(exportData, null, 2), 'application/json');
+        
+        alert(`Successfully exported ${this.characters.length} character(s) to ${filename}`);
+    }
+
+    exportSelectedCharacter() {
+        // This would be implemented with character selection UI
+        // For now, export the most recently created character
+        if (this.characters.length === 0) {
+            alert('No characters to export.');
+            return;
+        }
+
+        const latestCharacter = this.characters[this.characters.length - 1];
+        const exportData = {
+            version: '1.0',
+            exportDate: new Date().toISOString(),
+            characterCount: 1,
+            characters: [{
+                ...latestCharacter,
+                exportedAt: new Date().toISOString()
+            }]
+        };
+
+        const filename = `${latestCharacter.name.replace(/[^a-zA-Z0-9]/g, '_')}_Character.json`;
+        this.downloadFile(filename, JSON.stringify(exportData, null, 2), 'application/json');
+        
+        alert(`Successfully exported character "${latestCharacter.name}" to ${filename}`);
+    }
+
+    triggerCharacterImport() {
+        const fileInput = document.getElementById('character-import-file');
+        if (fileInput) {
+            fileInput.click();
+        }
+    }
+
+    async importCharacters(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Show progress indicator
+        this.showImportProgress('Reading file...');
+
+        try {
+            const text = await file.text();
+            const importData = JSON.parse(text);
+
+            // Validate import data structure
+            if (!this.validateImportData(importData)) {
+                throw new Error('Invalid file format. Please select a valid CharacterCraft export file.');
+            }
+
+            // Show import progress
+            this.showImportProgress(`Importing ${importData.characterCount} character(s)...`);
+
+            // Process imported characters
+            const importedCharacters = importData.characters.map(char => ({
+                ...char,
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9), // Generate new ID
+                importedAt: new Date().toISOString(),
+                originalId: char.id // Keep reference to original ID
+            }));
+
+            // Add to existing characters
+            this.characters.push(...importedCharacters);
+            localStorage.setItem('characters', JSON.stringify(this.characters));
+
+            // Update UI
+            this.displaySavedCharacters();
+            this.updateCharacterSelects();
+            this.updateTraitCharacterSelect();
+
+            // Show success message
+            this.showImportMessage('success', 
+                `Successfully imported ${importedCharacters.length} character(s)! ` +
+                `You now have ${this.characters.length} total characters.`
+            );
+
+            // Clear file input
+            event.target.value = '';
+
+        } catch (error) {
+            console.error('Import error:', error);
+            this.showImportMessage('error', 
+                `Import failed: ${error.message}. Please check that you selected a valid CharacterCraft export file.`
+            );
+        } finally {
+            this.hideImportProgress();
+        }
+    }
+
+    validateImportData(data) {
+        return (
+            data &&
+            typeof data === 'object' &&
+            data.version &&
+            Array.isArray(data.characters) &&
+            data.characters.every(char => 
+                char.name && 
+                char.age !== undefined && 
+                char.gender !== undefined &&
+                char.locale !== undefined &&
+                char.occupation !== undefined
+            )
+        );
+    }
+
+    showImportProgress(message) {
+        const progressDiv = document.querySelector('.import-progress');
+        if (progressDiv) {
+            progressDiv.querySelector('.progress-text').textContent = message;
+            progressDiv.classList.add('show');
+        }
+    }
+
+    hideImportProgress() {
+        const progressDiv = document.querySelector('.import-progress');
+        if (progressDiv) {
+            progressDiv.classList.remove('show');
+        }
+    }
+
+    showImportMessage(type, message) {
+        // Hide any existing messages
+        document.querySelectorAll('.import-message').forEach(msg => {
+            msg.classList.remove('show');
+        });
+
+        // Show new message
+        const messageDiv = document.querySelector(`.import-message.${type}`);
+        if (messageDiv) {
+            messageDiv.textContent = message;
+            messageDiv.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                messageDiv.classList.remove('show');
+            }, 5000);
+        } else {
+            // Fallback to alert if message div doesn't exist
+            alert(message);
+        }
+    }
+
+    clearAllCharacters() {
+        if (this.characters.length === 0) {
+            alert('No characters to clear.');
+            return;
+        }
+
+        const confirmMessage = `Are you sure you want to delete all ${this.characters.length} saved characters? This action cannot be undone.`;
+        
+        if (confirm(confirmMessage)) {
+            this.characters = [];
+            localStorage.setItem('characters', JSON.stringify(this.characters));
+            
+            // Update UI
+            this.displaySavedCharacters();
+            this.updateCharacterSelects();
+            this.updateTraitCharacterSelect();
+            
+            // Clear trait assignment if active
+            this.clearTraitSelection();
+            
+            alert('All characters have been deleted.');
+        }
     }
 }
 

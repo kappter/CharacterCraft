@@ -1,0 +1,107 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CharacterCraft - Trait Bubbles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CharacterCraft/css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="flex items-center">
+            <img src="/CharacterCraft/images/cclogo.png" alt="CharacterCraft Logo" class="h-8 mr-2" onerror="this.src='https://via.placeholder.com/32';">
+            <h1>CharacterCraft</h1>
+        </div>
+        <div class="flex items-center">
+            <label class="mr-2">Theme:</label>
+            <input type="checkbox" id="theme-toggle" class="toggle">
+        </div>
+    </header>
+    <nav>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html'">Create Character</button>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html#compare-tab'">Compare Characters</button>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html#traits-tab'">Trait List</button>
+        <button class="tab-button" onclick="window.location.href='/CharacterCraft/index.html#saved-tab'">Saved Characters</button>
+        <a href="/CharacterCraft/nav/trait_bubble.html" class="trait-bubbles-link">Trait Bubbles</a>
+        <button class="reset-app">Reset App</button>
+    </nav>
+    <main class="container">
+        <div class="trait-bubbles-container">
+            <h2>Trait Bubbles</h2>
+            <p>Visualize character traits.</p>
+            <div class="trait-bubble">Barrel Chest</div>
+            <div class="trait-bubble">Skeptical Pragmatism</div>
+            <a href="/CharacterCraft/index.html">Back to CharacterCraft</a>
+        </div>
+    </main>
+    <footer>
+        <p>© 2025 CharacterCraft. All rights reserved.</p>
+    </footer>
+    <script>
+        const themeToggle = document.querySelector('#theme-toggle');
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.checked = newTheme === 'dark';
+            console.log(`Theme toggled to: ${newTheme}`);
+        }
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.checked = savedTheme === 'dark';
+            console.log(`Initialized theme: ${savedTheme}`);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTheme();
+            themeToggle.addEventListener('change', toggleTheme);
+            document.querySelector('.reset-app').addEventListener('click', () => {
+                localStorage.clear();
+                console.log('App reset');
+                window.location.href = '/CharacterCraft/index.html';
+            });
+        });
+    </script>
+</body>
+</html>

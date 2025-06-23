@@ -1,0 +1,8 @@
+{
+    "firstNames": ["John", "Emma", "Liam", "Olivia", "Quinn"],
+    "lastNames": ["Smith", "Johnson", "Walker", "Brown", "Li"],
+    "genders": ["Male", "Female", "Non-binary"],
+    "locales": ["New York", "Tokyo", "Bangkok", "London", "Rio de Janeiro"],
+    "occupations": ["Engineer", "Teacher", "Architect", "Artist", "Doctor"],
+    "ageRanges": ["18-25", "26-35", "36-50", "51-75", "76-100"]
+}

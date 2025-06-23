@@ -42,7 +42,7 @@ class CharacterManager {
                 psychological: [],
                 background: [],
                 motivations: [],
-                custom: char.traits ? char.traits.split(',').map(t => t.trim()) : []
+                custom: char.traits ? (Array.isArray(char.traits) ? char.traits : char.traits.split(',').map(t => t.trim())) : []
             },
             bios: {
                 external: char.detailedBio || '',
