@@ -1,4 +1,87 @@
 // Enhanced CharacterCraft - Main Script with Autobiography Features
+// Trait Opposites Mapping for Hover and Split Bubble Functionality
+const TRAIT_OPPOSITES = {
+    // Personality Types
+    "Creative": "Conventional", "Conventional": "Creative",
+    "Analytical": "Intuitive", "Intuitive": "Analytical", 
+    "Empathetic": "Detached", "Detached": "Empathetic",
+    "Ambitious": "Content", "Content": "Ambitious",
+    "Calm": "Anxious", "Anxious": "Calm",
+    "Optimistic": "Pessimistic", "Pessimistic": "Optimistic",
+    "Introverted": "Extroverted", "Extroverted": "Introverted",
+    "Spontaneous": "Methodical", "Methodical": "Spontaneous",
+    "Independent": "Dependent", "Dependent": "Independent",
+    "Logical": "Emotional", "Emotional": "Logical",
+
+    // Social Traits
+    "Charismatic": "Awkward", "Awkward": "Charismatic",
+    "Diplomatic": "Blunt", "Blunt": "Diplomatic",
+    "Resourceful": "Helpless", "Helpless": "Resourceful",
+    "Determined": "Indecisive", "Indecisive": "Determined",
+    "Witty": "Humorless", "Humorless": "Witty",
+    "Loyal": "Fickle", "Fickle": "Loyal",
+    "Generous": "Selfish", "Selfish": "Generous",
+    "Honest": "Deceptive", "Deceptive": "Honest",
+    "Patient": "Impatient", "Impatient": "Patient",
+    "Friendly": "Hostile", "Hostile": "Friendly",
+    "Confident": "Insecure", "Insecure": "Confident",
+    "Humble": "Arrogant", "Arrogant": "Humble",
+    "Trusting": "Suspicious", "Suspicious": "Trusting",
+    "Forgiving": "Vindictive", "Vindictive": "Forgiving",
+
+    // Work & Intellectual
+    "Hardworking": "Lazy", "Lazy": "Hardworking",
+    "Dedicated": "Uncommitted", "Uncommitted": "Dedicated",
+    "Focused": "Distracted", "Distracted": "Focused",
+    "Curious": "Indifferent", "Indifferent": "Curious",
+    "Perfectionist": "Careless", "Careless": "Perfectionist",
+    "Innovative": "Traditional", "Traditional": "Innovative",
+    "Organized": "Chaotic", "Chaotic": "Organized",
+    "Practical": "Idealistic", "Idealistic": "Practical",
+    "Cautious": "Reckless", "Reckless": "Cautious",
+    "Flexible": "Rigid", "Rigid": "Flexible",
+    "Competitive": "Cooperative", "Cooperative": "Competitive",
+    "Leader": "Follower", "Follower": "Leader",
+
+    // Emotional & Unique
+    "Sensitive": "Insensitive", "Insensitive": "Sensitive",
+    "Passionate": "Apathetic", "Apathetic": "Passionate",
+    "Artistic": "Unartistic", "Unartistic": "Artistic",
+    "Eccentric": "Conventional", "Mysterious": "Transparent", "Transparent": "Mysterious",
+    "Adventurous": "Cautious", "Romantic": "Unromantic", "Unromantic": "Romantic",
+    "Spiritual": "Materialistic", "Materialistic": "Spiritual",
+    "Rebellious": "Conformist", "Conformist": "Rebellious",
+    "Energetic": "Lethargic", "Lethargic": "Energetic",
+    "Playful": "Serious", "Serious": "Playful",
+    "Bold": "Timid", "Timid": "Bold",
+    "Wise": "Naive", "Naive": "Wise",
+    "Mature": "Immature", "Immature": "Mature",
+    "Outgoing": "Reserved", "Reserved": "Outgoing",
+    "Supportive": "Unsupportive", "Unsupportive": "Supportive",
+    "Excitable": "Calm", "Thoughtful": "Thoughtless", "Thoughtless": "Thoughtful",
+    "Reliable": "Unreliable", "Unreliable": "Reliable",
+    "Open-minded": "Close-minded", "Close-minded": "Open-minded",
+    "Adaptable": "Inflexible", "Inflexible": "Adaptable",
+    "Assertive": "Passive", "Passive": "Assertive",
+    "Disciplined": "Undisciplined", "Undisciplined": "Disciplined",
+    "Observant": "Oblivious", "Oblivious": "Observant",
+    "Tactful": "Tactless", "Tactless": "Tactful",
+    "Sincere": "Insincere", "Insincere": "Sincere",
+    "Courageous": "Cowardly", "Cowardly": "Courageous",
+    "Gentle": "Harsh", "Harsh": "Gentle",
+    "Scholarly": "Unscholarly", "Unscholarly": "Scholarly",
+    "Worldly": "Naive", "Sophisticated": "Unsophisticated", "Unsophisticated": "Sophisticated"
+};
+
+// Helper functions for trait opposites
+function getOppositeTrait(trait) {
+    return TRAIT_OPPOSITES[trait] || `Non-${trait}`;
+}
+
+function hasDefinedOpposite(trait) {
+    return trait in TRAIT_OPPOSITES;
+}
+
 class CharacterCraft {
     constructor() {
         this.characters = JSON.parse(localStorage.getItem('characters')) || [];
@@ -1146,8 +1229,18 @@ class CharacterCraft {
     }
 
     initializeTraitBubbles() {
-        // Add click event listeners to all trait bubbles
+        // Add click event listeners and opposite trait data to all trait bubbles
         document.querySelectorAll('.trait-bubble').forEach(bubble => {
+            const trait = bubble.getAttribute('data-trait');
+            if (trait) {
+                // Add opposite trait data attribute for hover tooltip
+                const opposite = getOppositeTrait(trait);
+                bubble.setAttribute('data-opposite', `Opposite: ${opposite}`);
+                
+                // Add hover effect class
+                bubble.classList.add('hoverable');
+            }
+            
             bubble.addEventListener('click', (e) => this.toggleTrait(e.target));
         });
     }

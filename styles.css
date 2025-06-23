@@ -750,3 +750,156 @@ footer {
     box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
+
+/* Enhanced Trait Bubble Hover Effects */
+.trait-bubble {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.trait-bubble:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+/* Opposite Trait Tooltip */
+.trait-bubble::after {
+    content: attr(data-opposite);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+.trait-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.trait-bubble:hover::after,
+.trait-bubble:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Split Bubble Styles */
+.trait-bubble.split {
+    background: linear-gradient(45deg, #4CAF50 50%, #FF9800 50%);
+    position: relative;
+    overflow: hidden;
+}
+
+.trait-bubble.split::after {
+    content: attr(data-trait) ' / ' attr(data-opposite);
+    background: rgba(0, 0, 0, 0.95);
+    font-weight: bold;
+}
+
+.trait-bubble.split .trait-text {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin: 2px;
+    display: inline-block;
+}
+
+.trait-bubble.split:hover .trait-text {
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Split bubble selection states */
+.trait-bubble.split.trait-selected {
+    background: linear-gradient(45deg, #2E7D32 50%, #FFB74D 50%);
+}
+
+.trait-bubble.split.opposite-selected {
+    background: linear-gradient(45deg, #81C784 50%, #FF6F00 50%);
+}
+
+/* Import/Export Button Styles */
+.import-export-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.import-export-section h4 {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #2196F3;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.file-input-label:hover {
+    background: #1976D2;
+}
+
+.export-character-btn {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background 0.3s ease;
+}
+
+.export-character-btn:hover {
+    background: #45a049;
+}
+
+.export-character-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
