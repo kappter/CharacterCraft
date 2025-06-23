@@ -10,8 +10,17 @@ class SigilGenerator {
         this.centerY = this.size / 2;
         this.circleRadius = 85; // Circle radius
         this.letterSize = this.circleRadius * 1.8; // Massive letters filling circle diameter
+        this.letterSizeBW = this.circleRadius * 2.1; // Even larger for black & white - barely touching frame
         
-        // Bold sans serif fonts for maximum impact
+        // Simple sans serif font for black & white option
+        this.simpleFonts = [
+            'Arial',
+            'Helvetica', 
+            'Verdana',
+            'Tahoma'
+        ];
+        
+        // Bold sans serif fonts for colored versions
         this.fonts = [
             'Arial Black',
             'Helvetica Bold', 
@@ -22,6 +31,14 @@ class SigilGenerator {
             'Geneva Bold',
             'Futura Bold'
         ];
+        
+        // Black and white option for maximum versatility
+        this.blackWhiteScheme = {
+            bg: 'transparent',
+            letters: '#000000',
+            accent: 'transparent',
+            isTransparent: true
+        };
         
         // High contrast color schemes for dramatic effect
         this.colorSchemes = [
@@ -99,27 +116,33 @@ class SigilGenerator {
     
     // Draw background circle with gradient
     drawBackground(colorScheme) {
-        // Clear canvas
-        this.ctx.fillStyle = colorScheme.bg;
-        this.ctx.fillRect(0, 0, this.size, this.size);
-        
-        // Draw outer circle border
-        this.ctx.strokeStyle = colorScheme.accent;
-        this.ctx.lineWidth = 4;
-        this.ctx.beginPath();
-        this.ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
-        this.ctx.stroke();
-        
-        // Draw inner circle for contrast
-        this.ctx.strokeStyle = colorScheme.letters;
-        this.ctx.lineWidth = 2;
-        this.ctx.beginPath();
-        this.ctx.arc(this.centerX, this.centerY, this.circleRadius - 5, 0, 2 * Math.PI);
-        this.ctx.stroke();
+        if (colorScheme.isTransparent) {
+            // For black & white transparent option, clear canvas completely
+            this.ctx.clearRect(0, 0, this.size, this.size);
+            // No circle border for transparent version - pure minimalism
+        } else {
+            // Clear canvas with background color
+            this.ctx.fillStyle = colorScheme.bg;
+            this.ctx.fillRect(0, 0, this.size, this.size);
+            
+            // Draw outer circle border
+            this.ctx.strokeStyle = colorScheme.accent;
+            this.ctx.lineWidth = 4;
+            this.ctx.beginPath();
+            this.ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
+            this.ctx.stroke();
+            
+            // Draw inner circle for contrast
+            this.ctx.strokeStyle = colorScheme.letters;
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.arc(this.centerX, this.centerY, this.circleRadius - 5, 0, 2 * Math.PI);
+            this.ctx.stroke();
+        }
     }
     
     // Draw a massive letter filling the entire circle diameter
-    drawMassiveLetter(letter, rotation, colorScheme, font) {
+    drawMassiveLetter(letter, rotation, colorScheme, font, isBlackWhite = false) {
         this.ctx.save();
         
         // Move to center point
@@ -128,23 +151,32 @@ class SigilGenerator {
         // Apply rotation around center
         this.ctx.rotate(rotation);
         
+        // Use larger size for black & white option
+        const fontSize = isBlackWhite ? this.letterSizeBW : this.letterSize;
+        
         // Set massive font size to fill circle diameter
-        this.ctx.font = `bold ${this.letterSize}px ${font}`;
+        this.ctx.font = `${isBlackWhite ? 'normal' : 'bold'} ${fontSize}px ${font}`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         
-        // Draw letter shadow for depth
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-        this.ctx.fillText(letter, 3, 3);
-        
-        // Draw main letter with high contrast
-        this.ctx.fillStyle = colorScheme.letters;
-        this.ctx.fillText(letter, 0, 0);
-        
-        // Add letter outline for definition
-        this.ctx.strokeStyle = colorScheme.accent;
-        this.ctx.lineWidth = 3;
-        this.ctx.strokeText(letter, 0, 0);
+        if (isBlackWhite) {
+            // Pure black letters for black & white option - no effects
+            this.ctx.fillStyle = colorScheme.letters;
+            this.ctx.fillText(letter, 0, 0);
+        } else {
+            // Draw letter shadow for depth (colored versions only)
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            this.ctx.fillText(letter, 3, 3);
+            
+            // Draw main letter with high contrast
+            this.ctx.fillStyle = colorScheme.letters;
+            this.ctx.fillText(letter, 0, 0);
+            
+            // Add letter outline for definition
+            this.ctx.strokeStyle = colorScheme.accent;
+            this.ctx.lineWidth = 3;
+            this.ctx.strokeText(letter, 0, 0);
+        }
         
         this.ctx.restore();
     }
@@ -173,22 +205,40 @@ class SigilGenerator {
         const letters = this.extractLetters(characterName);
         const rotations = this.generateDramaticRotations(letters.length);
         
-        // Select random color scheme and font
-        const colorScheme = this.colorSchemes[Math.floor(Math.random() * this.colorSchemes.length)];
-        const font = this.fonts[Math.floor(Math.random() * this.fonts.length)];
+        // Check if black & white option is requested
+        const useBlackWhite = options.blackWhite || Math.random() < 0.3; // 30% chance for B&W
+        
+        let colorScheme, font;
+        
+        if (useBlackWhite) {
+            // Use black & white scheme with simple font
+            colorScheme = this.blackWhiteScheme;
+            font = this.simpleFonts[Math.floor(Math.random() * this.simpleFonts.length)];
+        } else {
+            // Use colored scheme with bold font
+            colorScheme = this.colorSchemes[Math.floor(Math.random() * this.colorSchemes.length)];
+            font = this.fonts[Math.floor(Math.random() * this.fonts.length)];
+        }
         
         // Clear canvas and draw background
         this.drawBackground(colorScheme);
         
         // Draw massive letters with dramatic overlapping
         letters.forEach((letter, index) => {
-            this.drawMassiveLetter(letter, rotations[index], colorScheme, font);
+            this.drawMassiveLetter(letter, rotations[index], colorScheme, font, useBlackWhite);
         });
         
-        // Draw center point to emphasize intersection
-        this.drawCenterPoint(colorScheme);
+        // Draw center point only for colored versions
+        if (!useBlackWhite) {
+            this.drawCenterPoint(colorScheme);
+        }
         
         return this.canvas;
+    }
+    
+    // Generate black & white sigil specifically
+    generateBlackWhiteSigil(characterName) {
+        return this.generateSigil(characterName, { blackWhite: true });
     }
     
     // Generate dramatic rotations for maximum visual impact
@@ -220,6 +270,11 @@ class SigilGenerator {
     
     // Enhanced center point with intersection emphasis
     drawCenterPoint(colorScheme) {
+        // Skip center point for transparent black & white version
+        if (colorScheme.isTransparent) {
+            return;
+        }
+        
         this.ctx.save();
         
         // Draw center intersection point
