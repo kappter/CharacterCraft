@@ -533,3 +533,373 @@ footer {
     text-indent: 0;
 }
 
+
+/* Trait Assignment Styles */
+.trait-assignment-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.character-selector {
+    margin-bottom: 2rem;
+}
+
+.character-dropdown {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.character-dropdown:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.character-info {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.character-info h3 {
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.character-info p {
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+}
+
+.current-traits h4 {
+    color: var(--text-color);
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.trait-categories {
+    margin-bottom: 2rem;
+}
+
+.trait-categories h4 {
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+}
+
+.instruction {
+    color: var(--text-secondary);
+    margin: 0 0 2rem 0;
+    font-style: italic;
+}
+
+.trait-category {
+    margin-bottom: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.trait-category h5 {
+    color: var(--primary-color);
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.trait-bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.trait-bubble {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--secondary-color);
+    color: white;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.trait-bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: var(--primary-color);
+}
+
+.trait-bubble.assigned {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+}
+
+.trait-bubble.assigned:hover {
+    background: #dc3545;
+    border-color: #dc3545;
+    transform: translateY(-2px);
+}
+
+.trait-bubble.assigned::after {
+    content: "✓";
+    position: absolute;
+    top: -2px;
+    right: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.trait-bubble:active {
+    transform: translateY(0);
+    transition: transform 0.1s ease;
+}
+
+.trait-bubbles.assigned .trait-bubble {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    margin-bottom: 0.5rem;
+}
+
+.trait-bubbles.assigned .trait-bubble:hover {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.trait-bubbles.assigned .trait-bubble::after {
+    content: "✗";
+    position: absolute;
+    top: -2px;
+    right: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Animation for trait assignment */
+@keyframes traitAssigned {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.trait-bubble.just-assigned {
+    animation: traitAssigned 0.3s ease;
+}
+
+/* Responsive design for trait bubbles */
+@media (max-width: 768px) {
+    .trait-assignment-container {
+        padding: 0 1rem;
+    }
+    
+    .trait-category {
+        padding: 1rem;
+    }
+    
+    .trait-bubble {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .trait-bubbles {
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .trait-bubble {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .trait-category h5 {
+        font-size: 1rem;
+    }
+    
+    .character-info {
+        padding: 1rem;
+    }
+}
+
+/* Dark mode adjustments for trait bubbles */
+[data-theme="dark"] .trait-bubble {
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .trait-bubble:hover {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+
+/* Enhanced Trait Bubble Hover Effects */
+.trait-bubble {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.trait-bubble:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+/* Opposite Trait Tooltip */
+.trait-bubble::after {
+    content: attr(data-opposite);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+.trait-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.trait-bubble:hover::after,
+.trait-bubble:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Split Bubble Styles */
+.trait-bubble.split {
+    background: linear-gradient(45deg, #4CAF50 50%, #FF9800 50%);
+    position: relative;
+    overflow: hidden;
+}
+
+.trait-bubble.split::after {
+    content: attr(data-trait) ' / ' attr(data-opposite);
+    background: rgba(0, 0, 0, 0.95);
+    font-weight: bold;
+}
+
+.trait-bubble.split .trait-text {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin: 2px;
+    display: inline-block;
+}
+
+.trait-bubble.split:hover .trait-text {
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Split bubble selection states */
+.trait-bubble.split.trait-selected {
+    background: linear-gradient(45deg, #2E7D32 50%, #FFB74D 50%);
+}
+
+.trait-bubble.split.opposite-selected {
+    background: linear-gradient(45deg, #81C784 50%, #FF6F00 50%);
+}
+
+/* Import/Export Button Styles */
+.import-export-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.import-export-section h4 {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #2196F3;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.file-input-label:hover {
+    background: #1976D2;
+}
+
+.export-character-btn {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background 0.3s ease;
+}
+
+.export-character-btn:hover {
+    background: #45a049;
+}
+
+.export-character-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+

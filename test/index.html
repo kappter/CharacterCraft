@@ -24,6 +24,7 @@
         <button class="tab-button active" data-tab="create">Create Character</button>
         <button class="tab-button" data-tab="compare">Compare Characters</button>
         <button class="tab-button" data-tab="saved">Saved Characters</button>
+        <button class="tab-button" data-tab="traits">Trait Assignment</button>
         <button class="reset-app">Reset App</button>
     </nav>
 
@@ -142,6 +143,7 @@
                 <div class="action-buttons">
                     <button class="compare-characters btn-primary">Generate Comparison</button>
                     <button class="randomize-comparison btn-warning">Random Scenario</button>
+                    <button class="randomize-conflict btn-secondary">Random Conflict</button>
                 </div>
                 
                 <div class="bio-output empty" id="comparisonOutput">
@@ -163,6 +165,144 @@
                 
                 <div class="action-buttons">
                     <button class="export-all-characters btn-secondary">Export All Characters</button>
+                </div>
+            </div>
+
+            <!-- Trait Assignment Tab -->
+            <div id="traits-tab" class="tab-content">
+                <h2 class="section-title">Trait Assignment</h2>
+                
+                <div class="trait-assignment-container">
+                    <div class="character-selector">
+                        <label for="trait-character-select" class="form-label">Select Character to Edit</label>
+                        <select id="trait-character-select" class="character-dropdown">
+                            <option value="">Choose a character...</option>
+                        </select>
+                    </div>
+
+                    <div id="selected-character-info" class="character-info" style="display: none;">
+                        <h3 id="character-name-display"></h3>
+                        <p id="character-details-display"></p>
+                        
+                        <div class="current-traits">
+                            <h4>Current Traits</h4>
+                            <div id="current-traits-display" class="trait-bubbles assigned"></div>
+                        </div>
+                    </div>
+
+                    <div class="trait-categories">
+                        <h4>Available Traits</h4>
+                        <p class="instruction">Click on traits to add them to your character. Click assigned traits to remove them.</p>
+                        
+                        <div class="trait-category">
+                            <h5>Personality Types</h5>
+                            <div class="trait-bubbles" data-category="personality">
+                                <span class="trait-bubble" data-trait="Creative">Creative</span>
+                                <span class="trait-bubble" data-trait="Analytical">Analytical</span>
+                                <span class="trait-bubble" data-trait="Empathetic">Empathetic</span>
+                                <span class="trait-bubble" data-trait="Ambitious">Ambitious</span>
+                                <span class="trait-bubble" data-trait="Calm">Calm</span>
+                                <span class="trait-bubble" data-trait="Adventurous">Adventurous</span>
+                                <span class="trait-bubble" data-trait="Organized">Organized</span>
+                                <span class="trait-bubble" data-trait="Spontaneous">Spontaneous</span>
+                                <span class="trait-bubble" data-trait="Patient">Patient</span>
+                                <span class="trait-bubble" data-trait="Energetic">Energetic</span>
+                                <span class="trait-bubble" data-trait="Optimistic">Optimistic</span>
+                                <span class="trait-bubble" data-trait="Confident">Confident</span>
+                                <span class="trait-bubble" data-trait="Independent">Independent</span>
+                                <span class="trait-bubble" data-trait="Collaborative">Collaborative</span>
+                                <span class="trait-bubble" data-trait="Loyal">Loyal</span>
+                                <span class="trait-bubble" data-trait="Honest">Honest</span>
+                                <span class="trait-bubble" data-trait="Generous">Generous</span>
+                                <span class="trait-bubble" data-trait="Compassionate">Compassionate</span>
+                                <span class="trait-bubble" data-trait="Resilient">Resilient</span>
+                                <span class="trait-bubble" data-trait="Innovative">Innovative</span>
+                            </div>
+                        </div>
+
+                        <div class="trait-category">
+                            <h5>Social Traits</h5>
+                            <div class="trait-bubbles" data-category="social">
+                                <span class="trait-bubble" data-trait="Charismatic">Charismatic</span>
+                                <span class="trait-bubble" data-trait="Diplomatic">Diplomatic</span>
+                                <span class="trait-bubble" data-trait="Resourceful">Resourceful</span>
+                                <span class="trait-bubble" data-trait="Determined">Determined</span>
+                                <span class="trait-bubble" data-trait="Witty">Witty</span>
+                                <span class="trait-bubble" data-trait="Charming">Charming</span>
+                                <span class="trait-bubble" data-trait="Thoughtful">Thoughtful</span>
+                                <span class="trait-bubble" data-trait="Reliable">Reliable</span>
+                                <span class="trait-bubble" data-trait="Adaptable">Adaptable</span>
+                                <span class="trait-bubble" data-trait="Courageous">Courageous</span>
+                                <span class="trait-bubble" data-trait="Sociable">Sociable</span>
+                                <span class="trait-bubble" data-trait="Solitary">Solitary</span>
+                                <span class="trait-bubble" data-trait="Talkative">Talkative</span>
+                                <span class="trait-bubble" data-trait="Quiet">Quiet</span>
+                                <span class="trait-bubble" data-trait="Friendly">Friendly</span>
+                                <span class="trait-bubble" data-trait="Aloof">Aloof</span>
+                                <span class="trait-bubble" data-trait="Warm">Warm</span>
+                                <span class="trait-bubble" data-trait="Supportive">Supportive</span>
+                                <span class="trait-bubble" data-trait="Trusting">Trusting</span>
+                                <span class="trait-bubble" data-trait="Open-minded">Open-minded</span>
+                            </div>
+                        </div>
+
+                        <div class="trait-category">
+                            <h5>Work & Intellectual</h5>
+                            <div class="trait-bubbles" data-category="work">
+                                <span class="trait-bubble" data-trait="Hardworking">Hardworking</span>
+                                <span class="trait-bubble" data-trait="Dedicated">Dedicated</span>
+                                <span class="trait-bubble" data-trait="Focused">Focused</span>
+                                <span class="trait-bubble" data-trait="Disciplined">Disciplined</span>
+                                <span class="trait-bubble" data-trait="Punctual">Punctual</span>
+                                <span class="trait-bubble" data-trait="Thorough">Thorough</span>
+                                <span class="trait-bubble" data-trait="Detail-oriented">Detail-oriented</span>
+                                <span class="trait-bubble" data-trait="Efficient">Efficient</span>
+                                <span class="trait-bubble" data-trait="Curious">Curious</span>
+                                <span class="trait-bubble" data-trait="Wise">Wise</span>
+                                <span class="trait-bubble" data-trait="Scholarly">Scholarly</span>
+                                <span class="trait-bubble" data-trait="Practical">Practical</span>
+                                <span class="trait-bubble" data-trait="Philosophical">Philosophical</span>
+                                <span class="trait-bubble" data-trait="Imaginative">Imaginative</span>
+                                <span class="trait-bubble" data-trait="Logical">Logical</span>
+                                <span class="trait-bubble" data-trait="Intuitive">Intuitive</span>
+                                <span class="trait-bubble" data-trait="Methodical">Methodical</span>
+                                <span class="trait-bubble" data-trait="Big-picture">Big-picture</span>
+                                <span class="trait-bubble" data-trait="Theoretical">Theoretical</span>
+                                <span class="trait-bubble" data-trait="Applied">Applied</span>
+                            </div>
+                        </div>
+
+                        <div class="trait-category">
+                            <h5>Emotional & Unique</h5>
+                            <div class="trait-bubbles" data-category="emotional">
+                                <span class="trait-bubble" data-trait="Sensitive">Sensitive</span>
+                                <span class="trait-bubble" data-trait="Even-tempered">Even-tempered</span>
+                                <span class="trait-bubble" data-trait="Passionate">Passionate</span>
+                                <span class="trait-bubble" data-trait="Relaxed">Relaxed</span>
+                                <span class="trait-bubble" data-trait="Stoic">Stoic</span>
+                                <span class="trait-bubble" data-trait="Cheerful">Cheerful</span>
+                                <span class="trait-bubble" data-trait="Eccentric">Eccentric</span>
+                                <span class="trait-bubble" data-trait="Mysterious">Mysterious</span>
+                                <span class="trait-bubble" data-trait="Quirky">Quirky</span>
+                                <span class="trait-bubble" data-trait="Playful">Playful</span>
+                                <span class="trait-bubble" data-trait="Mischievous">Mischievous</span>
+                                <span class="trait-bubble" data-trait="Responsible">Responsible</span>
+                                <span class="trait-bubble" data-trait="Rebellious">Rebellious</span>
+                                <span class="trait-bubble" data-trait="Artistic">Artistic</span>
+                                <span class="trait-bubble" data-trait="Scientific">Scientific</span>
+                                <span class="trait-bubble" data-trait="Spiritual">Spiritual</span>
+                                <span class="trait-bubble" data-trait="Idealistic">Idealistic</span>
+                                <span class="trait-bubble" data-trait="Realistic">Realistic</span>
+                                <span class="trait-bubble" data-trait="Traditional">Traditional</span>
+                                <span class="trait-bubble" data-trait="Progressive">Progressive</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="save-trait-changes" class="btn-primary" style="display: none;">Save Changes</button>
+                        <button id="reset-traits" class="btn-secondary" style="display: none;">Reset to Original</button>
+                    </div>
                 </div>
             </div>
         </div>
